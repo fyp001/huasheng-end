@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myproject.api.springboot_mybatis.dao.StaffClientMapper">
+
+    <resultMap id="StaffClientResultMap" type="com.myproject.api.springboot_mybatis.entity.StaffClient">
+        <result column="c_s_id" jdbcType="INTEGER" property="c_s_id" />
+        <result column="staff_account" jdbcType="VARCHAR" property="staff_account" />
+        <result column="staff_name" jdbcType="VARCHAR" property="staff_name" />
+        <result column="staff_phone" jdbcType="VARCHAR" property="staff_phone" />
+        <result column="client_id" jdbcType="VARCHAR" property="client_id" />
+        <result column="project_id" jdbcType="VARCHAR" property="project_id" />
+        <result column="client_eval_content" jdbcType="VARCHAR" property="client_eval_content" />
+        <result column="client_eval_score" jdbcType="VARCHAR" property="client_eval_score" />
+        <result column="client_eval_date" jdbcType="VARCHAR" property="client_eval_date" />
+    </resultMap>
+    <select id="Sel" resultType="com.myproject.api.springboot_mybatis.entity.StaffClient">
+        select * from staff_client where c_s_id = #{id}
+    </select>
+
+    <select id="SelAll" resultType="com.myproject.api.springboot_mybatis.entity.StaffClient">
+        select * from staff_client
+    </select>
+</mapper>

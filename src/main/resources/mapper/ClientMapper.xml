@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myproject.api.springboot_mybatis.dao.ClientMapper">
+
+    <resultMap id="ClientResultMap" type="com.myproject.api.springboot_mybatis.entity.Client">
+        <result column="client_id" jdbcType="VARCHAR" property="client_id" />
+        <result column="client_name" jdbcType="VARCHAR" property="client_name" />
+        <result column="client_type" jdbcType="VARCHAR" property="client_type" />
+        <result column="client_quality" jdbcType="VARCHAR" property="client_quality" />
+        <result column="client_p_type" jdbcType="VARCHAR" property="client_p_type" />
+        <result column="client_p_name" jdbcType="VARCHAR" property="client_p_name" />
+        <result column="client_p_account" jdbcType="VARCHAR" property="client_p_account" />
+        <result column="client_work_address" jdbcType="VARCHAR" property="client_work_address" />
+        <result column="client_email" jdbcType="VARCHAR" property="client_email" />
+        <result column="client_permission" jdbcType="VARCHAR" property="client_permission" />
+        <result column="client_representative" jdbcType="VARCHAR" property="client_representative" />
+        <result column="client_business" jdbcType="VARCHAR" property="client_business" />
+        <result column="client_registered_capital" jdbcType="VARCHAR" property="client_registered_capital" />
+        <result column="client_person_name" jdbcType="VARCHAR" property="client_person_name" />
+        <result column="client_person_phone" jdbcType="VARCHAR" property="client_person_phone" />
+    </resultMap>
+
+    <insert id="insertClient" parameterType="com.myproject.api.springboot_mybatis.entity.Client">
+        insert into client VALUES (#{client_id},#{client_name},#{client_type},#{client_quality},
+        #{client_p_type},#{client_p_name},#{client_p_account},#{client_work_address},#{client_register_address},
+        #{client_email},#{client_permission},#{client_representative},#{client_business},#{client_registered_capital},
+        #{client_person_name},#{client_person_phone})
+    </insert>
+
+    <delete id="deleteClient" parameterType="com.myproject.api.springboot_mybatis.entity.Client">
+        delete from client where client_id = #{id}
+    </delete>
+
+    <update id="updateClient" parameterType="com.myproject.api.springboot_mybatis.entity.Client">
+        UPDATE client set client_name = #{newNameValue},
+         client_type = #{newTypeValue},
+         client_work_address = #{newAddressValue},
+         client_representative = #{newRepresentativeValue},
+         client_business = #{newBusinessValue},
+         client_registered_capital = #{newRegisterCapitalValue},
+         client_person_name = #{newPersonNameValue},
+         client_person_phone= #{newPersonPhoneValue}
+        where client_id = #{id}
+    </update>
+
+    <select id="readClient" resultType="com.myproject.api.springboot_mybatis.entity.Client">
+        select client_id,client_name,client_type,client_work_address,client_representative,client_business,client_registered_capital from client where client_id = #{id}
+    </select>
+
+    <select id="readAllClient" resultType="com.myproject.api.springboot_mybatis.entity.Client">
+        select client_id,client_name,client_type,client_work_address,client_representative,client_business,client_registered_capital
+         ,client_person_name,client_person_phone from client
+    </select>
+
+</mapper>

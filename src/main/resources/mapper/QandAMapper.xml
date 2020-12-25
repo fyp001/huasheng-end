@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myproject.api.springboot_mybatis.dao.QandAMapper">
+
+    <resultMap id="QandAResultMap" type="com.myproject.api.springboot_mybatis.entity.Question">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="question_pre" jdbcType="VARCHAR" property="question_pre" />
+        <result column="q_word" jdbcType="VARCHAR" property="q_word" />
+        <result column="question_aft" jdbcType="VARCHAR" property="question_aft" />
+    </resultMap>
+
+    <insert id="insertQuestion" parameterType="com.myproject.api.springboot_mybatis.entity.Question">
+        insert into question (question_pre,q_word,question_aft) VALUES (#{question_pre},#{q_word},#{question_aft})
+    </insert>
+
+    <delete id="deleteQuestion" parameterType="com.myproject.api.springboot_mybatis.entity.Question">
+        delete from question where id = #{id}
+    </delete>
+
+    <update id="updateQuestion" parameterType="com.myproject.api.springboot_mybatis.entity.Question">
+        UPDATE question set question_pre = #{question_pre},
+         q_word = #{q_word},
+         question_aft = #{question_aft}
+        where id = #{id}
+    </update>
+
+<!--    <select id="readClient" resultType="com.example.entity.Question">-->
+<!--        select client_id,client_name,client_type,client_work_address,client_representative,client_business,client_registered_capital from client where client_id = #{id}-->
+<!--    </select>-->
+
+    <select id="readAllQuestion" resultType="com.myproject.api.springboot_mybatis.entity.Question">
+        select * from question
+    </select>
+
+</mapper>

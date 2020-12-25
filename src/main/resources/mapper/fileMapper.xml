@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myproject.api.springboot_mybatis.dao.fileMapper">
+    <insert id="insert" parameterType="com.myproject.api.springboot_mybatis.entity.file" useGeneratedKeys="true" keyProperty="file_id">
+        INSERT into filetable(file_id,file_name,file_type,file_property,file_version, file_project ,file_location,file_uploaddate,file_updatedate,txt_name,jing_ban_ren,if_issued,if_delete,if_submit,shen_he_ren)
+        VALUES(#{file_id},#{file_name},#{file_type},#{file_property},#{file_version},#{file_project},#{file_location},#{file_uploaddate},#{file_updatedate},#{txt_name},#{jing_ban_ren},#{if_issued},#{if_delete},#{if_submit},#{shen_he_ren})
+    </insert>
+    
+    <update id="update" parameterType="com.myproject.api.springboot_mybatis.entity.file" >
+        UPDATE filetable set file_name=#{file_name},file_type=#{file_type},file_property=#{file_property},file_version=#{file_version},file_project=#{file_project},file_location=#{file_location},file_uploaddate=#{file_uploaddate},file_updatedate=#{file_updatedate},txt_name=#{txt_name}
+        WHERE file_id=#{file_id}
+    </update>
+    <update id="submitfile">
+        update filetable set if_submit=1,if_issued=0,shen_he_ren=0 where file_id=#{file_id}
+    </update>
+    <update id="checkpass">
+        update filetable set if_issued=2,shen_he_ren=#{shen_he_ren} where file_id=#{file_id} and if_issued=0
+    </update>
+    <update id="checknotpass">
+        update filetable set if_issued=1,shen_he_ren=#{shen_he_ren} where file_id=#{file_id} and if_issued=0
+    </update>
+    <update id="checkdelete">
+        update filetable set if_delete=1 where file_id=#{file_id}
+    </update>
+
+    <delete id="delete">
+        delete from filetable where file_id=#{file_id}
+    </delete>
+
+
+    <select id="QueryFile" resultType="com.myproject.api.springboot_mybatis.entity.file"  parameterType="com.myproject.api.springboot_mybatis.entity.file">
+    select*
+    from filetable
+    where file_type= #{file_type}
+    </select>
+
+  <select id="GetAllFile" resultType="com.myproject.api.springboot_mybatis.entity.file" >
+    select*
+    from filetable where file_type!='合同'
+  </select>
+    <select id="download" resultType="com.myproject.api.springboot_mybatis.entity.file" parameterType="com.myproject.api.springboot_mybatis.entity.file">
+        SELECT file_location FROM filetable
+        WHERE file_id=#{file_id} AND file_type=#{file_type}
+    </select>
+    <select id="SearchFile" resultType="com.myproject.api.springboot_mybatis.entity.file" parameterType="com.myproject.api.springboot_mybatis.entity.file">
+        SELECT * from  filetable
+        WHERE file_id=#{file_id} AND file_type=#{file_type}
+    </select>
+
+    <select id="GetAllContract" resultType="com.myproject.api.springboot_mybatis.entity.file">
+        select*
+        from filetable
+        where file_type='合同' and jing_ban_ren=#{jing_ban_ren}
+    </select>
+
+    <select id="GetOperator" resultType="com.myproject.api.springboot_mybatis.entity.file">
+        select * from filetable where jing_ban_ren=#{jing_ban_ren}
+    </select>
+    <select id="GetChecker" resultType="com.myproject.api.springboot_mybatis.entity.file">
+        select * from  filetable where  if_submit=1 and if_delete=0
+    </select>
+
+    <select id="GetName" resultType="java.lang.String">
+        select staff_name from staff where staff_id=#{shen_he_ren}
+    </select>
+
+
+</mapper>
