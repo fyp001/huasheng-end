@@ -90,11 +90,11 @@ public class staffController extends BaseController{
     @CrossOrigin
     @ResponseBody
     @PostMapping(value = "/stuff/add")
-    public String InsertStaff(@Param("Id") Integer Id,@Param("name") String name, @Param ("sex") String sex,
+    public String InsertStaff(@Param("Id") String Id,@Param("name") String name, @Param ("sex") String sex,
                               @Param("number") String number,@Param("job") String job,@Param("point")String point,
                               @Param("score")String score,@Param("salary") String salary,@Param("weight") String weight) throws JSONException {
         Staff s = new Staff();
-        s.setStaff_id(Id);
+        s.setStaff_account(Id);
         s.setStaff_name(name);
         s.setStaff_sex(sex);
         s.setStaff_phone(number);
@@ -146,7 +146,7 @@ public class staffController extends BaseController{
     @ResponseBody
     @PostMapping(value = "/staff/info")
     public Staff staffInfoById(@Param("staff_id") Integer staff_id) throws JSONException{
-        System.out.println(staff_id);
+        System.out.println(staff_id);   
         Staff staff = staffService.staffInfoById(staff_id);
         String msg = "";
         if(staff==null){
