@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 public class PageController {
     @RequestMapping("/login")
     public String jumpLogin(){
-        return "redirect:http://8.129.86.121:3333";
+        return "redirect:http://8.129.86.121/dist";
     }
 
     @RequestMapping("/main")
