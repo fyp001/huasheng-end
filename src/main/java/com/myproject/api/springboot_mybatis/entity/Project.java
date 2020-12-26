@@ -18,110 +18,40 @@ public class Project {
     public double project_audit;
     public double project_reduction;
     public String project_accountant;
-
-    public String getStaff_namej() {
-        return staff_namej;
-    }
-
-    public void setStaff_namej(String staff_namej) {
-        this.staff_namej= staff_namej;
-    }
-
-    public String getStaff_namea() {
-        return staff_names;
-    }
-
-    public void setStaff_names(String staff_names) {
-        this.staff_names= staff_names;
-    }
-
-
     public String project_costengineer;
     public String project_taxaccountant;
     public String project_partner;
     public String project_construction;
     public String project_code;
-    public String if_issued;
-    public String if_delete;
-    public String if_submit;
+    public char if_issued;
+    public char if_delete;
+    public char if_submit;
     public int jing_ban_ren;
     public int shen_he_ren;
-
     public String staff_namej;
     public String staff_names;
 
-
-    public String getif_issued() {
-        return if_issued;
-    }
-
-    public void setif_issued(String if_issued) {
-        this.if_issued = if_issued;
-    }
-
-    public String getif_delete() {
-        return if_delete;
-    }
-
-    public void setif_delete(String if_delete) {
-        this.if_delete = if_delete;
-    }
-
-    public String getif_submit() {
-        return if_submit;
-    }
-
-    public void setif_submit(String if_submit) {
-        this.if_submit = if_submit;
-    }
-
-    public int getjing_ban_ren() {
-        return jing_ban_ren;
-    }
-
-    public void setjing_ban_ren(int jing_ban_ren) {
-        this.jing_ban_ren = jing_ban_ren;
-    }
-
-    public int getshen_he_ren() {
-        return shen_he_ren;
-    }
-
-    public void setshen_he_ren(int shen_he_ren) {
-        this.shen_he_ren = shen_he_ren;
-    }
-    /*   public String user_name;
-       public String password;
-
-       public String getuser_name() {
-           return user_name;
-       }
-
-       public void setuser_name(String user_name) {
-           this.user_name = user_name;
-       }
-
-       public String getpassword() {
-           return password;
-       }
-
-       public void setpassword(String password) {
-           this.password = password;
-       }
-       */
-    public int getproject_id() {
+    public int getProject_id() {
         return project_id;
     }
 
-    public void setproject_id(int project_id) {
+    public void setProject_id(int project_id) {
         this.project_id = project_id;
     }
 
-    public String getproject_name() {
+    public String getProject_type() {
+        return project_type;
+    }
+
+    public void setProject_type(String project_type) {
+        this.project_type = project_type;
+    }
+
+    public String getProject_name() {
         return project_name;
     }
 
-    public void setproject_name(String project_name) {
+    public void setProject_name(String project_name) {
         this.project_name = project_name;
     }
 
@@ -133,7 +63,6 @@ public class Project {
         this.project_client = project_client;
     }
 
-
     public String getProject_reportnumber() {
         return project_reportnumber;
     }
@@ -142,29 +71,20 @@ public class Project {
         this.project_reportnumber = project_reportnumber;
     }
 
-    public String getproject_type() {
-        return project_type;
-    }
-
-    public void setproject_type(String project_type) {
-        this.project_type = project_type;
-    }
-
-    public String getproject_class() {
+    public String getProject_class() {
         return project_class;
     }
 
-    public void setproject_class(String project_class) {
+    public void setProject_class(String project_class) {
         this.project_class = project_class;
-
     }
+
     public String getProject_qualitycontroler() {
         return project_qualitycontroler;
     }
 
     public void setProject_qualitycontroler(String project_qualitycontroler) {
         this.project_qualitycontroler = project_qualitycontroler;
-
     }
 
     public String getProject_head() {
@@ -181,6 +101,22 @@ public class Project {
 
     public void setProject_members(String project_members) {
         this.project_members = project_members;
+    }
+
+    public String getProject_starttime() {
+        return project_starttime;
+    }
+
+    public void setProject_starttime(String project_starttime) {
+        this.project_starttime = project_starttime;
+    }
+
+    public String getProject_endtime() {
+        return project_endtime;
+    }
+
+    public void setProject_endtime(String project_endtime) {
+        this.project_endtime = project_endtime;
     }
 
     public String getProject_comment() {
@@ -239,7 +175,6 @@ public class Project {
         this.project_taxaccountant = project_taxaccountant;
     }
 
-
     public String getProject_partner() {
         return project_partner;
     }
@@ -252,8 +187,8 @@ public class Project {
         return project_construction;
     }
 
-    public void setProject_construction(String project_construcion) {
-        this.project_construction = project_construcion;
+    public void setProject_construction(String project_construction) {
+        this.project_construction = project_construction;
     }
 
     public String getProject_code() {
@@ -264,20 +199,60 @@ public class Project {
         this.project_code = project_code;
     }
 
-    public String getProject_starttime() {
-        return project_starttime;
+    public char getIf_issued() {
+        return if_issued;
     }
 
-    public void setProject_starttime(String project_starttime) {
-        this.project_starttime = project_starttime;
+    public void setIf_issued(char if_issued) {
+        this.if_issued = if_issued;
     }
 
-    public String getProject_endtime() {
-        return project_endtime;
+    public char getIf_delete() {
+        return if_delete;
     }
 
-    public void setProject_endtime(String project_endtime) {
-        this.project_endtime = project_endtime;
+    public void setIf_delete(char if_delete) {
+        this.if_delete = if_delete;
+    }
+
+    public char getIf_submit() {
+        return if_submit;
+    }
+
+    public void setIf_submit(char if_submit) {
+        this.if_submit = if_submit;
+    }
+
+    public int getJing_ban_ren() {
+        return jing_ban_ren;
+    }
+
+    public void setJing_ban_ren(int jing_ban_ren) {
+        this.jing_ban_ren = jing_ban_ren;
+    }
+
+    public int getShen_he_ren() {
+        return shen_he_ren;
+    }
+
+    public void setShen_he_ren(int shen_he_ren) {
+        this.shen_he_ren = shen_he_ren;
+    }
+
+    public String getStaff_namej() {
+        return staff_namej;
+    }
+
+    public void setStaff_namej(String staff_namej) {
+        this.staff_namej = staff_namej;
+    }
+
+    public String getStaff_names() {
+        return staff_names;
+    }
+
+    public void setStaff_names(String staff_names) {
+        this.staff_names = staff_names;
     }
 }
 

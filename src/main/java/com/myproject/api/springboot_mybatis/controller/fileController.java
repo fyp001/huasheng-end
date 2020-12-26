@@ -70,6 +70,9 @@ public class fileController {
             if(f.get(i).getJing_ban_ren()!=0){
                 f.get(i).setOperatorname(fileservice.GetName(f.get(i).getJing_ban_ren()));
             }
+            if(f.get(i).getShen_he_ren()!=0){
+                f.get(i).setChecker(fileservice.GetName(f.get(i).getShen_he_ren()));
+            }
             if(f.get(i).getFile_location()!=null)
             {
 //                String filename=URLEncoder.encode(f.get(i).getFile_name(), "utf-8");
@@ -187,7 +190,7 @@ public class fileController {
     }
 
     /**
-     * 获取所有合同列表
+     * 经办人获取所有合同列表
      */
     @CrossOrigin
     @RequestMapping(value = "/file/GetAllContract")
@@ -212,6 +215,32 @@ public class fileController {
         return f;
     }
 
+    /**
+     * 审核人获取所有合同列表
+     */
+    @CrossOrigin
+    @RequestMapping(value = "/file/GetAllContractChecker")
+    public List<file> GetAllContractChecker() throws UnsupportedEncodingException {
+        List<file> f=fileservice.GetAllContractChecker();
+        for(int i=0;i<f.size();i++){
+            if(f.get(i).getJing_ban_ren()!=0){
+                f.get(i).setOperatorname(fileservice.GetName(f.get(i).getJing_ban_ren()));
+            }
+            if(f.get(i).getShen_he_ren()!=0){
+                f.get(i).setChecker(fileservice.GetName(f.get(i).getShen_he_ren()));
+            }
+            if(f.get(i).getFile_location()!=null)
+            {
+//                String filename=URLEncoder.encode(f.get(i).getFile_name(), "utf-8");
+//                String filelocation=URLEncoder.encode(f.get(i).getFile_location(), "utf-8");
+                String filename=f.get(i).getTxt_name();
+                String filelocation=f.get(i).getFile_location();
+                String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
+                f.get(i).setFile_url(url);
+            }
+        }
+        return f;
+    }
 
     /**
      * 文档插入字段(暂时无用)

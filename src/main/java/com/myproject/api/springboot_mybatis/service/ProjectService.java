@@ -6,7 +6,7 @@ import com.myproject.api.springboot_mybatis.entity.Staff;
 import java.util.List;
 
 public interface ProjectService {
-    List<Project> getAllProject();
+    List<Project> getAllProject(Project project);
     List<Project> getCheckProject();
     void insert(Project project);
     void delete(Project project);

@@ -17,7 +17,7 @@
 -->
 <mapper namespace="com.myproject.api.springboot_mybatis.dao.ProjectDao">
     <select id="getAllProject" resultType="com.myproject.api.springboot_mybatis.entity.Project" >
-        SELECT * FROM project;
+        SELECT * FROM project where jing_ban_ren=#{jing_ban_ren}
     </select>
     <select id="getCheckProject" resultType="com.myproject.api.springboot_mybatis.entity.Project" >
 
@@ -111,93 +111,25 @@
                          project_taxaccountant=#{project_taxaccountant},
                          project_partner=#{project_partner},
                          project_construction=#{project_construction},
-                         project_code=#{project_code},
-                         jing_ban_ren= #{jing_ban_ren},
-                         shen_he_ren=#{shen_he_ren}
                          where project.project_id=#{project_id}
     </update>
 
     <update id="submit" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
-    update project  set  project_name=#{project_name},
-                         project_id=#{project_id},
-                         project_type=#{project_type},
-                         project_client=#{project_client},
-                         project_reportnumber=#{project_reportnumber},
-                         project_class=#{project_class},
-                         project_qualitycontroler=#{project_qualitycontroler},
-                         project_head=#{project_head},
-                         project_members=#{project_members},
-                         project_starttime=#{project_starttime},
-                         project_endtime=#{project_endtime},
-                         project_comment=#{project_comment},
-                         project_assets=#{project_assets},
-                         project_audit=#{project_audit},
-                         project_reduction=#{project_reduction},
-                         project_accountant=#{project_accountant},
-                         project_costengineer=#{project_costengineer},
-                         project_taxaccountant=#{project_taxaccountant},
-                         project_partner=#{project_partner},
-                         project_construction=#{project_construction},
-                         project_code=#{project_code},
-                         if_submit=1,
-                         jing_ban_ren=#{jing_ban_ren}
-                         where project.project_id=#{project_id}
+    update project  set if_submit=1,if_issued=0,shen_he_ren=0  where project.project_id=#{project_id}
     </update>
 
     <update id="pass" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
-    update project  set  project_name=#{project_name},
-                         project_id=#{project_id},
-                         project_type=#{project_type},
-                         project_client=#{project_client},
-                         project_reportnumber=#{project_reportnumber},
-                         project_class=#{project_class},
-                         project_qualitycontroler=#{project_qualitycontroler},
-                         project_head=#{project_head},
-                         project_members=#{project_members},
-                         project_starttime=#{project_starttime},
-                         project_endtime=#{project_endtime},
-                         project_comment=#{project_comment},
-                         project_assets=#{project_assets},
-                         project_audit=#{project_audit},
-                         project_reduction=#{project_reduction},
-                         project_accountant=#{project_accountant},
-                         project_costengineer=#{project_costengineer},
-                         project_taxaccountant=#{project_taxaccountant},
-                         project_partner=#{project_partner},
-                         project_construction=#{project_construction},
-                         project_code=#{project_code},
-                         if_issued=1,
-                         jing_ban_ren=#{jing_ban_ren},
+    update project  set
+                         if_issued=2,
                          shen_he_ren=#{shen_he_ren}
-                         where project.project_id=#{project_id}
+                         where project.project_id=#{project_id} and if_issued=0
     </update>
 
     <update id="refuse" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
-    update project  set  project_name=#{project_name},
-                         project_id=#{project_id},
-                         project_type=#{project_type},
-                         project_client=#{project_client},
-                         project_reportnumber=#{project_reportnumber},
-                         project_class=#{project_class},
-                         project_qualitycontroler=#{project_qualitycontroler},
-                         project_head=#{project_head},
-                         project_members=#{project_members},
-                         project_starttime=#{project_starttime},
-                         project_endtime=#{project_endtime},
-                         project_comment=#{project_comment},
-                         project_assets=#{project_assets},
-                         project_audit=#{project_audit},
-                         project_reduction=#{project_reduction},
-                         project_accountant=#{project_accountant},
-                         project_costengineer=#{project_costengineer},
-                         project_taxaccountant=#{project_taxaccountant},
-                         project_partner=#{project_partner},
-                         project_construction=#{project_construction},
-                         project_code=#{project_code},
-                         if_submit=0,
-                         jing_ban_ren=#{jing_ban_ren},
+    update project  set
+                         if_issued=1,
                          shen_he_ren=#{shen_he_ren}
-                         where project.project_id=#{project_id}
+                         where project.project_id=#{project_id} and if_issued=0
     </update>
 
     <update id="if_delete" parameterType="com.myproject.api.springboot_mybatis.entity.Project">

@@ -16,6 +16,7 @@ public interface fileService {
     List<file> GetAllContract(file f);
     List<file> GetOperator(file f);
     List<file> GetChecker();
+    List<file> GetAllContractChecker();
     String GetName(int shen_he_ren);
     void submitfile(file f);
     void checkpass(file f);

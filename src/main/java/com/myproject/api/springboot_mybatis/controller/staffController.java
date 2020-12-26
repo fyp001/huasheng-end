@@ -144,14 +144,15 @@ public class staffController extends BaseController{
 
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/staff/info")
+    @PostMapping(value = "/staff/info")
     public Staff staffInfoById(@Param("staff_id") Integer staff_id) throws JSONException{
+        System.out.println(staff_id);
         Staff staff = staffService.staffInfoById(staff_id);
-        String status = "";
         String msg = "";
         if(staff==null){
-            status = "error";
             msg="No such Staff";
+        }else{
+            msg="Get A Staff";
         }
         return staff;
     }

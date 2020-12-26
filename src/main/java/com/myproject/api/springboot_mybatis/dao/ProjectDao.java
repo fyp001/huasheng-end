@@ -7,7 +7,7 @@ import com.myproject.api.springboot_mybatis.entity.Staff;
 import java.util.List;
 
 public interface ProjectDao {
-    List<Project> getAllProject();
+    List<Project> getAllProject(Project project);
     List<Project> getCheckProject();
     List <Staff>  getname();
     void insert(Project project);

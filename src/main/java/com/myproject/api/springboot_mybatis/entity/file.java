@@ -189,4 +189,14 @@ public class file {
     public void setChecker(String checker) {
         this.checker = checker;
     }
+
+    public String file_code;
+
+    public String getFile_code() {
+        return file_code;
+    }
+
+    public void setFile_code(String file_code) {
+        this.file_code = file_code;
+    }
 }

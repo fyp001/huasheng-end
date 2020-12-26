@@ -88,4 +88,9 @@ public class fileServiceImpl implements fileService {
     public void checkdelete(file f) {
         filemapper.checkdelete(f);
     }
+
+    @Override
+    public List<file> GetAllContractChecker() {
+        return filemapper.GetAllContractChecker();
+    }
 }

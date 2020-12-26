@@ -69,6 +69,8 @@ public interface fileMapper {
 
     List<file> GetChecker();
 
+    List<file> GetAllContractChecker();
+
     String GetName(int shen_he_ren);
 
     void submitfile(file f);
