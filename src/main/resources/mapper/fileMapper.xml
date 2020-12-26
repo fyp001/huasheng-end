@@ -11,7 +11,7 @@
         WHERE file_id=#{file_id}
     </update>
     <update id="submitfile">
-        update filetable set if_submit=1,if_issued=0,shen_he_ren=0 where file_id=#{file_id}
+        update filetable set if_submit=1,if_issued=0,shen_he_ren=null where file_id=#{file_id}
     </update>
     <update id="checkpass">
         update filetable set if_issued=2,shen_he_ren=#{shen_he_ren} where file_id=#{file_id} and if_issued=0

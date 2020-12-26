@@ -115,7 +115,7 @@
     </update>
 
     <update id="submit" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
-    update project  set if_submit=1,if_issued=0,shen_he_ren=0  where project.project_id=#{project_id}
+    update project  set if_submit=1,if_issued=0,shen_he_ren=null where project.project_id=#{project_id}
     </update>
 
     <update id="pass" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
