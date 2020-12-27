@@ -5,7 +5,7 @@ spring:
   datasource:
     username: hnhskjssws
     password: Hnhskjssws
-    url: jdbc:mysql://8.129.86.121:3306/kjssws?useUnicode=true&characterEncoding=utf-8&uesSSL=true&serverTimezone=UTC
+    url: jdbc:mysql://8.129.86.121:3306/kjssws?useUnicode=true&characterEncoding=utf-8&uesSSL=false&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
   thymeleaf:
     prefix: "classpath:/templates/frontend/"
