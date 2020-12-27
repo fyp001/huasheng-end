@@ -73,8 +73,8 @@ public class QandAController {
 
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "/backend")
-    public List<Map> ReadAllQusetion() throws JSONException {
+    @RequestMapping(value = "QandA/getProblem")
+    public List<Map> readAllQusetion() throws JSONException {
         List<Question> questionList = qandAService.readAllQuestion();
         List<Map> mapList = new ArrayList<>();
         for(Question q : questionList){
@@ -88,6 +88,54 @@ public class QandAController {
         return mapList;
     }
 
+    @CrossOrigin
+    @ResponseBody
+    @PostMapping(value = "QandA/insert")
+    public String insertQuestion(@Param("question_pre")String question_pre,@Param("q_word")String q_word,
+                                 @Param("question_aft")String question_aft) throws JSONException{
+        Question q = new Question();
+        q.setQuestion_pre(question_pre);
+        q.setQ_word(q_word);
+        q.setQuestion_aft(question_aft);
+        int result = qandAService.insertQuestion(q);
+        JSONObject jsonObject = new JSONObject();
+        if(result==1){
+            jsonObject.put("status","success");
+        }else{
+            jsonObject.put("status","error");
+        }
+        return jsonObject.toString();
+    }
+
+    @CrossOrigin
+    @ResponseBody
+    @PostMapping(value = "QandA/update")
+    public String updateQuestion(@Param("id") Integer id,@Param("question_pre")String question_pre,
+                                 @Param("q_word")String q_word, @Param("question_aft")String question_aft)
+            throws JSONException{
+        int result = qandAService.updateQuestion(id, question_pre, q_word, question_aft);
+        JSONObject jsonObject = new JSONObject();
+        if(result==1){
+            jsonObject.put("status","success");
+        }else{
+            jsonObject.put("status","error");
+        }
+        return jsonObject.toString();
+    }
+
+    @CrossOrigin
+    @ResponseBody
+    @RequestMapping(value="QandA/delete")
+    public String deleteQuestion(@Param("id") Integer id)throws JSONException{
+        int result = qandAService.deleteQuestion(id);
+        JSONObject jsonObject = new JSONObject();
+        if(result==1){
+            jsonObject.put("status","success");
+        }else{
+            jsonObject.put("status","error");
+        }
+        return jsonObject.toString();
+    }
 }
 
 class QandAThread extends Thread{

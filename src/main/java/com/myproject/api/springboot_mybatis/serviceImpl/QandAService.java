@@ -12,15 +12,15 @@ public class QandAService {
     @Autowired
     QandAMapper qandAMapper;
 
-    public int InsertQuestion(Question question){
+    public int insertQuestion(Question question){
         return qandAMapper.insertQuestion(question);
     }
 
-    public int DeleteQuestion(Integer id){
+    public int deleteQuestion(Integer id){
         return qandAMapper.deleteQuestion(id);
     }
 
-    public int UpdateQuestion(Integer id,String question_pre,String q_word,String question_aft){
+    public int updateQuestion(Integer id,String question_pre,String q_word,String question_aft){
         return qandAMapper.updateQuestion(id,question_pre,q_word,question_aft);
     }
 
