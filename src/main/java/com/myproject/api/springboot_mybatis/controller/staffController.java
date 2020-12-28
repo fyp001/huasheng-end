@@ -47,7 +47,8 @@ public class staffController extends BaseController{
         //建立token和用户登录态之间的联系
         redisTemplate.opsForValue().set(uuidToken,staff);
         redisTemplate.expire(uuidToken,1, TimeUnit.HOURS);
-
+//        Staff s=redisTemplate.opsForValue().get("d4d04043c407436a8e848af7c6eac601");
+//        System.out.println(s.toString());
         //将登录凭证加入到用户登录成功的session内
 //        this.httpServletRequest.getSession().setAttribute("IS_LOGIN",true);
 //        this.httpServletRequest.getSession().setAttribute("LOGIN_USER",userModel);
