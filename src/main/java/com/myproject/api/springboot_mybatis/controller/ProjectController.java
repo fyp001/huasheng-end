@@ -51,9 +51,10 @@ public class ProjectController {
     @GetMapping(value = "/project/getCheckProject")
     public List<Project> getCheckProject()
     {
-
+        Project project=new Project();
+        project.setShen_he_ren(staff_id);
         List<Staff> s=projectService.getname();
-        List<Project> p=projectService.getCheckProject();
+        List<Project> p=projectService.getCheckProject(project);
         return getProjects(s, p);
 
     }
@@ -93,22 +94,38 @@ public class ProjectController {
     {
         Map<String,Object> result=new HashMap<>();
         project.setShen_he_ren(staff_id);
-        List<Project> p=projectService.getCheckProject();
-        char if_issued ='0';
+        List<Project> p=projectService.getAllCheckProject();
         for(int i=0;i<p.size();i++){
             if(p.get(i).getProject_id()==project.getProject_id()){
-                if_issued=p.get(i).getIf_issued();
+                if(p.get(i).getIf_issued()!='0'){
+                    result.put("code",250);
+                    result.put("message","已经有人对此进行了审核操作");
+                }
+                else {
+                    if(p.get(i).getShen_he_ren()==0)
+                    {
+                        projectService.pass(project);
+                        result.put("code",100);
+                        result.put("message","操作成功");
+                    }
+                    else if(p.get(i).getShen_he_ren()!=0)
+                    {
+                        if(p.get(i).getShen_he_ren()==staff_id)
+                        {
+                            projectService.pass(project);
+                            result.put("code",100);
+                            result.put("message","操作成功");
+                        }
+                        else
+                        {
+                            result.put("code",300);
+                            result.put("message","该处已有审核人进行审核");
+                        }
+                    }
+                }
             }
         }
-        if(if_issued!='0'){
-            result.put("code",250);
-            result.put("message","已经有人对此进行了审核操作");
-        }
-        else {
-            projectService.pass(project);
-            result.put("code",100);
-            result.put("message","操作成功");
-        }
+
         return result;
     }
 
@@ -118,22 +135,36 @@ public class ProjectController {
     {
         Map<String,Object> result=new HashMap<>();
         project.setShen_he_ren(staff_id);
-        List<Project> p=projectService.getCheckProject();
-        char if_issued ='0';
+        List<Project> p=projectService.getAllCheckProject();
         for(int i=0;i<p.size();i++){
             if(p.get(i).getProject_id()==project.getProject_id()){
-                if_issued=p.get(i).getIf_issued();
+                if(p.get(i).getIf_issued()!='0'){
+                    result.put("code",250);
+                    result.put("message","已经有人对此进行了审核操作");
+                }
+                else {
+                    if(p.get(i).getShen_he_ren()==0)
+                    {
+                        projectService.refuse(project);
+                        result.put("code",100);
+                        result.put("message","操作成功");
+                    }
+                    else if(p.get(i).getShen_he_ren()!=0)
+                    {
+                        if(p.get(i).getShen_he_ren()==staff_id)
+                        {
+                            projectService.refuse(project);
+                            result.put("code",100);
+                            result.put("message","操作成功");
+                        }
+                        else
+                        {
+                            result.put("code",300);
+                            result.put("message","该处已有审核人进行审核");
+                        }
+                    }
+                }
             }
-
-        }
-        if(if_issued!='0'){
-            result.put("code",250);
-            result.put("message","已经有人对此进行了审核操作");
-        }
-        else {
-            projectService.refuse(project);
-            result.put("code",100);
-            result.put("message","操作成功");
         }
         return result;
     }

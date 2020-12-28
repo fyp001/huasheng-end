@@ -63,9 +63,9 @@ public class fileController {
     @CrossOrigin
     @RequestMapping(value = "/file/getChecker")
     List<file> getChecker(){
-        //file file2 = new file();
-        //file2.setShen_he_ren(1);
-        List<file> f=fileservice.GetChecker();
+        file file2 = new file();
+        file2.setShen_he_ren(staff_id);
+        List<file> f=fileservice.GetChecker(file2);
         for(int i=0;i<f.size();i++){
             if(f.get(i).getJing_ban_ren()!=0){
                 f.get(i).setOperatorname(fileservice.GetName(f.get(i).getJing_ban_ren()));
@@ -103,21 +103,36 @@ public class fileController {
     Map<String,Object> checkpass(file f){
         Map<String,Object> result=new HashMap<>();
         f.setShen_he_ren(staff_id);
-        List<file> l=fileservice.GetChecker();
-        char if_issued ='0';
+        List<file> l=fileservice.getAllCheckerFile();
         for(int i=0;i<l.size();i++){
             if(l.get(i).getFile_id()==f.getFile_id()){
-                if_issued=l.get(i).getIf_issued();
+                if(l.get(i).getIf_issued()!='0'){
+                    result.put("code",250);
+                    result.put("message","已经有人对此进行了审核操作");
+                }
+                else {
+                    if(l.get(i).getShen_he_ren()==0)
+                    {
+                        fileservice.checkpass(f);
+                        result.put("code",100);
+                        result.put("message","操作成功");
+                    }
+                    else if(l.get(i).getShen_he_ren()!=0)
+                    {
+                        if(l.get(i).getShen_he_ren()==staff_id)
+                        {
+                            fileservice.checkpass(f);
+                            result.put("code",100);
+                            result.put("message","操作成功");
+                        }
+                        else
+                        {
+                            result.put("code",300);
+                            result.put("message","该处已有审核人进行审核");
+                        }
+                    }
+                }
             }
-        }
-        if(if_issued!='0'){
-            result.put("code",250);
-            result.put("message","已经有人对此进行了审核操作");
-        }
-        else {
-            fileservice.checkpass(f);
-            result.put("code",100);
-            result.put("message","操作成功");
         }
         return result;
     }
@@ -130,21 +145,36 @@ public class fileController {
     Map<String,Object> checknotpass(file f){
         Map<String,Object> result=new HashMap<>();
         f.setShen_he_ren(staff_id);
-        List<file> l=fileservice.GetChecker();
-        char if_issued ='0';
+        List<file> l=fileservice.getAllCheckerFile();
         for(int i=0;i<l.size();i++){
             if(l.get(i).getFile_id()==f.getFile_id()){
-                if_issued=l.get(i).getIf_issued();
+                if(l.get(i).getIf_issued()!='0'){
+                    result.put("code",250);
+                    result.put("message","已经有人对此进行了审核操作");
+                }
+                else {
+                    if(l.get(i).getShen_he_ren()==0)
+                    {
+                        fileservice.checknotpass(f);
+                        result.put("code",100);
+                        result.put("message","操作成功");
+                    }
+                    else if(l.get(i).getShen_he_ren()!=0)
+                    {
+                        if(l.get(i).getShen_he_ren()==staff_id)
+                        {
+                            fileservice.checknotpass(f);
+                            result.put("code",100);
+                            result.put("message","操作成功");
+                        }
+                        else
+                        {
+                            result.put("code",300);
+                            result.put("message","该处已有审核人进行审核");
+                        }
+                    }
+                }
             }
-        }
-        if(if_issued!='0'){
-            result.put("code",250);
-            result.put("message","已经有人对此进行了审核操作");
-        }
-        else {
-            fileservice.checknotpass(f);
-            result.put("code",100);
-            result.put("message","操作成功");
         }
         return result;
     }
@@ -221,7 +251,9 @@ public class fileController {
     @CrossOrigin
     @RequestMapping(value = "/file/GetAllContractChecker")
     public List<file> GetAllContractChecker() throws UnsupportedEncodingException {
-        List<file> f=fileservice.GetAllContractChecker();
+        file file2 = new file();
+        file2.setShen_he_ren(staff_id);
+        List<file> f=fileservice.GetAllContractChecker(file2);
         for(int i=0;i<f.size();i++){
             if(f.get(i).getJing_ban_ren()!=0){
                 f.get(i).setOperatorname(fileservice.GetName(f.get(i).getJing_ban_ren()));

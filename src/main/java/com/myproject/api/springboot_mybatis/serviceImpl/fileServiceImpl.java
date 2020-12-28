@@ -60,8 +60,8 @@ public class fileServiceImpl implements fileService {
     }
 
     @Override
-    public List<file> GetChecker() {
-        return filemapper.GetChecker();
+    public List<file> GetChecker(file f) {
+        return filemapper.GetChecker(f);
     }
 
     @Override
@@ -90,7 +90,14 @@ public class fileServiceImpl implements fileService {
     }
 
     @Override
-    public List<file> GetAllContractChecker() {
-        return filemapper.GetAllContractChecker();
+    public List<file> GetAllContractChecker(file f) {
+        return filemapper.GetAllContractChecker(f);
     }
+
+    @Override
+    public List<file> getAllCheckerFile() {
+        return filemapper.getAllCheckerFile();
+    }
+
+
 }

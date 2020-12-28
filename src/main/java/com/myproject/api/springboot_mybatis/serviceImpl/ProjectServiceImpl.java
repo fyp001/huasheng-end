@@ -20,8 +20,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> getCheckProject() {
-        return ProjectDao.getCheckProject();
+    public List<Project> getCheckProject(Project project) {
+        return ProjectDao.getCheckProject(project);
     }
 
     @Override
@@ -62,5 +62,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void if_delete(Project project) {
         ProjectDao.if_delete(project);
+    }
+
+    @Override
+    public List<Project> getAllCheckProject() {
+        return ProjectDao.getAllCheckProject();
     }
 }

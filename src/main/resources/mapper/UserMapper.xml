@@ -21,7 +21,7 @@
     </select>
     <select id="getCheckProject" resultType="com.myproject.api.springboot_mybatis.entity.Project" >
 
-        SELECT * FROM project where if_submit=1 and if_delete=0 ;
+        SELECT * FROM project where if_submit=1 and (shen_he_ren=#{shen_he_ren} or shen_he_ren=0) ;
 
     </select>
 
@@ -29,6 +29,9 @@
 
         SELECT * FROM staff  ;
 
+    </select>
+    <select id="getAllCheckProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">
+        select * from  project where  if_submit=1
     </select>
 
     <insert id="insert" parameterType="com.myproject.api.springboot_mybatis.entity.Project" useGeneratedKeys="true" keyProperty="project_id">
@@ -92,7 +95,6 @@
     </delete>
     <update id="update" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
     update project  set  project_name=#{project_name},
-                         project_id=#{project_id},
                          project_type=#{project_type},
                          project_client=#{project_client},
                          project_reportnumber=#{project_reportnumber},
@@ -110,7 +112,7 @@
                          project_costengineer=#{project_costengineer},
                          project_taxaccountant=#{project_taxaccountant},
                          project_partner=#{project_partner},
-                         project_construction=#{project_construction},
+                         project_construction=#{project_construction}
                          where project.project_id=#{project_id}
     </update>
 

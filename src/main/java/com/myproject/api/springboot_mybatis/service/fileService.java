@@ -15,12 +15,13 @@ public interface fileService {
     void delete(file f);
     List<file> GetAllContract(file f);
     List<file> GetOperator(file f);
-    List<file> GetChecker();
-    List<file> GetAllContractChecker();
+    List<file> GetChecker(file f);
+    List<file> GetAllContractChecker(file f);
     String GetName(int shen_he_ren);
     void submitfile(file f);
     void checkpass(file f);
     void checknotpass(file f);
     void checkdelete(file f);
+    List<file> getAllCheckerFile();
 
 }

@@ -45,6 +45,7 @@ public class file {
 
     private String operatorname;
     private String checker;
+    private double contract_amount;
 
     public String getTxt_name() {
         return txt_name;
@@ -198,5 +199,13 @@ public class file {
 
     public void setFile_code(String file_code) {
         this.file_code = file_code;
+    }
+
+    public double getContract_amount() {
+        return contract_amount;
+    }
+
+    public void setContract_amount(double contract_amount) {
+        this.contract_amount = contract_amount;
     }
 }

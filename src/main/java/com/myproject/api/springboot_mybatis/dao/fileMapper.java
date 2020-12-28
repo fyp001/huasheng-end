@@ -67,9 +67,9 @@ public interface fileMapper {
 
     List<file> GetOperator(file f);
 
-    List<file> GetChecker();
+    List<file> GetChecker(file f);
 
-    List<file> GetAllContractChecker();
+    List<file> GetAllContractChecker(file f);
 
     String GetName(int shen_he_ren);
 
@@ -80,5 +80,9 @@ public interface fileMapper {
     void checknotpass(file f);
 
     void checkdelete(file f);
+
+    List<file> getAllCheckerFile();
+
+
 
 }

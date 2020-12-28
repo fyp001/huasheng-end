@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface ProjectDao {
     List<Project> getAllProject(Project project);
-    List<Project> getCheckProject();
+    List<Project> getCheckProject(Project project);
+    List<Project> getAllCheckProject();
     List <Staff>  getname();
     void insert(Project project);
     void delete(Project project);
