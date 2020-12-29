@@ -38,8 +38,8 @@
          client_representative = #{newRepresentativeValue},
          client_business = #{newBusinessValue},
          client_registered_capital = #{newRegisterCapitalValue},
-         client_person_name = #{newPersonNameValue},
-         client_person_phone= #{newPersonPhoneValue}
+         client_person_name = #{newPersonName},
+         client_person_phone= #{newPersonPhone}
         where client_id = #{id}
     </update>
 
