@@ -16,8 +16,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Bean
     public LoginInterceptor getMyInterceptor(){return new LoginInterceptor();}
 
-    @Value("${spring.mvc.static-path-pattern}")
-    private String staticPathPattern;
+//    @Value("${spring.mvc.static-path-pattern}")
+//    private String staticPathPattern;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册拦截器
@@ -39,7 +39,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
         //ir.addPathPatterns("staff/*");
         // 添加不拦截的请求
         //ir.excludePathPatterns("/staff/login");
-        ir.excludePathPatterns(this.staticPathPattern);
+        ir.excludePathPatterns("/static/**");
         ir.excludePathPatterns("/static/assets/**");
         ir.excludePathPatterns("/static/img/**");
         ir.excludePathPatterns("/static/layui/**");
@@ -52,6 +52,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(this.staticPathPattern).addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     }
 }
