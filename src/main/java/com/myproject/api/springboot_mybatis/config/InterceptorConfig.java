@@ -1,6 +1,7 @@
 package com.myproject.api.springboot_mybatis.config;
 
 import com.myproject.api.springboot_mybatis.interceptor.LoginInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
@@ -9,10 +10,14 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
+
 @Configuration
 public class InterceptorConfig implements WebMvcConfigurer {
     @Bean
     public LoginInterceptor getMyInterceptor(){return new LoginInterceptor();}
+
+    @Value("${spring.mvc.static-path-pattern}")
+    private String staticPathPattern;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册拦截器
@@ -34,7 +39,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
         //ir.addPathPatterns("staff/*");
         // 添加不拦截的请求
         //ir.excludePathPatterns("/staff/login");
-        ir.excludePathPatterns("/static/**");
+        ir.excludePathPatterns(this.staticPathPattern);
 
         // 以上三句代码可以使用下面的代替
         // registry.addInterceptor(new MyInterceptor()).addPathPatterns("/*").excludePathPatterns("/login");
@@ -42,6 +47,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler(this.staticPathPattern).addResourceLocations("classpath:/static/");
     }
 }
