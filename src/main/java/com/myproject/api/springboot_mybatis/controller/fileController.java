@@ -39,8 +39,13 @@ public class fileController {
     @RequestMapping(value = "/file/getOperator")
     List<file> getOperator(HttpServletRequest request){
         JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
+        int staff_id = 0;
+        if(null!=jsonObject)
+        {
+            staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+        }
         file file1 = new file();
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+
         file1.setJing_ban_ren(staff_id);
         List<file> f=fileservice.GetOperator(file1);
         for(int i=0;i<f.size();i++){
@@ -231,7 +236,7 @@ public class fileController {
     /**
      * 经办人获取所有合同列表
      */
-    @CrossOrigin
+    //@CrossOrigin
     @RequestMapping(value = "/file/GetAllContract")
     public List<file> GetAllContract(HttpServletRequest request) throws UnsupportedEncodingException {
         JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
