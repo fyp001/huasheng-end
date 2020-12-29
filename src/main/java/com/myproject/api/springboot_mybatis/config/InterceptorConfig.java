@@ -40,6 +40,10 @@ public class InterceptorConfig implements WebMvcConfigurer {
         // 添加不拦截的请求
         //ir.excludePathPatterns("/staff/login");
         ir.excludePathPatterns(this.staticPathPattern);
+        ir.excludePathPatterns("/assets/**");
+        ir.excludePathPatterns("/img/**");
+        ir.excludePathPatterns("/layui/**");
+        //ir.excludePathPatterns("/assets/**");
 
         // 以上三句代码可以使用下面的代替
         // registry.addInterceptor(new MyInterceptor()).addPathPatterns("/*").excludePathPatterns("/login");
