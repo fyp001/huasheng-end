@@ -35,15 +35,10 @@ public class fileController {
     /**
      * 经办人文档显示
      */
-    @CrossOrigin
     @RequestMapping(value = "/file/getOperator")
     List<file> getOperator(HttpServletRequest request){
         JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id = 0;
-        if(null!=jsonObject)
-        {
-            staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
-        }
+        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
         file file1 = new file();
 
         file1.setJing_ban_ren(staff_id);
@@ -68,7 +63,6 @@ public class fileController {
     /**
      * 审核人文档显示
      */
-    @CrossOrigin
     @RequestMapping(value = "/file/getChecker")
     List<file> getChecker(HttpServletRequest request){
         JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
@@ -152,7 +146,6 @@ public class fileController {
     /**
      * 审核人审核驳回
      */
-    @CrossOrigin
     @RequestMapping(value = "/file/checknotpass")
     Map<String,Object> checknotpass(file f,HttpServletRequest request){
         JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
@@ -196,7 +189,6 @@ public class fileController {
     /**
      * 审核人删除已审核显示(暂时无用)
      */
-    @CrossOrigin
     @RequestMapping(value = "/file/checkdelete")
     void checkdelete(file f){
         fileservice.checkdelete(f);
@@ -205,7 +197,6 @@ public class fileController {
     /**
      * 根据id查询(暂时无用)
      */
-    @CrossOrigin
     @RequestMapping(value = "/file/QueryFile")
     public List<file> QueryFile(file f) //得到传来的file_type参数 json参数要加@RequestBody使其自动转对象
     {
@@ -215,7 +206,6 @@ public class fileController {
     /**
      * 获取所有文档列表(暂时无用)
      */
-    @CrossOrigin
     @RequestMapping(value = "/file/GetAllFile")
     public List<file> GetAllFile() throws UnsupportedEncodingException {
         List<file> f=fileservice.GetAllFile();
@@ -236,7 +226,6 @@ public class fileController {
     /**
      * 经办人获取所有合同列表
      */
-    //@CrossOrigin
     @RequestMapping(value = "/file/GetAllContract")
     public List<file> GetAllContract(HttpServletRequest request) throws UnsupportedEncodingException {
         JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
@@ -264,7 +253,6 @@ public class fileController {
     /**
      * 审核人获取所有合同列表
      */
-    @CrossOrigin
     @RequestMapping(value = "/file/GetAllContractChecker")
     public List<file> GetAllContractChecker(HttpServletRequest request) throws UnsupportedEncodingException {
         JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
@@ -295,7 +283,6 @@ public class fileController {
     /**
      * 文档插入字段(暂时无用)
      */
-    @CrossOrigin
     @RequestMapping(value = "/file/insert")
     public void insert(file f)
     {
@@ -307,7 +294,6 @@ public class fileController {
     /**
      * 文档删除(暂时无用)
      */
-    @CrossOrigin
     @RequestMapping(value = "/file/delete")
     public void delete(file f)
     {
@@ -317,7 +303,6 @@ public class fileController {
     /**
      * 获取文档文件位置(暂时无用)
      */
-    @CrossOrigin
     @RequestMapping(value = "/file/download")
     List<file> download(file f){
         return fileservice.download(f);
@@ -326,7 +311,6 @@ public class fileController {
     /**
      * 无用
      */
-    @CrossOrigin
     @RequestMapping(value = "/file/search")
     List<file> SearchFile(file f){
         return fileservice.SearchFile(f);
@@ -337,7 +321,6 @@ public class fileController {
      * 可以编辑已有文档的字段，以及上传文件，若该文档原来已有文件，则编辑时上传会替换原文件；
      * 若原来没有文件则上传一个文件保存文件地址
      */
-    @CrossOrigin
     @RequestMapping(value = "/file/update")
     public Map<String,Object> update(@RequestParam(value = "file",required = false) MultipartFile multipartFiles,file f,HttpServletResponse response,HttpServletRequest request)  {
         Map<String,Object> result=new HashMap<>();
@@ -399,7 +382,6 @@ public class fileController {
     /**
      * 文档上传，上传文档的字段信息或文件，文件可有可无，若有则需设置文件位置，文件名等字段
      */
-    @CrossOrigin
     @RequestMapping("/file/upload")
     public Map<String,Object> uploadFile(@RequestParam(value = "file",required = false) MultipartFile multipartFiles,HttpServletResponse response,HttpServletRequest request,file f)  {
         JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
@@ -465,7 +447,6 @@ public class fileController {
     /**
      * 文档文件下载
      */
-    @CrossOrigin
     @RequestMapping("/file/download1")
     public Map<String,Object> downloadFile(@RequestParam String fileName,@RequestParam String fileLocation,HttpServletResponse response,HttpServletRequest request) throws UnsupportedEncodingException {
         Map<String,Object> result=new HashMap<>();
@@ -524,7 +505,6 @@ public class fileController {
     /**
      * 文档文件删除，若有文件则需要同时删除文件
      */
-    @CrossOrigin
     @RequestMapping("/file/deletefile")
     public Map<String,Object> deletefile(HttpServletResponse response,HttpServletRequest request,file f)
     {

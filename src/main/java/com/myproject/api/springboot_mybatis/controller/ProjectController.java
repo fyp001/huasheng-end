@@ -18,7 +18,7 @@ public class ProjectController {
     @Autowired
     ProjectService projectService;
 
-    @CrossOrigin
+
     @GetMapping(value = "/project/getAllProject")
     public List<Project> getAllProject(HttpServletRequest request){
         JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
@@ -50,7 +50,7 @@ public class ProjectController {
         return p;
     }
 
-    @CrossOrigin
+
     @GetMapping(value = "/project/getCheckProject")
     public List<Project> getCheckProject(HttpServletRequest request)
     {
@@ -64,7 +64,7 @@ public class ProjectController {
 
     }
 
-    @CrossOrigin
+
     @RequestMapping(value = "/project/insert")
     public void insert(Project project,HttpServletRequest request)
     {
@@ -74,28 +74,27 @@ public class ProjectController {
         projectService.insert(project);
     }
 
-    @CrossOrigin
     @RequestMapping(value = "/project/delete",method = RequestMethod.DELETE)
     public void delete(Project project)
     {
         projectService.delete(project);
     }
 
-    @CrossOrigin
+
     @RequestMapping(value = "/project/update")
     public void update(Project project)
     {
         projectService.update(project);
     }
 
-    @CrossOrigin
+
     @RequestMapping(value = "/project/submit")
     public void submit(Project project,HttpServletRequest request)
     {
         projectService.submit(project);
     }
 
-    @CrossOrigin
+
     @RequestMapping(value = "/project/pass")
     public Map<String,Object> pass(Project project,HttpServletRequest request)
     {
@@ -138,7 +137,7 @@ public class ProjectController {
         return result;
     }
 
-    @CrossOrigin
+
     @RequestMapping(value = "/project/refuse")
     public Map<String,Object> refuse(Project project,HttpServletRequest request)
     {
@@ -180,7 +179,7 @@ public class ProjectController {
         return result;
     }
 
-    @CrossOrigin
+
     @RequestMapping(value = "/project/if_delete")
     public void if_delete(Project project)
     {
