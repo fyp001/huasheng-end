@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
@@ -33,9 +34,14 @@ public class InterceptorConfig implements WebMvcConfigurer {
         //ir.addPathPatterns("staff/*");
         // 添加不拦截的请求
         //ir.excludePathPatterns("/staff/login");
-        //ir.excludePathPatterns("/static/**");
+        ir.excludePathPatterns("/static/**");
 
         // 以上三句代码可以使用下面的代替
         // registry.addInterceptor(new MyInterceptor()).addPathPatterns("/*").excludePathPatterns("/login");
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     }
 }

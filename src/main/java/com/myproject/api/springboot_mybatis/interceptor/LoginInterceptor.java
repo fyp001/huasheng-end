@@ -45,9 +45,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             httpServletResponse.getWriter().write(JSONObject.toJSONString(map));
             httpServletResponse.getWriter().flush();
         }
-        return true;
-
-
+        return false;
     }
 
     //    试图渲染之后执行
