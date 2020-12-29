@@ -29,9 +29,10 @@ public class QandAController {
     public String QandA(@Param("data") String question) throws IOException, InterruptedException, JSONException {
             String exe = "python";
             String command = "/root/AnsPy/AnsSys.py";
+//            String command = "G:\\大学\\面向对象\\huasheng\\src\\main\\resources\\static\\AnsSys.py";
             String cmdArr = exe + ' '+command +' '+question;
             System.out.println(cmdArr);
-        JSONObject object = new JSONObject();
+            JSONObject object = new JSONObject();
             Process process = Runtime.getRuntime().exec(cmdArr);
             BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
             new Thread(){
@@ -41,7 +42,9 @@ public class QandAController {
                         String str = null;
                         while(true){
                             try {
-                                if (!((str = in.readLine())==null)) break;
+                                if (!((str = in.readLine())==null)) {
+                                    break
+                                }
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -142,7 +145,6 @@ class QandAThread extends Thread{
     public void run(){
         synchronized (o1){
             System.out.println("Waiting for ans...");
-
         }
     }
 }

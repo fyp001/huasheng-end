@@ -16,6 +16,12 @@ spring:
     host: 8.129.86.121
     port: 6379
     database: 10
+  servlet:
+    multipart:
+      #单个文件的最大上限
+      max-file-size: 100MB
+      #单个请求的文件总大小上限
+      max-request-size: 100MB
 
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
