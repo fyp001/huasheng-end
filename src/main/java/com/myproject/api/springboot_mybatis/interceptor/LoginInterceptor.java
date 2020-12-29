@@ -25,7 +25,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 
         httpServletResponse.setCharacterEncoding("UTF-8");
-        String token=httpServletRequest.getHeader("accessToken");
+        String token=httpServletRequest.getHeader("token");
         if (null==token){
             Map<String,Object> map=new HashMap<>();
             map.put("data","token is null");
