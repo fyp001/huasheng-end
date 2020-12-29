@@ -22,9 +22,6 @@ spring:
       max-file-size: 100MB
       #单个请求的文件总大小上限
       max-request-size: 100MB
-      
-  mvc:
-    static-path-pattern: /static/**
 
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
@@ -34,6 +31,7 @@ mq:
   nameserver:
     addr: 127.0.0.1:9876
   topicname: stock
+
 
 #showSql
 logging:

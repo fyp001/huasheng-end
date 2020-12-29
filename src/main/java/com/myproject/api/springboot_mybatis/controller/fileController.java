@@ -1,7 +1,5 @@
 package com.myproject.api.springboot_mybatis.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.myproject.api.springboot_mybatis.entity.file;
 import com.myproject.api.springboot_mybatis.entity.Staff;
 import com.myproject.api.springboot_mybatis.service.fileService;
@@ -32,15 +30,14 @@ public class fileController {
     staffService staffservice;
     SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat formatter1= new SimpleDateFormat("yyyy-MM-dd'-'HH-mm-ss");
+    static int staff_id=1;
     /**
      * 经办人文档显示
      */
     @CrossOrigin
     @RequestMapping(value = "/file/getOperator")
-    List<file> getOperator(HttpServletRequest request){
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
+    List<file> getOperator(){
         file file1 = new file();
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
         file1.setJing_ban_ren(staff_id);
         List<file> f=fileservice.GetOperator(file1);
         for(int i=0;i<f.size();i++){
@@ -65,9 +62,7 @@ public class fileController {
      */
     @CrossOrigin
     @RequestMapping(value = "/file/getChecker")
-    List<file> getChecker(HttpServletRequest request){
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+    List<file> getChecker(){
         file file2 = new file();
         file2.setShen_he_ren(staff_id);
         List<file> f=fileservice.GetChecker(file2);
@@ -105,9 +100,7 @@ public class fileController {
      */
     @CrossOrigin
     @RequestMapping(value = "/file/checkpass")
-    Map<String,Object> checkpass(file f,HttpServletRequest request){
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+    Map<String,Object> checkpass(file f){
         Map<String,Object> result=new HashMap<>();
         f.setShen_he_ren(staff_id);
         List<file> l=fileservice.getAllCheckerFile();
@@ -149,9 +142,7 @@ public class fileController {
      */
     @CrossOrigin
     @RequestMapping(value = "/file/checknotpass")
-    Map<String,Object> checknotpass(file f,HttpServletRequest request){
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+    Map<String,Object> checknotpass(file f){
         Map<String,Object> result=new HashMap<>();
         f.setShen_he_ren(staff_id);
         List<file> l=fileservice.getAllCheckerFile();
@@ -233,9 +224,7 @@ public class fileController {
      */
     @CrossOrigin
     @RequestMapping(value = "/file/GetAllContract")
-    public List<file> GetAllContract(HttpServletRequest request) throws UnsupportedEncodingException {
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+    public List<file> GetAllContract() throws UnsupportedEncodingException {
         file file1 = new file();
         file1.setJing_ban_ren(staff_id);
         List<file> f=fileservice.GetAllContract(file1);
@@ -261,9 +250,7 @@ public class fileController {
      */
     @CrossOrigin
     @RequestMapping(value = "/file/GetAllContractChecker")
-    public List<file> GetAllContractChecker(HttpServletRequest request) throws UnsupportedEncodingException {
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+    public List<file> GetAllContractChecker() throws UnsupportedEncodingException {
         file file2 = new file();
         file2.setShen_he_ren(staff_id);
         List<file> f=fileservice.GetAllContractChecker(file2);
@@ -352,7 +339,7 @@ public class fileController {
                 File file=new File(URLDecoder.decode(f.getFile_location())+URLDecoder.decode(f.getTxt_name()));
                 file.delete();
                 try {
-                    String newname=UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
+                    String newname=UUID.randomUUID()+"_"+multipartFiles.getOriginalFilename();
                     multipartFiles.transferTo(new File(fileDir,newname));
                     f.setTxt_name(URLEncoder.encode(newname, "utf-8"));
                 } catch (IOException e) {
@@ -368,7 +355,7 @@ public class fileController {
                     fileDirnew.mkdirs();
                 }
                 try {
-                    String newname=UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
+                    String newname=UUID.randomUUID()+"_"+multipartFiles.getOriginalFilename();
                     multipartFiles.transferTo(new File(fileDirnew,newname));
                     f.setTxt_name(URLEncoder.encode(newname, "utf-8"));
                     f.setFile_location(URLEncoder.encode(rootPath, "utf-8"));
@@ -397,8 +384,6 @@ public class fileController {
     @CrossOrigin
     @RequestMapping("/file/upload")
     public Map<String,Object> uploadFile(@RequestParam(value = "file",required = false) MultipartFile multipartFiles,HttpServletResponse response,HttpServletRequest request,file f)  {
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
         Map<String,Object> result=new HashMap<>();
         //在文件操作中，不用/或者\最好，推荐使用File.separator
         File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
@@ -419,7 +404,7 @@ public class fileController {
             if (multipartFiles != null)
             {
                 //String newname=UUID.randomUUID()+"_"+multipartFiles.getOriginalFilename();
-                String newname=UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
+                String newname=UUID.randomUUID()+"_"+multipartFiles.getOriginalFilename();
                 f.setFile_location(URLEncoder.encode(rootPath, "utf-8"));
                 f.setTxt_name(URLEncoder.encode(newname, "utf-8"));
                 File fileDir = new File(rootPath);
