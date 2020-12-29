@@ -352,7 +352,7 @@ public class fileController {
                 File file=new File(URLDecoder.decode(f.getFile_location())+URLDecoder.decode(f.getTxt_name()));
                 file.delete();
                 try {
-                    String newname=UUID.randomUUID()+"_"+multipartFiles.getOriginalFilename();
+                    String newname=UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
                     multipartFiles.transferTo(new File(fileDir,newname));
                     f.setTxt_name(URLEncoder.encode(newname, "utf-8"));
                 } catch (IOException e) {
@@ -368,7 +368,7 @@ public class fileController {
                     fileDirnew.mkdirs();
                 }
                 try {
-                    String newname=UUID.randomUUID()+"_"+multipartFiles.getOriginalFilename();
+                    String newname=UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
                     multipartFiles.transferTo(new File(fileDirnew,newname));
                     f.setTxt_name(URLEncoder.encode(newname, "utf-8"));
                     f.setFile_location(URLEncoder.encode(rootPath, "utf-8"));
@@ -419,7 +419,7 @@ public class fileController {
             if (multipartFiles != null)
             {
                 //String newname=UUID.randomUUID()+"_"+multipartFiles.getOriginalFilename();
-                String newname=UUID.randomUUID()+"_"+multipartFiles.getOriginalFilename();
+                String newname=UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
                 f.setFile_location(URLEncoder.encode(rootPath, "utf-8"));
                 f.setTxt_name(URLEncoder.encode(newname, "utf-8"));
                 File fileDir = new File(rootPath);
