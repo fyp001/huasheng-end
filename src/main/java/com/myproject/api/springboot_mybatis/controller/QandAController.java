@@ -43,7 +43,7 @@ public class QandAController {
                         while(true){
                             try {
                                 if (!((str = in.readLine())==null)) {
-                                    break
+                                    break;
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
