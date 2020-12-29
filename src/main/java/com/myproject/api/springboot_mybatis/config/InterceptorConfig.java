@@ -43,6 +43,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
         ir.excludePathPatterns("/static/assets/**");
         ir.excludePathPatterns("/static/img/**");
         ir.excludePathPatterns("/static/layui/**");
+        ir.excludePathPatterns("/static/font_Icon/**");
         ir.excludePathPatterns("/templates/frontend/**");
         ir.excludePathPatterns("/", "/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg", "/**/*.gif", "/**/fonts/*", "/**/*.svg");
         // 以上三句代码可以使用下面的代替
