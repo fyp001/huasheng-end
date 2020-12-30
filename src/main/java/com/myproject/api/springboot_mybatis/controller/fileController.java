@@ -41,8 +41,8 @@ public class fileController {
     @RequestMapping(value = "/file/getOperator")
     List<file> getOperator(HttpServletRequest request){
         int staff_id=0;
-        System.out.println("通过了拦截器到达controller先取值:"+request.getAttribute("staffMessage"));
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
+        System.out.println("通过了拦截器到达controller先取值:"+request.getSession().getAttribute("staffMessage"));
+        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getSession().getAttribute("staffMessage"));
         if(null==jsonObject)
         {
             log.info("在controlled中拿到的staff信息为空");
