@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.myproject.api.springboot_mybatis.entity.file;
 import com.myproject.api.springboot_mybatis.entity.Staff;
+import com.myproject.api.springboot_mybatis.interceptor.LoginInterceptor;
 import com.myproject.api.springboot_mybatis.service.fileService;
 import com.myproject.api.springboot_mybatis.service.staffService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -32,13 +33,27 @@ public class fileController {
     staffService staffservice;
     SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat formatter1= new SimpleDateFormat("yyyy-MM-dd'-'HH-mm-ss");
+
+    private static java.util.logging.Logger log = java.util.logging.Logger.getLogger(fileController.class.getName());
     /**
      * 经办人文档显示
      */
     @RequestMapping(value = "/file/getOperator")
     List<file> getOperator(HttpServletRequest request){
+        int staff_id=0;
+        System.out.println("通过了拦截器到达controller先取值:"+request.getAttribute("staffMessage"));
         JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+        if(null==jsonObject)
+        {
+            log.info("在controlled中拿到的staff信息为空");
+            System.out.println("在controlled中拿到的staff信息为空");
+        }
+        else
+        {
+            staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+            System.out.println(staff_id);
+        }
+
         file file1 = new file();
 
         file1.setJing_ban_ren(staff_id);

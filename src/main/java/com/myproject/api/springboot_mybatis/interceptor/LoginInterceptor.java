@@ -2,6 +2,7 @@ package com.myproject.api.springboot_mybatis.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.myproject.api.springboot_mybatis.entity.Staff;
+import org.springframework.data.redis.connection.RedisServer;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 
 @Component
@@ -20,6 +22,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Resource
     RedisTemplate<String, Staff> redisTemplate;
 
+    private static Logger log = Logger.getLogger(LoginInterceptor.class.getName());
     //    在请求处理之前调用,只有返回true才会执行要执行的请求
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
@@ -34,12 +37,17 @@ public class LoginInterceptor implements HandlerInterceptor {
             httpServletResponse.getWriter().flush();
         }else {
             Staff s=redisTemplate.opsForValue().get(token);
+            System.out.println(s);
             if (s!=null){
                 //更新存储的token信息
+                log.info("在拦截器中获取了staff的信息");
+                System.out.println("在拦截器中获取了staff的信息"+s);
                 httpServletRequest.setAttribute("staffMessage",JSONObject.toJSON(s));
                 return true;
             }
             Map<String,Object> map=new HashMap<>();
+            log.info("该token对应的staff信息为空");
+            System.out.println("该token对应的staff信息为空");
             map.put("data","token is null");
             map.put("code","401");
             httpServletResponse.getWriter().write(JSONObject.toJSONString(map));
