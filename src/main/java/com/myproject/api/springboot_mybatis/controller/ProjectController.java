@@ -6,8 +6,10 @@ import com.myproject.api.springboot_mybatis.entity.Staff;
 import com.myproject.api.springboot_mybatis.entity.file;
 import com.myproject.api.springboot_mybatis.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -18,11 +20,17 @@ public class ProjectController {
     @Autowired
     ProjectService projectService;
 
+    @Resource
+    RedisTemplate<String, Staff> redisTemplate;
 
     @GetMapping(value = "/project/getAllProject")
     public List<Project> getAllProject(HttpServletRequest request){
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+        String token=request.getHeader("token");
+        Staff s1=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_in_date());
+        int staff_id=s1.getStaff_id();
+        System.out.println(s1.getStaff_id());
+
         List<Staff> s=projectService.getname();
         Project pro = new Project();
         pro.setJing_ban_ren(staff_id);
@@ -54,8 +62,11 @@ public class ProjectController {
     @GetMapping(value = "/project/getCheckProject")
     public List<Project> getCheckProject(HttpServletRequest request)
     {
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+        String token=request.getHeader("token");
+        Staff s1=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_in_date());
+        int staff_id=s1.getStaff_id();
+        System.out.println(s1.getStaff_id());
         Project project=new Project();
         project.setShen_he_ren(staff_id);
         List<Staff> s=projectService.getname();
@@ -68,8 +79,11 @@ public class ProjectController {
     @RequestMapping(value = "/project/insert")
     public void insert(Project project,HttpServletRequest request)
     {
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        int staff_id=s.getStaff_id();
+        System.out.println(s.getStaff_id());
         project.setJing_ban_ren(staff_id);
         projectService.insert(project);
     }
@@ -98,8 +112,11 @@ public class ProjectController {
     @RequestMapping(value = "/project/pass")
     public Map<String,Object> pass(Project project,HttpServletRequest request)
     {
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        int staff_id=s.getStaff_id();
+        System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
         project.setShen_he_ren(staff_id);
         List<Project> p=projectService.getAllCheckProject();
@@ -141,8 +158,11 @@ public class ProjectController {
     @RequestMapping(value = "/project/refuse")
     public Map<String,Object> refuse(Project project,HttpServletRequest request)
     {
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        int staff_id=s.getStaff_id();
+        System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
         project.setShen_he_ren(staff_id);
         List<Project> p=projectService.getAllCheckProject();

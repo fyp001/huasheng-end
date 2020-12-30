@@ -42,7 +42,6 @@ public class LoginInterceptor implements HandlerInterceptor {
                 //更新存储的token信息
                 log.info("在拦截器中获取了staff的信息");
                 System.out.println("在拦截器中获取了staff的信息"+s);
-                httpServletRequest.getSession().setAttribute("staffMessage",JSONObject.toJSON(s));
                 return true;
             }
             Map<String,Object> map=new HashMap<>();

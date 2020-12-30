@@ -12,10 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.filechooser.FileSystemView;
@@ -34,28 +36,21 @@ public class fileController {
     SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat formatter1= new SimpleDateFormat("yyyy-MM-dd'-'HH-mm-ss");
 
+    @Resource
+    RedisTemplate<String, Staff> redisTemplate;
+
     private static java.util.logging.Logger log = java.util.logging.Logger.getLogger(fileController.class.getName());
     /**
      * 经办人文档显示
      */
     @RequestMapping(value = "/file/getOperator")
     List<file> getOperator(HttpServletRequest request){
-        int staff_id=0;
-        System.out.println("通过了拦截器到达controller先取值:"+request.getSession().getAttribute("staffMessage"));
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getSession().getAttribute("staffMessage"));
-        if(null==jsonObject)
-        {
-            log.info("在controlled中拿到的staff信息为空");
-            System.out.println("在controlled中拿到的staff信息为空");
-        }
-        else
-        {
-            staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
-            System.out.println(staff_id);
-        }
-
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        int staff_id=s.getStaff_id();
+        System.out.println(s.getStaff_id());
         file file1 = new file();
-
         file1.setJing_ban_ren(staff_id);
         List<file> f=fileservice.GetOperator(file1);
         for(int i=0;i<f.size();i++){
@@ -80,8 +75,11 @@ public class fileController {
      */
     @RequestMapping(value = "/file/getChecker")
     List<file> getChecker(HttpServletRequest request){
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        int staff_id=s.getStaff_id();
+        System.out.println(s.getStaff_id());
         file file2 = new file();
         file2.setShen_he_ren(staff_id);
         List<file> f=fileservice.GetChecker(file2);
@@ -120,8 +118,11 @@ public class fileController {
     @CrossOrigin
     @RequestMapping(value = "/file/checkpass")
     Map<String,Object> checkpass(file f,HttpServletRequest request){
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        int staff_id=s.getStaff_id();
+        System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
         f.setShen_he_ren(staff_id);
         List<file> l=fileservice.getAllCheckerFile();
@@ -163,8 +164,11 @@ public class fileController {
      */
     @RequestMapping(value = "/file/checknotpass")
     Map<String,Object> checknotpass(file f,HttpServletRequest request){
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        int staff_id=s.getStaff_id();
+        System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
         f.setShen_he_ren(staff_id);
         List<file> l=fileservice.getAllCheckerFile();
@@ -243,8 +247,11 @@ public class fileController {
      */
     @RequestMapping(value = "/file/GetAllContract")
     public List<file> GetAllContract(HttpServletRequest request) throws UnsupportedEncodingException {
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        int staff_id=s.getStaff_id();
+        System.out.println(s.getStaff_id());
         file file1 = new file();
         file1.setJing_ban_ren(staff_id);
         List<file> f=fileservice.GetAllContract(file1);
@@ -270,8 +277,11 @@ public class fileController {
      */
     @RequestMapping(value = "/file/GetAllContractChecker")
     public List<file> GetAllContractChecker(HttpServletRequest request) throws UnsupportedEncodingException {
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        int staff_id=s.getStaff_id();
+        System.out.println(s.getStaff_id());
         file file2 = new file();
         file2.setShen_he_ren(staff_id);
         List<file> f=fileservice.GetAllContractChecker(file2);
@@ -399,8 +409,11 @@ public class fileController {
      */
     @RequestMapping("/file/upload")
     public Map<String,Object> uploadFile(@RequestParam(value = "file",required = false) MultipartFile multipartFiles,HttpServletResponse response,HttpServletRequest request,file f)  {
-        JSONObject jsonObject=(JSONObject) JSONObject.toJSON(request.getAttribute("staffMessage"));
-        int staff_id=Integer.valueOf(jsonObject.get("staff_id").toString());
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        int staff_id=s.getStaff_id();
+        System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
         //在文件操作中，不用/或者\最好，推荐使用File.separator
         File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
