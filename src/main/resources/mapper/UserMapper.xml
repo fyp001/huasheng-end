@@ -119,7 +119,6 @@
                          project_partner=#{project_partner},
                          project_construction=#{project_construction},
                          file_location=#{file_location},
-                         file_uploaddate=#{file_uploaddate},
                          file_updatedate=#{file_updatedate},
                          txt_name=#{txt_name}
                          where project.project_id=#{project_id}

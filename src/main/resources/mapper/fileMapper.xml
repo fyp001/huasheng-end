@@ -7,7 +7,7 @@
     </insert>
     
     <update id="update" parameterType="com.myproject.api.springboot_mybatis.entity.file" >
-        UPDATE filetable set file_name=#{file_name},file_type=#{file_type},file_property=#{file_property},file_version=#{file_version},file_project=#{file_project},file_location=#{file_location},file_uploaddate=#{file_uploaddate},file_updatedate=#{file_updatedate},txt_name=#{txt_name},file_code=#{file_code},contract_amount=#{contract_amount}
+        UPDATE filetable set file_name=#{file_name},file_type=#{file_type},file_property=#{file_property},file_version=#{file_version},file_project=#{file_project},file_location=#{file_location},file_updatedate=#{file_updatedate},txt_name=#{txt_name},file_code=#{file_code},contract_amount=#{contract_amount}
         WHERE file_id=#{file_id}
     </update>
     <update id="submitfile">
