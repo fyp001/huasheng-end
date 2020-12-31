@@ -83,7 +83,7 @@ public class ProjectController {
     {
         String token=request.getHeader("token");
         Staff s1=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_id());
         int staff_id=s1.getStaff_id();
         System.out.println(s1.getStaff_id());
         Project project=new Project();

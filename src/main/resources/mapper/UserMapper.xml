@@ -21,7 +21,7 @@
     </select>
     <select id="getCheckProject" resultType="com.myproject.api.springboot_mybatis.entity.Project" >
 
-        SELECT * FROM project where if_submit=1 and (shen_he_ren=#{shen_he_ren} or shen_he_ren=0) ;
+        SELECT * FROM project where if_submit=1 and (shen_he_ren=#{shen_he_ren} or shen_he_ren=null) ;
 
     </select>
 
@@ -126,21 +126,21 @@
     </update>
 
     <update id="submit" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
-    update project  set if_submit=1,if_issued=0,shen_he_ren=null where project.project_id=#{project_id}
+    update project  set if_submit=1,if_issued=0 where project.project_id=#{project_id}
     </update>
 
     <update id="pass" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
     update project  set
                          if_issued=2,
                          shen_he_ren=#{shen_he_ren}
-                         where project.project_id=#{project_id} and if_issued=0
+                         where project.project_id=#{project_id}
     </update>
 
     <update id="refuse" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
     update project  set
                          if_issued=1,
                          shen_he_ren=#{shen_he_ren}
-                         where project.project_id=#{project_id} and if_issued=0
+                         where project.project_id=#{project_id}
     </update>
 
     <update id="if_delete" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
