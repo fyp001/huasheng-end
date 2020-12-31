@@ -161,7 +161,7 @@ public class ProjectController {
         return result;
     }
 
-    @RequestMapping(value = "/project/delete",method = RequestMethod.DELETE)
+    @RequestMapping("/project/delete")
     public Map<String,Object> delete(Project project,HttpServletResponse response,HttpServletRequest request)
     {
         Map<String,Object> result=new HashMap<>();
