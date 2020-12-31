@@ -57,14 +57,14 @@
         select * from filetable where jing_ban_ren=#{jing_ban_ren} and file_type!='合同'
     </select>
     <select id="GetChecker" resultType="com.myproject.api.springboot_mybatis.entity.file">
-        select * from  filetable where  if_submit=1 and (shen_he_ren=#{shen_he_ren} or shen_he_ren=null) and file_type!='合同'
+        select * from  filetable where  if_submit=1 and (shen_he_ren=#{shen_he_ren} or shen_he_ren is null) and file_type!='合同'
     </select>
 
     <select id="GetName" resultType="java.lang.String">
         select staff_name from staff where staff_id=#{shen_he_ren}
     </select>
     <select id="GetAllContractChecker" resultType="com.myproject.api.springboot_mybatis.entity.file">
-        select * from  filetable where  if_submit=1 and (shen_he_ren=#{shen_he_ren} or shen_he_ren=null) and file_type='合同'
+        select * from  filetable where  if_submit=1 and (shen_he_ren=#{shen_he_ren} or shen_he_ren is null) and file_type='合同'
     </select>
     <select id="getAllCheckerFile" resultType="com.myproject.api.springboot_mybatis.entity.file">
         select * from  filetable where  if_submit=1
