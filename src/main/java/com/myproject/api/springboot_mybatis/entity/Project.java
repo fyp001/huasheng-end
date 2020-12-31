@@ -31,6 +31,56 @@ public class Project {
     public String staff_namej;
     public String staff_names;
 
+    public String file_location;
+
+    public String file_url;
+
+    public String txt_name;
+
+    private String file_uploaddate;
+
+    private String file_updatedate;
+
+    public String getFile_uploaddate() {
+        return file_uploaddate;
+    }
+
+    public void setFile_uploaddate(String file_uploaddate) {
+        this.file_uploaddate = file_uploaddate;
+    }
+
+    public String getFile_updatedate() {
+        return file_updatedate;
+    }
+
+    public void setFile_updatedate(String file_updatedate) {
+        this.file_updatedate = file_updatedate;
+    }
+
+    public String getFile_location() {
+        return file_location;
+    }
+
+    public void setFile_location(String file_location) {
+        this.file_location = file_location;
+    }
+
+    public String getFile_url() {
+        return file_url;
+    }
+
+    public void setFile_url(String file_url) {
+        this.file_url = file_url;
+    }
+
+    public String getTxt_name() {
+        return txt_name;
+    }
+
+    public void setTxt_name(String txt_name) {
+        this.txt_name = txt_name;
+    }
+
     public int getProject_id() {
         return project_id;
     }

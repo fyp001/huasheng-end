@@ -420,16 +420,7 @@ public class fileController {
         String desktopPath = desktopDir.getAbsolutePath();
         String driname = "files";
         String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + formatter.format(new Date()) + File.separator;
-//        if (multipartFiles != null && multipartFiles.length > 0)
-//        {
-//            try {
-//                String newname=uuid+"_"+multipartFiles[0].getOriginalFilename();
-//                f.setFile_location(URLEncoder.encode(rootPath, "utf-8"));
-//                f.setTxt_name(URLEncoder.encode(newname, "utf-8"));
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
-//            }
-//        }
+
         try {
             if (multipartFiles != null)
             {
