@@ -60,7 +60,8 @@
                        if_issued,
                        if_delete,
                        if_submit,
-                       jing_ban_ren
+                       jing_ban_ren,
+                       file_location,file_uploaddate,file_updatedate,txt_name
                    )
         values
             (#{project_id},
@@ -87,7 +88,11 @@
              0,
              0,
              0,
-             #{jing_ban_ren}
+             #{jing_ban_ren},
+             #{file_location},
+             #{file_uploaddate},
+             #{file_updatedate},
+             #{txt_name}
              )
     </insert>
     <delete id="delete"  parameterType="com.myproject.api.springboot_mybatis.entity.Project">
@@ -112,7 +117,11 @@
                          project_costengineer=#{project_costengineer},
                          project_taxaccountant=#{project_taxaccountant},
                          project_partner=#{project_partner},
-                         project_construction=#{project_construction}
+                         project_construction=#{project_construction},
+                         file_location=#{file_location},
+                         file_uploaddate=#{file_uploaddate},
+                         file_updatedate=#{file_updatedate},
+                         txt_name=#{txt_name}
                          where project.project_id=#{project_id}
     </update>
 
