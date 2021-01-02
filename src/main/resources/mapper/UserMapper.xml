@@ -120,7 +120,8 @@
                          project_construction=#{project_construction},
                          file_location=#{file_location},
                          file_updatedate=#{file_updatedate},
-                         txt_name=#{txt_name}
+                         txt_name=#{txt_name},
+                         project_code=#{project_code}
                          where project.project_id=#{project_id}
     </update>
 
