@@ -30,14 +30,30 @@ public class TenderController {
     SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
 
     @CrossOrigin
-    @GetMapping(value = "/tender/publicity")
-    public List<Tender> getAllTenderByIssue(){
+    @GetMapping(value = "/tender/getAllTender")
+    public List<Tender> getAllTenderByIssue(HttpServletRequest request){
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        int staff_id=s.getStaff_id();
         List<Tender> tenders=tenderService.getAllTender();
         List<Tender> result = null;
         for(Tender t : tenders){
-           if(t.getIf_issued()=='1'){
-               result.add(t);
-           }
+            if(t.getJing_ban_ren()==staff_id)
+            {
+                if(t.getIf_submit()=='0'){
+                    if(t.getShen_he_ren()!=0){
+                        t.setStaff_names(tenderService.GetName(t.getShen_he_ren()));
+                    }
+                    if(t.getFile_location()!=null)
+                    {
+                        String filename=t.getTxt_name();
+                        String filelocation=t.getFile_location();
+                        String url="http://8.129.86.121:8080/tender/download1?fileName="+filename+"&fileLocation="+filelocation;
+                        t.setFile_url(url);
+                    }
+                    result.add(t);
+                }
+            }
        }
         return result;
     }
@@ -60,7 +76,7 @@ public class TenderController {
     {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
         System.out.println(s.getStaff_id());
 
@@ -106,6 +122,9 @@ public class TenderController {
         tender.setFile_uploaddate(formatter.format(new Date()));
         tender.setFile_updatedate(formatter.format(new Date()));
         tender.setJing_ban_ren(staff_id);
+        tender.setIf_submit('0');
+        tender.setIf_issued('0');
+        tender.setIf_delete('0');
         tenderService.insert(tender);
         return result;
     }
@@ -227,7 +246,7 @@ public class TenderController {
     {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
         System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
@@ -294,7 +313,7 @@ public class TenderController {
     {
         String token=request.getHeader("token");
         Staff s1=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_id());
         int staff_id=s1.getStaff_id();
         System.out.println(s1.getStaff_id());
         Tender tender=new Tender();
@@ -321,7 +340,7 @@ public class TenderController {
     {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
         System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
@@ -369,7 +388,7 @@ public class TenderController {
     /**
      * 项目文件下载
      */
-    @RequestMapping("/project/download1")
+    @RequestMapping("/tender/download1")
     public Map<String,Object> downloadFile(@RequestParam String fileName, @RequestParam String fileLocation, HttpServletResponse response, HttpServletRequest request) throws UnsupportedEncodingException {
         Map<String,Object> result=new HashMap<>();
 //        ServletOutputStream os = null;

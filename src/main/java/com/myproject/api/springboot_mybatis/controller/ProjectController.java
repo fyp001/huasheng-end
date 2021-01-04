@@ -107,11 +107,11 @@ public class ProjectController {
 
 
     @RequestMapping(value = "/project/insert")
-    public Map<String,Object> insert(Project project,HttpServletRequest request,@RequestParam(value = "file",required = false) MultipartFile multipartFiles)
+    public Map<String,Object> insert(Project project,HttpServletRequest request,HttpServletResponse response,@RequestParam(value = "file",required = false) MultipartFile multipartFiles)
     {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
         System.out.println(s.getStaff_id());
 
@@ -245,7 +245,7 @@ public class ProjectController {
 
 
     @RequestMapping(value = "/project/submit")
-    public void submit(Project project,HttpServletRequest request)
+    public void submit(Project project)
     {
         projectService.submit(project);
     }

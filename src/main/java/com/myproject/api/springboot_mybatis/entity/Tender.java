@@ -406,4 +406,6 @@ public class Tender {
     public void setFile_url(String file_url) {
         this.file_url = file_url;
     }
+
+
 }
