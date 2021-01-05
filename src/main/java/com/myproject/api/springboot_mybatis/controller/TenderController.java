@@ -40,7 +40,6 @@ public class TenderController {
         for(Tender t : tenders){
             if(t.getJing_ban_ren()==staff_id)
             {
-                if(t.getIf_submit()=='0'){
                     if(t.getShen_he_ren()!=0){
                         t.setStaff_names(tenderService.GetName(t.getShen_he_ren()));
                     }
@@ -52,7 +51,6 @@ public class TenderController {
                         t.setFile_url(url);
                     }
                     result.add(t);
-                }
             }
        }
         return result;
