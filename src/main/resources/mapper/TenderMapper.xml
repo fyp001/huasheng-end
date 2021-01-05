@@ -45,7 +45,7 @@
         tender_text, tender_record_scanning, project_record,
         tender_margin, tender_account, bank_deposit,
         if_submit, if_delete, jing_ban_ren,
-        shen_he_ren, if_issued, txt_name,
+        if_issued, txt_name,
         file_location, file_uploaddate, file_updatedate
         )
         values (#{id,jdbcType=INTEGER}, #{tender_year,jdbcType=VARCHAR}, #{tender_date,jdbcType=TIMESTAMP},
@@ -60,7 +60,7 @@
         #{tender_text,jdbcType=VARCHAR}, #{tender_record_scanning,jdbcType=VARCHAR}, #{project_record,jdbcType=VARCHAR},
         #{tender_margin,jdbcType=DOUBLE}, #{tender_account,jdbcType=VARCHAR}, #{bank_deposit,jdbcType=VARCHAR},
         #{if_submit,jdbcType=CHAR}, #{if_delete,jdbcType=CHAR}, #{jing_ban_ren,jdbcType=INTEGER},
-        #{shen_he_ren,jdbcType=INTEGER}, #{if_issued,jdbcType=CHAR}, #{txt_name,jdbcType=VARCHAR},
+        #{if_issued,jdbcType=CHAR}, #{txt_name,jdbcType=VARCHAR},
         #{file_location,jdbcType=VARCHAR}, #{file_uploaddate,jdbcType=DATE}, #{file_updatedate,jdbcType=DATE}
         )
     </insert>
