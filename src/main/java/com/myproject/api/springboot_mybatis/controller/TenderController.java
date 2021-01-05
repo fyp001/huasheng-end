@@ -289,7 +289,7 @@ public class TenderController {
     }
 
 
-    @GetMapping(value = "/tender/getCheckTender")
+    @GetMapping(value = "/tender/getAllTender")
     public List<Tender> getCheckTender(HttpServletRequest request)
     {
         String token=request.getHeader("token");
