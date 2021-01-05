@@ -33,9 +33,13 @@ public class InterceptorConfig implements WebMvcConfigurer {
         ir.addPathPatterns("/project/getAllProject");
         ir.addPathPatterns("/project/getCheckProject");
         ir.addPathPatterns("/project/insert");
-        ir.addPathPatterns("/project/submit");
         ir.addPathPatterns("/project/pass");
         ir.addPathPatterns("/project/refuse");
+        ir.addPathPatterns("/tender/getAllTender");
+        ir.addPathPatterns("/tender/insert");
+        ir.addPathPatterns("/tender/pass");
+        ir.addPathPatterns("/tender/getCheckTender");
+        ir.addPathPatterns("/tender/refuse");
         //ir.addPathPatterns("staff/*");
         // 添加不拦截的请求
         //ir.excludePathPatterns("/staff/login");

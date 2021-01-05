@@ -21,4 +21,5 @@ public interface TenderService {
     void pass(Tender tender);
     void refuse(Tender tender);
     void if_delete(Tender tender);
+    String GetName(int shen_he_ren);
 }

@@ -84,4 +84,9 @@ public class TenderServiceImpl implements TenderService {
     public void if_delete(Tender tender) {
         tenderDao.if_delete(tender);
     }
+
+    @Override
+    public String GetName(int shen_he_ren) {
+        return tenderDao.GetName(shen_he_ren);
+    }
 }
