@@ -5,7 +5,7 @@ import java.util.Date;
 public class Tender {
     private Integer id;
     private String tender_year;
-    private Date tender_date;
+    private String tender_date;
     private String project_name;
     private String audit_type;
     private String tender_block;
@@ -71,11 +71,11 @@ public class Tender {
         this.tender_year = tender_year;
     }
 
-    public Date getTender_date() {
+    public String getTender_date() {
         return tender_date;
     }
 
-    public void setTender_date(Date tender_date) {
+    public void setTender_date(String tender_date) {
         this.tender_date = tender_date;
     }
 
