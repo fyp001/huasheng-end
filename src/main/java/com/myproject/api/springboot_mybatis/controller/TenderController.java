@@ -36,7 +36,7 @@ public class TenderController {
         Staff s=redisTemplate.opsForValue().get(token);
         int staff_id=s.getStaff_id();
         List<Tender> tenders=tenderService.getAllTender();
-        List<Tender> result = null;
+        List<Tender> result = new ArrayList<Tender>();
         for(Tender t : tenders){
             if(t.getJing_ban_ren()==staff_id)
             {
