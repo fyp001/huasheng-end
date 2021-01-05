@@ -133,7 +133,7 @@
 
     <select id="getCheckTender" resultType="com.myproject.api.springboot_mybatis.entity.Tender" >
 
-        SELECT * FROM tender where if_submit=1 and (shen_he_ren=#{shen_he_ren} or shen_he_ren=0) ;
+        SELECT * FROM tender where if_submit=1 and (shen_he_ren=#{shen_he_ren} or shen_he_ren is null) ;
 
     </select>
     <select id="GetName" resultType="java.lang.String">
@@ -144,14 +144,14 @@
         update tender  set
                            if_issued=2,
                            shen_he_ren=#{shen_he_ren}
-        where tender.tender_id=#{tender_id} and if_issued=0
+        where id = #{id}
     </update>
 
     <update id="refuse" parameterType="com.myproject.api.springboot_mybatis.entity.Tender">
         update tender  set
                             if_issued=1,
                             shen_he_ren=#{shen_he_ren}
-        where id = #{id} and if_issued=0
+        where id = #{id}
     </update>
 
     <update id="if_delete" parameterType="com.myproject.api.springboot_mybatis.entity.Tender">
