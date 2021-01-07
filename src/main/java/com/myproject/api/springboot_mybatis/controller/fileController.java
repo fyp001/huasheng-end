@@ -47,9 +47,8 @@ public class fileController {
     List<file> getOperator(HttpServletRequest request){
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        System.out.println(s.getStaff_id());
         file file1 = new file();
         file1.setJing_ban_ren(staff_id);
         List<file> f=fileservice.GetOperator(file1);
@@ -67,6 +66,7 @@ public class fileController {
                 f.get(i).setFile_url(url);
             }
         }
+        Collections.reverse(f);
         return f;
     }
 
@@ -77,9 +77,8 @@ public class fileController {
     List<file> getChecker(HttpServletRequest request){
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        System.out.println(s.getStaff_id());
         file file2 = new file();
         file2.setShen_he_ren(staff_id);
         List<file> f=fileservice.GetChecker(file2);
@@ -100,6 +99,7 @@ public class fileController {
                 f.get(i).setFile_url(url);
             }
         }
+        Collections.reverse(f);
         return f;
     }
 
@@ -120,9 +120,8 @@ public class fileController {
     Map<String,Object> checkpass(file f,HttpServletRequest request){
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
         f.setShen_he_ren(staff_id);
         List<file> l=fileservice.getAllCheckerFile();
@@ -166,9 +165,8 @@ public class fileController {
     Map<String,Object> checknotpass(file f,HttpServletRequest request){
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
         f.setShen_he_ren(staff_id);
         List<file> l=fileservice.getAllCheckerFile();
@@ -249,9 +247,8 @@ public class fileController {
     public List<file> GetAllContract(HttpServletRequest request) throws UnsupportedEncodingException {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        System.out.println(s.getStaff_id());
         file file1 = new file();
         file1.setJing_ban_ren(staff_id);
         List<file> f=fileservice.GetAllContract(file1);
@@ -269,6 +266,7 @@ public class fileController {
                 f.get(i).setFile_url(url);
             }
         }
+        Collections.reverse(f);
         return f;
     }
 
@@ -279,9 +277,8 @@ public class fileController {
     public List<file> GetAllContractChecker(HttpServletRequest request) throws UnsupportedEncodingException {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        System.out.println(s.getStaff_id());
         file file2 = new file();
         file2.setShen_he_ren(staff_id);
         List<file> f=fileservice.GetAllContractChecker(file2);
@@ -302,6 +299,7 @@ public class fileController {
                 f.get(i).setFile_url(url);
             }
         }
+        Collections.reverse(f);
         return f;
     }
 
@@ -413,7 +411,6 @@ public class fileController {
         Staff s=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
         //在文件操作中，不用/或者\最好，推荐使用File.separator
         File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
