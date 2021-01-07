@@ -39,15 +39,22 @@ public class QandAController {
                 public void run(){
                     synchronized (o1){
                         System.out.println("Waiting for ans...");
+                        Long milliSecondsBfr = System.currentTimeMillis();
                         String str = null;
                         while(true){
                             try {
                                 if (!((str = in.readLine())==null)) {
                                     break;
                                 }
+                                if(((System.currentTimeMillis()-milliSecondsBfr)/1000)>2){
+                                    break;
+                                }
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+                        }
+                        if(str==null){
+                            str="系统繁忙,稍后再试";
                         }
                         System.out.println(str);
                         result = str;
