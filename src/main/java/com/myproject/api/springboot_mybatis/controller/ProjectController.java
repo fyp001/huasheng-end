@@ -73,7 +73,6 @@ public class ProjectController {
                 }
             }
         }
-        Collections.reverse(p);
         return p;
     }
 
