@@ -35,10 +35,8 @@ public class ProjectController {
     public List<Project> getAllProject(HttpServletRequest request){
         String token=request.getHeader("token");
         Staff s1=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_id());
         int staff_id=s1.getStaff_id();
-        System.out.println(s1.getStaff_id());
-
         List<Staff> s=projectService.getname();
         Project pro = new Project();
         pro.setJing_ban_ren(staff_id);
@@ -55,6 +53,7 @@ public class ProjectController {
                 p1.get(i).setFile_url(url);
             }
         }
+        Collections.reverse(p1);
         return p1;
     }
 
@@ -74,6 +73,7 @@ public class ProjectController {
                 }
             }
         }
+        Collections.reverse(p);
         return p;
     }
 
@@ -85,7 +85,6 @@ public class ProjectController {
         Staff s1=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_id());
         int staff_id=s1.getStaff_id();
-        System.out.println(s1.getStaff_id());
         Project project=new Project();
         project.setShen_he_ren(staff_id);
         List<Staff> s=projectService.getname();
@@ -102,6 +101,7 @@ public class ProjectController {
                 p1.get(i).setFile_url(url);
             }
         }
+        Collections.reverse(p1);
         return p1;
     }
 
@@ -113,7 +113,6 @@ public class ProjectController {
         Staff s=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        System.out.println(s.getStaff_id());
 
         Map<String,Object> result=new HashMap<>();
         //在文件操作中，不用/或者\最好，推荐使用File.separator
@@ -256,9 +255,8 @@ public class ProjectController {
     {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
         project.setShen_he_ren(staff_id);
         List<Project> p=projectService.getAllCheckProject();
@@ -302,9 +300,8 @@ public class ProjectController {
     {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_in_date());
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
         project.setShen_he_ren(staff_id);
         List<Project> p=projectService.getAllCheckProject();

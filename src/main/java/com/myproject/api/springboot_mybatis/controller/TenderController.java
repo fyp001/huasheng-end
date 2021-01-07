@@ -53,6 +53,7 @@ public class TenderController {
                     result.add(t);
             }
        }
+        Collections.reverse(result);
         return result;
     }
 
@@ -76,7 +77,6 @@ public class TenderController {
         Staff s=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        System.out.println(s.getStaff_id());
 
         Map<String,Object> result=new HashMap<>();
         //在文件操作中，不用/或者\最好，推荐使用File.separator
@@ -246,7 +246,6 @@ public class TenderController {
         Staff s=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
         tender.setShen_he_ren(staff_id);
         List<Tender> p=tenderService.getCheckerTender();
@@ -313,7 +312,6 @@ public class TenderController {
         Staff s1=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_id());
         int staff_id=s1.getStaff_id();
-        System.out.println(s1.getStaff_id());
         Tender tender=new Tender();
         tender.setShen_he_ren(staff_id);
         List<Staff> s=tenderService.getname();
@@ -330,6 +328,7 @@ public class TenderController {
                 p1.get(i).setFile_url(url);
             }
         }
+        Collections.reverse(p1);
         return p1;
     }
 
@@ -340,7 +339,6 @@ public class TenderController {
         Staff s=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        System.out.println(s.getStaff_id());
         Map<String,Object> result=new HashMap<>();
         tender.setShen_he_ren(staff_id);
         List<Tender> p=tenderService.getCheckerTender();
