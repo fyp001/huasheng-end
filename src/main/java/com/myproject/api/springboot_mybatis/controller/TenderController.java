@@ -30,7 +30,7 @@ public class TenderController {
     SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
 
     @CrossOrigin
-    @GetMapping(value = "/tender/getCheckTender")
+    @GetMapping(value = "/tender/getAllTender")
     public List<Tender> getAllTenderByIssue(HttpServletRequest request){
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
@@ -305,7 +305,7 @@ public class TenderController {
     }
 
 
-    @GetMapping(value = "/tender/getAllTender")
+    @GetMapping(value = "/tender/getCheckTender")
     public List<Tender> getCheckTender(HttpServletRequest request)
     {
         String token=request.getHeader("token");
