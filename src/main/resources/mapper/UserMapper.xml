@@ -33,6 +33,9 @@
     <select id="getAllCheckProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">
         select * from  project where  if_submit=1
     </select>
+    <select id="getAdmin" resultType="com.myproject.api.springboot_mybatis.entity.Project">
+        select *from project;
+    </select>
 
     <insert id="insert" parameterType="com.myproject.api.springboot_mybatis.entity.Project" useGeneratedKeys="true" keyProperty="project_id">
         insert into

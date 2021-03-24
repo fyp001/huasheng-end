@@ -31,6 +31,26 @@ public class ProjectController {
 
     SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
 
+    @GetMapping(value = "/project/getAdmin")
+    public List<Project> getAdmin(HttpServletRequest request){
+        List<Project> p=projectService.getAdmin();
+        List<Staff> s=projectService.getname();
+        List<Project> p1=getProjects(s,p);
+        for(int i=0;i<p1.size();i++){
+            if(p1.get(i).getFile_location()!=null)
+            {
+//                String filename=URLEncoder.encode(f.get(i).getFile_name(), "utf-8");
+//                String filelocation=URLEncoder.encode(f.get(i).getFile_location(), "utf-8");
+                String filename=p1.get(i).getTxt_name();
+                String filelocation=p1.get(i).getFile_location();
+                String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
+                p1.get(i).setFile_url(url);
+            }
+        }
+        Collections.reverse(p1);
+        return p1;
+    }
+
     @GetMapping(value = "/project/getAllProject")
     public List<Project> getAllProject(HttpServletRequest request){
         String token=request.getHeader("token");

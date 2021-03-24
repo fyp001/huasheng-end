@@ -2,6 +2,7 @@ package com.myproject.api.springboot_mybatis.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.myproject.api.springboot_mybatis.entity.Project;
 import com.myproject.api.springboot_mybatis.entity.file;
 import com.myproject.api.springboot_mybatis.entity.Staff;
 import com.myproject.api.springboot_mybatis.interceptor.LoginInterceptor;
@@ -40,8 +41,54 @@ public class fileController {
     RedisTemplate<String, Staff> redisTemplate;
 
     private static java.util.logging.Logger log = java.util.logging.Logger.getLogger(fileController.class.getName());
+    @GetMapping(value = "/file/getAdminFile")
+    public List<file> getAdminFile(HttpServletRequest request){
+        List<file> f=fileservice.GetAllFile();
+        for(int i=0;i<f.size();i++){
+            if(f.get(i).getShen_he_ren()!=0){
+                f.get(i).setChecker(fileservice.GetName(f.get(i).getShen_he_ren()));
+            }
+            if(f.get(i).getJing_ban_ren()!=0){
+                f.get(i).setOperatorname(fileservice.GetName(f.get(i).getJing_ban_ren()));
+            }
+            if(f.get(i).getFile_location()!=null)
+            {
+                String filename=f.get(i).getTxt_name();
+                String filelocation=f.get(i).getFile_location();
+                String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
+                f.get(i).setFile_url(url);
+            }
+        }
+        Collections.reverse(f);
+        return f;
+    }
+
+    @GetMapping(value = "/file/getAdminCon")
+    public List<file> getAdminCon(HttpServletRequest request){
+        List<file> f=fileservice.GetAllCon();
+        for(int i=0;i<f.size();i++){
+            if(f.get(i).getShen_he_ren()!=0){
+                f.get(i).setChecker(fileservice.GetName(f.get(i).getShen_he_ren()));
+            }
+            if(f.get(i).getJing_ban_ren()!=0){
+                f.get(i).setOperatorname(fileservice.GetName(f.get(i).getJing_ban_ren()));
+            }
+            if(f.get(i).getFile_location()!=null)
+            {
+                String filename=f.get(i).getTxt_name();
+                String filelocation=f.get(i).getFile_location();
+                String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
+                f.get(i).setFile_url(url);
+            }
+        }
+        Collections.reverse(f);
+        return f;
+    }
+
     /**
      * 经办人文档显示
+     * 需要获取token验证身份
+     * 然后筛选出该身份对应的文档
      */
     @RequestMapping(value = "/file/getOperator")
     List<file> getOperator(HttpServletRequest request){
@@ -58,8 +105,6 @@ public class fileController {
             }
             if(f.get(i).getFile_location()!=null)
             {
-//                String filename=URLEncoder.encode(f.get(i).getFile_name(), "utf-8");
-//                String filelocation=URLEncoder.encode(f.get(i).getFile_location(), "utf-8");
                 String filename=f.get(i).getTxt_name();
                 String filelocation=f.get(i).getFile_location();
                 String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
@@ -72,6 +117,8 @@ public class fileController {
 
     /**
      * 审核人文档显示
+     * 需要获取token验证身份信息
+     * 在这里需要返回审核人的名字与经办人的名字
      */
     @RequestMapping(value = "/file/getChecker")
     List<file> getChecker(HttpServletRequest request){
@@ -91,8 +138,6 @@ public class fileController {
             }
             if(f.get(i).getFile_location()!=null)
             {
-//                String filename=URLEncoder.encode(f.get(i).getFile_name(), "utf-8");
-//                String filelocation=URLEncoder.encode(f.get(i).getFile_location(), "utf-8");
                 String filename=f.get(i).getTxt_name();
                 String filelocation=f.get(i).getFile_location();
                 String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
@@ -114,6 +159,8 @@ public class fileController {
 
     /**
      * 审核人审核通过
+     * 需要获取token验证身份，因为审核时需要对应到是哪个用户进行的操作
+     * 审核之前还需判断该文档/合同是否已经有人进行了审核操作
      */
     @CrossOrigin
     @RequestMapping(value = "/file/checkpass")
@@ -159,7 +206,9 @@ public class fileController {
     }
 
     /**
-     * 审核人审核驳回
+     * 审核人审核退回
+     * 需要获取token验证身份，因为审核时需要对应到是哪个用户进行的操作
+     * 审核之前还需判断该文档/合同是否已经有人进行了审核操作
      */
     @RequestMapping(value = "/file/checknotpass")
     Map<String,Object> checknotpass(file f,HttpServletRequest request){
@@ -242,6 +291,9 @@ public class fileController {
 
     /**
      * 经办人获取所有合同列表
+     * 需要获取token验证用户身份
+     * 因为经办人只能获取自己对应的合同
+     * 所以需要根据用户进行筛选
      */
     @RequestMapping(value = "/file/GetAllContract")
     public List<file> GetAllContract(HttpServletRequest request) throws UnsupportedEncodingException {
@@ -258,8 +310,6 @@ public class fileController {
             }
             if(f.get(i).getFile_location()!=null)
             {
-//                String filename=URLEncoder.encode(f.get(i).getFile_name(), "utf-8");
-//                String filelocation=URLEncoder.encode(f.get(i).getFile_location(), "utf-8");
                 String filename=f.get(i).getTxt_name();
                 String filelocation=f.get(i).getFile_location();
                 String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
@@ -272,6 +322,7 @@ public class fileController {
 
     /**
      * 审核人获取所有合同列表
+     * 需要获取token验证身份信息
      */
     @RequestMapping(value = "/file/GetAllContractChecker")
     public List<file> GetAllContractChecker(HttpServletRequest request) throws UnsupportedEncodingException {
@@ -291,8 +342,6 @@ public class fileController {
             }
             if(f.get(i).getFile_location()!=null)
             {
-//                String filename=URLEncoder.encode(f.get(i).getFile_name(), "utf-8");
-//                String filelocation=URLEncoder.encode(f.get(i).getFile_location(), "utf-8");
                 String filename=f.get(i).getTxt_name();
                 String filelocation=f.get(i).getFile_location();
                 String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
@@ -403,7 +452,8 @@ public class fileController {
     private static final Logger logger = LoggerFactory.getLogger(fileController.class);
 
     /**
-     * 文档上传，上传文档的字段信息或文件，文件可有可无，若有则需设置文件位置，文件名等字段
+     * 文档/合同上传，上传文档/合同的字段信息或文件，文件可有可无，若有则需设置文件位置，文件名等字段
+     * 需要获取token验证身份信息，每个文档/合同需要对应一个经办人
      */
     @RequestMapping("/file/upload")
     public Map<String,Object> uploadFile(@RequestParam(value = "file",required = false) MultipartFile multipartFiles,HttpServletResponse response,HttpServletRequest request,file f)  {
@@ -462,6 +512,7 @@ public class fileController {
 
     /**
      * 文档文件下载
+     * 需要提供文件名及文件的位置
      */
     @RequestMapping("/file/download1")
     public Map<String,Object> downloadFile(@RequestParam String fileName,@RequestParam String fileLocation,HttpServletResponse response,HttpServletRequest request) throws UnsupportedEncodingException {

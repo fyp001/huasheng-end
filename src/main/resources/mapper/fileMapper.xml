@@ -69,6 +69,10 @@
     <select id="getAllCheckerFile" resultType="com.myproject.api.springboot_mybatis.entity.file">
         select * from  filetable where  if_submit=1
     </select>
+    <select id="GetAllCon" resultType="com.myproject.api.springboot_mybatis.entity.file">
+        select*
+    from filetable where file_type='合同'
+    </select>
 
 
 </mapper>

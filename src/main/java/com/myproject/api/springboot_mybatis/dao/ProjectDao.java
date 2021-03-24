@@ -11,6 +11,7 @@ public interface ProjectDao {
     List<Project> getCheckProject(Project project);
     List<Project> getAllCheckProject();
     List <Staff>  getname();
+    List<Project> getAdmin();
     void insert(Project project);
     void delete(Project project);
     void update(Project project);

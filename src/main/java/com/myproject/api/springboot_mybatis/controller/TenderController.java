@@ -29,6 +29,28 @@ public class TenderController {
 
     SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
 
+
+    @CrossOrigin
+    @GetMapping(value = "/tender/getAdminTender")
+    public List<Tender> getAdminTender(HttpServletRequest request){
+        List<Staff> s=tenderService.getname();
+        List<Tender> t=tenderService.getAllTender();
+        List<Tender> t1=getTenders(s,t);
+        for(int i=0;i<t1.size();i++){
+            if(t1.get(i).getFile_location()!=null)
+            {
+//                String filename=URLEncoder.encode(f.get(i).getFile_name(), "utf-8");
+//                String filelocation=URLEncoder.encode(f.get(i).getFile_location(), "utf-8");
+                String filename=t1.get(i).getTxt_name();
+                String filelocation=t1.get(i).getFile_location();
+                String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
+                t1.get(i).setFile_url(url);
+            }
+        }
+        Collections.reverse(t1);
+        return t1;
+    }
+
     @CrossOrigin
     @GetMapping(value = "/tender/getAllTender")
     public List<Tender> getAllTenderByIssue(HttpServletRequest request){

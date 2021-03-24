@@ -68,4 +68,9 @@ public class ProjectServiceImpl implements ProjectService {
     public List<Project> getAllCheckProject() {
         return ProjectDao.getAllCheckProject();
     }
+
+    @Override
+    public List<Project> getAdmin() {
+        return ProjectDao.getAdmin();
+    }
 }

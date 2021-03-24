@@ -23,5 +23,5 @@ public interface fileService {
     void checknotpass(file f);
     void checkdelete(file f);
     List<file> getAllCheckerFile();
-
+    List<file> GetAllCon();
 }

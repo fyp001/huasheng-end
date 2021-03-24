@@ -100,4 +100,8 @@ public class fileServiceImpl implements fileService {
     }
 
 
+    @Override
+    public List<file> GetAllCon() {
+        return filemapper.GetAllCon();
+    }
 }
