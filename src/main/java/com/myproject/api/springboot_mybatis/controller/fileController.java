@@ -455,11 +455,67 @@ public class fileController {
      * 文档/合同上传，上传文档/合同的字段信息或文件，文件可有可无，若有则需设置文件位置，文件名等字段
      * 需要获取token验证身份信息，每个文档/合同需要对应一个经办人
      */
+//    @RequestMapping("/file/upload")
+//    public Map<String,Object> uploadFile(@RequestParam(value = "file",required = false) MultipartFile multipartFiles,HttpServletResponse response,HttpServletRequest request,file f)  {
+//        String token=request.getHeader("token");
+//        Staff s=redisTemplate.opsForValue().get(token);
+//        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
+//        int staff_id=s.getStaff_id();
+//        Map<String,Object> result=new HashMap<>();
+//        //在文件操作中，不用/或者\最好，推荐使用File.separator
+//        File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
+//        String desktopPath = desktopDir.getAbsolutePath();
+//        String driname = "files";
+//        String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + formatter.format(new Date()) + File.separator;
+//
+//        try {
+//            if (multipartFiles != null)
+//            {
+//                //String newname=UUID.randomUUID()+"_"+multipartFiles.getOriginalFilename();
+//                String newname=UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
+//                f.setFile_location(URLEncoder.encode(rootPath, "utf-8"));
+//                f.setTxt_name(URLEncoder.encode(newname, "utf-8"));
+//                File fileDir = new File(rootPath);
+//                if (!fileDir.exists() && !fileDir.isDirectory())
+//                {
+//                    fileDir.mkdirs();
+//                }
+//                try {
+//                    //String extension=multipartFiles[i].getOriginalFilename().substring(multipartFiles[i].getOriginalFilename().lastIndexOf("."));
+//                    multipartFiles.transferTo(new File(fileDir,newname));
+//                    //String url=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+"/Springbootfile/"+newname;
+//                    result.put("status","success");
+//                    result.put("file_loaction",fileDir);
+//                    result.put("file_name",newname);
+//                } catch (IOException e) {
+//                    result.put("status","fail");
+//                    result.put("msg",e.getMessage());
+//                }
+//            }
+//            else
+//            {
+//                result.put("msg","not file");
+//            }
+//        } catch (Exception e) {
+//            result.put("status","fail");
+//            result.put("msg",e.getMessage());
+//        }
+//        f.setFile_uploaddate(formatter.format(new Date()));
+//        f.setFile_updatedate(formatter.format(new Date()));
+//        f.setJing_ban_ren(staff_id);
+//        f.setIf_submit('0');
+//        f.setIf_issued('0');
+//        f.setIf_delete('0');
+//        fileservice.insert(f);
+//        return result;
+//    }
+
     @RequestMapping("/file/upload")
-    public Map<String,Object> uploadFile(@RequestParam(value = "file",required = false) MultipartFile multipartFiles,HttpServletResponse response,HttpServletRequest request,file f)  {
+
+    public Map<String,Object> uploadFile(@RequestParam(value = "files",required = false) MultipartFile[] multipartFiles,HttpServletResponse response,HttpServletRequest request,file f)  {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
+//        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
         Map<String,Object> result=new HashMap<>();
         //在文件操作中，不用/或者\最好，推荐使用File.separator
@@ -468,28 +524,34 @@ public class fileController {
         String driname = "files";
         String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + formatter.format(new Date()) + File.separator;
 
+        //用list保存多个文件地址名
+        List<String> file_location = new ArrayList();
+        List<String> txt_name = new ArrayList();
+        List<String> newnames = new ArrayList();
+
+        System.out.println(multipartFiles.length+"长度");
+
+
         try {
             if (multipartFiles != null)
             {
-                //String newname=UUID.randomUUID()+"_"+multipartFiles.getOriginalFilename();
-                String newname=UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
-                f.setFile_location(URLEncoder.encode(rootPath, "utf-8"));
-                f.setTxt_name(URLEncoder.encode(newname, "utf-8"));
-                File fileDir = new File(rootPath);
-                if (!fileDir.exists() && !fileDir.isDirectory())
-                {
-                    fileDir.mkdirs();
-                }
-                try {
-                    //String extension=multipartFiles[i].getOriginalFilename().substring(multipartFiles[i].getOriginalFilename().lastIndexOf("."));
-                    multipartFiles.transferTo(new File(fileDir,newname));
-                    //String url=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+"/Springbootfile/"+newname;
-                    result.put("status","success");
-                    result.put("file_loaction",fileDir);
-                    result.put("file_name",newname);
-                } catch (IOException e) {
-                    result.put("status","fail");
-                    result.put("msg",e.getMessage());
+                for(MultipartFile multipartFile :multipartFiles) {
+                    String newname = UUID.randomUUID().toString().replace("-", "") + "_" + multipartFile.getOriginalFilename();
+                    file_location.add(URLEncoder.encode(rootPath, "utf-8"));
+                    txt_name.add(URLEncoder.encode(newname, "utf-8"));
+                    System.out.println(rootPath+newname);
+                    File fileDir = new File(rootPath);
+                    if (!fileDir.exists() && !fileDir.isDirectory()) {
+                        fileDir.mkdirs();
+                    }
+                    try {
+                        multipartFile.transferTo(new File(fileDir, newname));
+                        result.put("status", "success");
+                        newnames.add(newname);
+                    } catch (IOException e) {
+                        result.put("status", "fail");
+                        result.put("msg", e.getMessage());
+                    }
                 }
             }
             else
@@ -500,6 +562,11 @@ public class fileController {
             result.put("status","fail");
             result.put("msg",e.getMessage());
         }
+        result.put("file_loaction", file_location.toString());
+        result.put("file_name", newnames.toString());
+        f.setFile_location(file_location.toString());
+        f.setTxt_name(txt_name.toString());
+
         f.setFile_uploaddate(formatter.format(new Date()));
         f.setFile_updatedate(formatter.format(new Date()));
         f.setJing_ban_ren(staff_id);
