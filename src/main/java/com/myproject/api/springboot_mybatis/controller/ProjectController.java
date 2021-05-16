@@ -1,6 +1,8 @@
 package com.myproject.api.springboot_mybatis.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 import com.myproject.api.springboot_mybatis.entity.Project;
 import com.myproject.api.springboot_mybatis.entity.Staff;
 import com.myproject.api.springboot_mybatis.entity.file;
@@ -16,10 +18,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 @RestController
 public class ProjectController {
@@ -421,6 +425,265 @@ public class ProjectController {
         }
         return result;
     }
+
+
+
+
+    @GetMapping(value = "/project/export/{projectId}")
+    //http://localhost:8080/project/export/387
+    public void exportFile(@PathVariable("projectId") int project_id) throws IOException, DocumentException {
+
+        Project oneProject = projectService.getOneProject(project_id);
+
+        FileSystemView fsv = FileSystemView.getFileSystemView();
+        File com=fsv.getHomeDirectory();
+
+
+        Document document = new Document();
+        //建立一个书写器
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(com.getPath() +"\\审计报告"+ UUID.randomUUID().toString() + ".pdf"));
+        //打开文件
+        document.open();
+
+        //中文字体,解决中文不能显示问题
+        BaseFont bfChinese = BaseFont.createFont("STSong-Light","UniGB-UCS2-H",BaseFont.NOT_EMBEDDED);
+        Font bf = new Font(bfChinese);
+        bf.setSize(10f);
+        //添加内容
+        document.add(new Paragraph("审计报告",bf));
+
+
+        //4列的表.
+        PdfPTable table = new PdfPTable(4);
+        table.setWidthPercentage(100); // 宽度100%填充
+        table.setSpacingBefore(10f); // 前间距
+        table.setSpacingAfter(10f); // 后间距
+
+
+        List<PdfPRow> listRow = table.getRows();
+        //设置列宽
+        float[] columnWidths = {2f, 2f, 2f, 2f};
+        table.setWidths(columnWidths);
+
+        //行1
+        PdfPCell cells1[] = new PdfPCell[4];
+        PdfPRow row1 = new PdfPRow(cells1);
+
+
+        //单元格
+        cells1[0] = new PdfPCell(new Paragraph("项目名称",bf));//单元格内容
+        //cells1[0].setBorderColor(BaseColor.BLUE);//边框验证
+        //cells1[0].setPaddingLeft(20);//左填充20
+        cells1[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells1[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+
+        cells1[1] = new PdfPCell(new Paragraph(oneProject.getProject_name(),bf));
+        cells1[2] = new PdfPCell(new Paragraph("项目开始时间",bf));
+        cells1[2].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells1[2].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+        cells1[3] = new PdfPCell(new Paragraph(oneProject.getProject_starttime(),bf));
+
+        //行2
+        PdfPCell cells2[] = new PdfPCell[4];
+        PdfPRow row2 = new PdfPRow(cells2);
+        //单元格
+        cells2[0] = new PdfPCell(new Paragraph("经办人",bf));//单元格内容
+        //cells1[0].setBorderColor(BaseColor.BLUE);//边框验证
+        //cells2[0].setPaddingLeft(20);//左填充20
+        cells2[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells2[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+
+        cells2[1] = new PdfPCell(new Paragraph(String.valueOf(oneProject.getJing_ban_ren()),bf));
+        cells2[2] = new PdfPCell(new Paragraph("审核人",bf));
+        cells2[2].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells2[2].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+        cells2[3] = new PdfPCell(new Paragraph(String.valueOf(oneProject.getShen_he_ren()),bf));
+
+        //行3
+        PdfPCell cells3[] = new PdfPCell[4];
+        PdfPRow row3 = new PdfPRow(cells3);
+
+        //单元格
+        cells3[0] = new PdfPCell(new Paragraph("类型",bf));//单元格内容
+        //cells1[0].setBorderColor(BaseColor.BLUE);//边框验证
+        //cells3[0].setPaddingLeft(20);//左填充20
+        cells3[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells3[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+        cells3[0].setFixedHeight(36f);
+        cells3[0].setRowspan(2);
+        cells3[1] = new PdfPCell(new Paragraph("大类",bf));
+        cells3[1].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells3[1].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+        cells3[1].setFixedHeight(18f);
+        cells3[2] = new PdfPCell(new Paragraph(oneProject.getProject_type(),bf));
+        cells3[2].setFixedHeight(18f);
+        cells3[2].setColspan(2);
+
+        PdfPCell cellsd[] = new PdfPCell[4];
+        PdfPRow rowsd = new PdfPRow(cellsd);
+        cellsd[1] = new PdfPCell(new Paragraph("类别",bf));
+        cellsd[1].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cellsd[1].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+        cellsd[1].setFixedHeight(18f);
+        cellsd[2] = new PdfPCell(new Paragraph(oneProject.getProject_class(),bf));
+        cellsd[2].setFixedHeight(18f);
+        cellsd[2].setColspan(2);
+
+//行4
+        PdfPCell cells4[] = new PdfPCell[4];
+        PdfPRow row4 = new PdfPRow(cells4);
+        //单元格
+        cells4[0] = new PdfPCell(new Paragraph("附件名称",bf));//单元格内容
+        //cells1[0].setBorderColor(BaseColor.BLUE);//边框验证
+        //cells4[0].setPaddingLeft(20);//左填充20
+        cells4[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells4[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+
+        cells4[1] = new PdfPCell(new Paragraph(oneProject.getTxt_name(),bf));
+        cells4[1].setColspan(3);
+
+
+//行4
+        PdfPCell cells5[] = new PdfPCell[4];
+        PdfPRow row5 = new PdfPRow(cells5);
+        //单元格
+        cells5[0] = new PdfPCell(new Paragraph("附件内容",bf));//单元格内容
+        //cells1[0].setBorderColor(BaseColor.BLUE);//边框验证
+        //cells3[0].setPaddingLeft(20);//左填充20
+        cells5[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells5[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+        cells5[1] = new PdfPCell(new Paragraph("xx",bf));//单元格内容
+        cells5[1].setColspan(3);
+        cells5[1].setFixedHeight(100f);
+
+
+
+
+
+        PdfPCell cells6[] = new PdfPCell[4];
+        PdfPRow row6 = new PdfPRow(cells6);
+        //单元格
+        cells6[0] = new PdfPCell(new Paragraph("客户名称",bf));//单元格内容
+        //cells1[0].setBorderColor(BaseColor.BLUE);//边框验证
+        //cells2[0].setPaddingLeft(20);//左填充20
+        cells6[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells6[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+
+        cells6[1] = new PdfPCell(new Paragraph(oneProject.getProject_client(),bf));
+        cells6[2] = new PdfPCell(new Paragraph("审计报告号",bf));
+        cells6[2].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells6[2].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+        cells6[3] = new PdfPCell(new Paragraph(oneProject.getProject_reportnumber(),bf));
+
+
+        PdfPCell cells7[] = new PdfPCell[4];
+        PdfPRow row7 = new PdfPRow(cells7);
+        //单元格
+        cells7[0] = new PdfPCell(new Paragraph("质控负责人",bf));//单元格内容
+        //cells1[0].setBorderColor(BaseColor.BLUE);//边框验证
+        //cells2[0].setPaddingLeft(20);//左填充20
+        cells7[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells7[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+
+        cells7[1] = new PdfPCell(new Paragraph(oneProject.getProject_qualitycontroler(),bf));
+        cells7[2] = new PdfPCell(new Paragraph("项目负责人",bf));
+        cells7[2].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells7[2].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+        cells7[3] = new PdfPCell(new Paragraph(oneProject.getProject_head(),bf));
+
+
+        PdfPCell cells8[] = new PdfPCell[4];
+        PdfPRow row8 = new PdfPRow(cells8);
+        //单元格
+        cells8[0] = new PdfPCell(new Paragraph("项目组员",bf));//单元格内容
+        //cells1[0].setBorderColor(BaseColor.BLUE);//边框验证
+        //cells2[0].setPaddingLeft(20);//左填充20
+        cells8[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells8[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+
+        cells8[1] = new PdfPCell(new Paragraph(oneProject.getProject_members(),bf));
+        cells8[1].setColspan(3);
+
+
+        PdfPCell cells9[] = new PdfPCell[4];
+        PdfPRow row9 = new PdfPRow(cells9);
+        //单元格
+        cells9[0] = new PdfPCell(new Paragraph("开始时间",bf));//单元格内容
+        //cells1[0].setBorderColor(BaseColor.BLUE);//边框验证
+        //cells2[0].setPaddingLeft(20);//左填充20
+        cells9[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells9[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+
+        cells9[1] = new PdfPCell(new Paragraph(oneProject.getProject_starttime(),bf));
+        cells9[2] = new PdfPCell(new Paragraph("终止时间",bf));
+        cells9[2].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells9[2].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+        cells9[3] = new PdfPCell(new Paragraph(oneProject.getProject_endtime(),bf));
+
+
+        PdfPCell cells10[] = new PdfPCell[4];
+        PdfPRow row10 = new PdfPRow(cells10);
+        //单元格
+        cells10[0] = new PdfPCell(new Paragraph("报告意见类型",bf));//单元格内容
+        //cells1[0].setBorderColor(BaseColor.BLUE);//边框验证
+        //cells2[0].setPaddingLeft(20);//左填充20
+        cells10[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells10[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+
+        cells10[1] = new PdfPCell(new Paragraph(oneProject.getProject_comment(),bf));
+        cells10[2] = new PdfPCell(new Paragraph("资产金额",bf));
+        cells10[2].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells10[2].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+        cells10[3] = new PdfPCell(new Paragraph(String.valueOf(oneProject.getProject_assets()),bf));
+
+
+        PdfPCell cells11[] = new PdfPCell[4];
+        PdfPRow row11 = new PdfPRow(cells11);
+        //单元格
+        cells11[0] = new PdfPCell(new Paragraph("项目合伙人",bf));//单元格内容
+        //cells1[0].setBorderColor(BaseColor.BLUE);//边框验证
+        //cells2[0].setPaddingLeft(20);//左填充20
+        cells11[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells11[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+
+        cells11[1] = new PdfPCell(new Paragraph(oneProject.getProject_partner(),bf));
+        cells11[2] = new PdfPCell(new Paragraph("施工单位",bf));
+        cells11[2].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells11[2].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+        cells11[3] = new PdfPCell(new Paragraph(oneProject.getProject_construction(),bf));
+
+
+        //把第一行添加到集合
+        listRow.add(row1);
+        listRow.add(row2);
+        listRow.add(row3);
+        listRow.add(rowsd);
+        listRow.add(row6);
+        listRow.add(row7);
+        listRow.add(row8);
+        listRow.add(row9);
+        listRow.add(row10);
+        listRow.add(row11);
+
+
+        listRow.add(row4);
+        listRow.add(row5);
+        //把表格添加到文件中
+        document.add(table);
+
+        //关闭文档
+        document.close();
+        //关闭书写器
+        writer.close();
+
+//        Field[] fields = oneProject.getClass().getDeclaredFields();
+//        for(Field field : fields){
+//            String name = field.getName();
+//
+//        }
+
+    }
+
 
     /**
      * 文件超出大小的异常捕获
