@@ -431,17 +431,26 @@ public class ProjectController {
 
     @GetMapping(value = "/project/export/{projectId}")
     //http://localhost:8080/project/export/387
-    public void exportFile(@PathVariable("projectId") int project_id) throws IOException, DocumentException {
-
+    public void exportFile(@PathVariable("projectId") int project_id,HttpServletResponse response) throws IOException, DocumentException {
         Project oneProject = projectService.getOneProject(project_id);
 
         FileSystemView fsv = FileSystemView.getFileSystemView();
         File com=fsv.getHomeDirectory();
-
-
+        // 配置文件下载
+        response.setHeader("content-type", "application/octet-stream");
+        response.setContentType("application/octet-stream");
+        // 下载文件能正常显示中文
+//        response.setHeader("Access-Control-Expose-Headers","Authorization");
+        String projectName=URLEncoder.encode(oneProject.getProject_name()+".pdf", "UTF-8");
+        projectName=projectName.replaceAll("//+", "%20");
+        response.setHeader("Content-Disposition", "attachment;filename=" + projectName);
+        System.out.println(oneProject.getProject_name());
+        OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
         Document document = new Document();
         //建立一个书写器
-        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(com.getPath() +"\\审计报告"+ UUID.randomUUID().toString() + ".pdf"));
+        PdfWriter writer = PdfWriter.getInstance(document, outputStream );
+
+//        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(com.getPath() +"\\审计报告"+ UUID.randomUUID().toString() + ".pdf"));
         //打开文件
         document.open();
 
@@ -671,11 +680,15 @@ public class ProjectController {
         //把表格添加到文件中
         document.add(table);
 
+
+
         //关闭文档
         document.close();
         //关闭书写器
         writer.close();
 
+        outputStream.flush();
+        outputStream.close();
 //        Field[] fields = oneProject.getClass().getDeclaredFields();
 //        for(Field field : fields){
 //            String name = field.getName();
