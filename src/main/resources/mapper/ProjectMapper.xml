@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<!--
-<mapper namespace="com.sml.mybatisdemo.dao.UserDao">
-    <select id="getAllUser" resultType="com.sml.mybatisdemo.domin.User" >
-        SELECT * FROM userinfo;
-    </select>
-
-    <insert id="insert" parameterType="com.sml.mybatisdemo.domin.User" useGeneratedKeys="true" keyProperty="userId">
-        insert into
-            userinfo(id,userName,age, sex)
-        values
-            (#{id},#{userName},#{age},#{sex})
-    </insert>
-</mapper>
--->
 <mapper namespace="com.myproject.api.springboot_mybatis.dao.ProjectDao">
+<resultMap id="projectMapper" type="com.myproject.api.springboot_mybatis.entity.Project">
+    <id property="project_id" column="project_id"/>
+    <result property="project_type" column="project_type"/>
+    <result property="project_name" column="project_name"/>
+    <result property="project_client" column="project_client"/>
+    <result property="project_reportnumber" column="project_reportnumber"/>
+    <result property="project_class" column="project_class"/>
+    <result property="project_qualitycontroler" column="project_qualitycontroler"/>
+    <result property="project_head" column="project_head"/>
+    <result property="project_members" column="project_members"/>
+    <result property="project_starttime" column="project_starttime"/>
+    <result property="project_endtime" column="project_endtime"/>
+    <result property="project_comment" column="project_comment"/>
+    <result property="project_assets" column="project_assets"/>
+    <result property="project_audit" column="project_audit"/>
+    <result property="project_reduction" column="project_reduction"/>
+    <result property="project_accountant" column="project_accountant"/>
+    <result property="project_costengineer" column="project_costengineer"/>
+    <result property="project_taxaccountant" column="project_taxaccountant"/>
+    <result property="project_partner" column="project_partner"/>
+    <result property="project_construction" column="project_construction"/>
+    <result property="project_code" column="project_code"/>
+    <result property="if_issued" column="if_issued"/>
+    <result property="if_delete" column="if_delete"/>
+    <result property="if_submit" column="if_submit"/>
+    <result property="file_location" column="file_location"/>
+    <result property="file_uploaddate" column="file_uploaddate"/>
+    <result property="file_updatedate" column="file_updatedate"/>
+    <result property="txt_name" column="txt_name"/>
+    <association property="staff_namej" column="jing_ban_ren"
+                 select="com.myproject.api.springboot_mybatis.dao.ProjectDao.getNameById"/>
+    <association property="staff_names" column="shen_he_ren"
+                 select="com.myproject.api.springboot_mybatis.dao.ProjectDao.getNameById"/>
+</resultMap>
     <select id="getAllProject" resultType="com.myproject.api.springboot_mybatis.entity.Project" >
         SELECT * FROM project where jing_ban_ren=#{jing_ban_ren}
     </select>
@@ -29,17 +49,27 @@
         SELECT * FROM project where if_submit=1 and (shen_he_ren=#{shen_he_ren} or shen_he_ren is null) ;
 
     </select>
+    <select id="getGlobalCheckProject" resultMap="projectMapper" >
+
+        SELECT * FROM project where if_submit=1 and if_issued=2;
+
+    </select>
 
     <select id="getname" resultType="com.myproject.api.springboot_mybatis.entity.Staff" >
 
         SELECT * FROM staff  ;
 
     </select>
+    <select id="getNameById" resultType="string">
+
+        SELECT staff_name FROM staff where staff_id=#{staff_id} ;
+
+    </select>
     <select id="getAllCheckProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">
         select * from  project where  if_submit=1
     </select>
     <select id="getAdmin" resultType="com.myproject.api.springboot_mybatis.entity.Project">
-        select *from project;
+        select * from project;
     </select>
 
     <insert id="insert" parameterType="com.myproject.api.springboot_mybatis.entity.Project" useGeneratedKeys="true" keyProperty="project_id">

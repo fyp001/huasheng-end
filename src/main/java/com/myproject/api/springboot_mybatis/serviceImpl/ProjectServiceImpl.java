@@ -36,6 +36,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<Project> getGlobalCheckProject(Project project) {
+        return ProjectDao.getGlobalCheckProject(project);
+    }
+
+    @Override
     public void insert(Project project) {
         ProjectDao.insert(project);
     }

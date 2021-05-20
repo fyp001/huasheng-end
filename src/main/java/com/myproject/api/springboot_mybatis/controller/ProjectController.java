@@ -106,13 +106,19 @@ public class ProjectController {
     {
         String token=request.getHeader("token");
         Staff s1=redisTemplate.opsForValue().get(token);
+        System.out.println(s1.toString());
         System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_id());
         int staff_id=s1.getStaff_id();
         Project project=new Project();
         project.setShen_he_ren(staff_id);
-        List<Staff> s=projectService.getname();
-        List<Project> p=projectService.getCheckProject(project);
-        List<Project> p1=getProjects(s,p);
+        List<Project> p;
+        List<Project> p1;
+        if("1".equals(s1.getStaff_permission())){
+            List<Staff> s=projectService.getname();
+            p=projectService.getCheckProject(project);
+            p1=getProjects(s,p);}
+        else
+            p1=projectService.getGlobalCheckProject(project);
         for(int i=0;i<p1.size();i++){
             if(p1.get(i).getFile_location()!=null)
             {
