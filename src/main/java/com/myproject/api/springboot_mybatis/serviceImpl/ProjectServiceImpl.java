@@ -14,6 +14,12 @@ public class ProjectServiceImpl implements ProjectService {
     @Resource
     ProjectDao ProjectDao;
 
+
+    @Override
+    public Project getOneProject(int project_id) {
+        return ProjectDao.getOneProject(project_id);
+    }
+
     @Override
     public List<Project> getAllProject(Project project) {
         return ProjectDao.getAllProject(project);

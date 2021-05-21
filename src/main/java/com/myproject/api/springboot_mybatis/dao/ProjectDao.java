@@ -7,6 +7,7 @@ import com.myproject.api.springboot_mybatis.entity.Staff;
 import java.util.List;
 
 public interface ProjectDao {
+    Project getOneProject(int project_id);
     List<Project> getAllProject(Project project);
     List<Project> getCheckProject(Project project);
     List<Project> getAllCheckProject();
