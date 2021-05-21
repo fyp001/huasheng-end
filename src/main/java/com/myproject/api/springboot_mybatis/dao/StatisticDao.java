@@ -12,4 +12,10 @@ public interface StatisticDao {
 
 
     List<Project> getProject(String projectClass, String projectHead);
+
+    List<Project> getFile(String projectClass, String projectHead);
+
+    List<Project> getContract(String projectClass, String projectHead);
+
+    List<Project> getTender(String projectClass, String projectHead);
 }

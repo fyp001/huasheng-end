@@ -26,7 +26,6 @@ public class StatisticController {
         for(int i=0;i<12;i++){
             res.add(0);
         }
-        System.out.println(res.size());
         //查找出给定范围的日期,例如，2021-04-15 -》 2021-9-16,返回4月到9月之间改项目负责人负责某类工程的数量
         int startYear = Integer.valueOf(searchObj.getBegin().split("-")[0]);
         int startMonth = Integer.valueOf(searchObj.getBegin().split("-")[1]);
@@ -34,7 +33,7 @@ public class StatisticController {
         int endMonth = Integer.valueOf(searchObj.getEnd().split("-")[1]);
 //        System.out.println(11);
 
-        //先判断是查询哪个模块,合同，工程
+        //工程模块
         if(searchObj.getType().equals("project")){
             //先根据工程负责人和工程类型查出数据
             List<Project> list = statisticService.getProject(searchObj.getProjectClass(),searchObj.getProjectHead());
@@ -46,7 +45,42 @@ public class StatisticController {
                 }
             }
         }
-        System.out.println(res.size());
+//        //文档模块，file
+//        if(searchObj.getType().equals("file")){
+//            //先根据工程负责人和工程类型查出数据
+//            List<Project> list = statisticService.getFile(searchObj.getProjectClass(),searchObj.getProjectHead());
+//            for(Project project:list){
+//                int year = Integer.valueOf(project.getProject_starttime().split("-")[0]);
+//                int month = Integer.valueOf(project.getProject_starttime().split("-")[1])-1;
+//                if(year==startYear && month>=startMonth && month<=endMonth){
+//                    res.set(month,res.get(month)+1);
+//                }
+//            }
+//        }
+//        ///合同模块，contract
+//        if(searchObj.getType().equals("contract")){
+//            //先根据工程负责人和工程类型查出数据
+//            List<Project> list = statisticService.getContract(searchObj.getProjectClass(),searchObj.getProjectHead());
+//            for(Project project:list){
+//                int year = Integer.valueOf(project.getProject_starttime().split("-")[0]);
+//                int month = Integer.valueOf(project.getProject_starttime().split("-")[1])-1;
+//                if(year==startYear && month>=startMonth && month<=endMonth){
+//                    res.set(month,res.get(month)+1);
+//                }
+//            }
+//        }
+//        ///投标模块，tender
+//        if(searchObj.getType().equals("tender")){
+//            //先根据工程负责人和工程类型查出数据
+//            List<Project> list = statisticService.getTender(searchObj.getProjectClass(),searchObj.getProjectHead());
+//            for(Project project:list){
+//                int year = Integer.valueOf(project.getProject_starttime().split("-")[0]);
+//                int month = Integer.valueOf(project.getProject_starttime().split("-")[1])-1;
+//                if(year==startYear && month>=startMonth && month<=endMonth){
+//                    res.set(month,res.get(month)+1);
+//                }
+//            }
+//        }
         return res;
 
     }
