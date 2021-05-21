@@ -27,6 +27,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @EnableAutoConfiguration
 @RestController
@@ -94,11 +96,12 @@ public class fileController {
     List<file> getOperator(HttpServletRequest request){
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
+        System.out.println("通过了拦截器到达controller先取值:"+s.staff_name);
         int staff_id=s.getStaff_id();
         file file1 = new file();
         file1.setJing_ban_ren(staff_id);
         List<file> f=fileservice.GetOperator(file1);
+        System.out.println(f.size());
         for(int i=0;i<f.size();i++){
             if(f.get(i).getShen_he_ren()!=0){
                 f.get(i).setChecker(fileservice.GetName(f.get(i).getShen_he_ren()));
@@ -107,7 +110,7 @@ public class fileController {
             {
                 String filename=f.get(i).getTxt_name();
                 String filelocation=f.get(i).getFile_location();
-                String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
+                String url="http://127.0.0.1:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
                 f.get(i).setFile_url(url);
             }
         }
@@ -122,6 +125,7 @@ public class fileController {
      */
     @RequestMapping(value = "/file/getChecker")
     List<file> getChecker(HttpServletRequest request){
+
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
@@ -396,6 +400,7 @@ public class fileController {
     @RequestMapping(value = "/file/update")
     public Map<String,Object> update(@RequestParam(value = "file",required = false) MultipartFile multipartFiles,file f,HttpServletResponse response,HttpServletRequest request)  {
         Map<String,Object> result=new HashMap<>();
+
         if (multipartFiles != null)
         {
             File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
@@ -511,48 +516,102 @@ public class fileController {
 //    }
 
     @RequestMapping("/file/upload")
-
     public Map<String,Object> uploadFile(@RequestParam(value = "files",required = false) MultipartFile[] multipartFiles,HttpServletResponse response,HttpServletRequest request,file f)  {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
-//        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
         Map<String,Object> result=new HashMap<>();
         //在文件操作中，不用/或者\最好，推荐使用File.separator
         File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
-        String desktopPath = desktopDir.getAbsolutePath();
         String driname = "files";
         String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + formatter.format(new Date()) + File.separator;
 
-        //用list保存多个文件地址名
-        List<String> file_location = new ArrayList();
-        List<String> txt_name = new ArrayList();
-        List<String> newnames = new ArrayList();
-
-        System.out.println(multipartFiles.length+"长度");
-
+        //保存文件地址名
+        String file_location = null;
+        String txt_name = null;
+        String newname = null;
 
         try {
+
             if (multipartFiles != null)
             {
-                for(MultipartFile multipartFile :multipartFiles) {
-                    String newname = UUID.randomUUID().toString().replace("-", "") + "_" + multipartFile.getOriginalFilename();
-                    file_location.add(URLEncoder.encode(rootPath, "utf-8"));
-                    txt_name.add(URLEncoder.encode(newname, "utf-8"));
-                    System.out.println(rootPath+newname);
+                //多文件打包压缩存储
+                List<File> files=new ArrayList<>();
+                //ZipOutputStream类：完成文件或文件夹的压缩
+                for(MultipartFile multipartFile :multipartFiles){
+                    newname = UUID.randomUUID().toString().replace("-", "") + "_" + multipartFile.getOriginalFilename();
+//                    file_location.add(URLEncoder.encode(rootPath, "utf-8"));
+//                    txt_name.add(URLEncoder.encode(newname, "utf-8"));
                     File fileDir = new File(rootPath);
+                    File file = new File(fileDir, newname);
+                    file.setWritable(true, false);
                     if (!fileDir.exists() && !fileDir.isDirectory()) {
                         fileDir.mkdirs();
                     }
                     try {
-                        multipartFile.transferTo(new File(fileDir, newname));
+                        multipartFile.transferTo(file);
                         result.put("status", "success");
-                        newnames.add(newname);
                     } catch (IOException e) {
                         result.put("status", "fail");
                         result.put("msg", e.getMessage());
                     }
+                    files.add(file);
                 }
+                //以最后一个文件名来命名压缩文件
+                try {
+                    File zip = new File(rootPath,newname+".zip");
+                    file_location = URLEncoder.encode(rootPath, "utf-8");
+                    txt_name = URLEncoder.encode(newname+".zip", "utf-8");
+
+                    zip.setWritable(true, false);
+                    zip.createNewFile();
+
+
+                    byte[] buf = new byte[1024];
+                    ZipOutputStream out = null;
+                    //ZipOutputStream类：完成文件或文件夹的压缩
+                    out = new ZipOutputStream(new FileOutputStream(zip));
+                    for (int i = 0; i < files.size(); i++) {
+                        FileInputStream in = new FileInputStream(files.get(i));
+                        String filePath="";
+                        if (filePath == null)
+                            filePath = "";
+                        else
+                            filePath += "/";
+                        out.putNextEntry(new ZipEntry(filePath + files.get(i).getName()));
+                        int len;
+                        while ((len = in.read(buf)) > 0) {
+                            out.write(buf, 0, len);
+                        }
+                        out.closeEntry();
+                        in.close();
+                    }
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                System.out.println("压缩完成.");
+                //不压缩
+//                for(MultipartFile multipartFile :multipartFiles) {
+//                    String newname = UUID.randomUUID().toString().replace("-", "") + "_" + multipartFile.getOriginalFilename();
+//                    file_location.add(URLEncoder.encode(rootPath, "utf-8"));
+//                    txt_name.add(URLEncoder.encode(newname, "utf-8"));
+//                    System.out.println(rootPath+newname);
+//                    File fileDir = new File(rootPath);
+//                    if (!fileDir.exists() && !fileDir.isDirectory()) {
+//                        fileDir.mkdirs();
+//                    }
+//                    try {
+//                        multipartFile.transferTo(new File(fileDir, newname));
+//                        result.put("status", "success");
+//                        newnames.add(newname);
+//                    } catch (IOException e) {
+//                        result.put("status", "fail");
+//                        result.put("msg", e.getMessage());
+//                    }
+//                }
+
+                //多文件打包压缩存储
             }
             else
             {
@@ -562,11 +621,11 @@ public class fileController {
             result.put("status","fail");
             result.put("msg",e.getMessage());
         }
-        result.put("file_loaction", file_location.toString());
-        result.put("file_name", newnames.toString());
-        f.setFile_location(file_location.toString());
-        f.setTxt_name(txt_name.toString());
-
+        System.out.println(file_location+"       "+newname+".zip");
+        result.put("file_loaction", file_location);
+        result.put("file_name", newname+".zip");
+        f.setFile_location(file_location);
+        f.setTxt_name(txt_name);
         f.setFile_uploaddate(formatter.format(new Date()));
         f.setFile_updatedate(formatter.format(new Date()));
         f.setJing_ban_ren(staff_id);
@@ -586,6 +645,7 @@ public class fileController {
         Map<String,Object> result=new HashMap<>();
 //        ServletOutputStream os = null;
 //        InputStream is= null;
+        System.out.println(URLDecoder.decode(fileLocation)+URLDecoder.decode(fileName));
         File file=new File(URLDecoder.decode(fileLocation)+URLDecoder.decode(fileName));
         if(!file.exists()){
             result.put("status","fail");

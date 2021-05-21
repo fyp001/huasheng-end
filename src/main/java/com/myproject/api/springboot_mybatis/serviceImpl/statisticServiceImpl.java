@@ -17,4 +17,16 @@ public class statisticServiceImpl implements StatisticService {
     public List<Project> getProject(String projectClass, String projectHead){
         return statisticDao.getProject(projectClass, projectHead);
     }
+
+    public List<Project> getFile(String projectClass, String projectHead){
+        return statisticDao.getFile(projectClass, projectHead);
+    }
+
+    public List<Project> getContract(String projectClass, String projectHead){
+        return statisticDao.getContract(projectClass, projectHead);
+    }
+
+    public List<Project> getTender(String projectClass, String projectHead){
+        return statisticDao.getTender(projectClass, projectHead);
+    }
 }
