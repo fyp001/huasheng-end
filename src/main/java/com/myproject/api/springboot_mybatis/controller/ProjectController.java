@@ -54,6 +54,23 @@ public class ProjectController {
         Collections.reverse(p1);
         return p1;
     }
+    @GetMapping(value = "/project/getArchiveProject")
+    public List<Project>  getArchiveProject(HttpServletRequest request){
+        List<Project> p1=projectService.getArchiveProject();
+        for(int i=0;i<p1.size();i++){
+            if(p1.get(i).getFile_location()!=null)
+            {
+//                String filename=URLEncoder.encode(f.get(i).getFile_name(), "utf-8");
+//                String filelocation=URLEncoder.encode(f.get(i).getFile_location(), "utf-8");
+                String filename=p1.get(i).getTxt_name();
+                String filelocation=p1.get(i).getFile_location();
+                String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
+                p1.get(i).setFile_url(url);
+            }
+        }
+        Collections.reverse(p1);
+        return p1;
+    }
 
     @GetMapping(value = "/project/getAllProject")
     public List<Project> getAllProject(HttpServletRequest request){

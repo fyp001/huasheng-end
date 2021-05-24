@@ -89,7 +89,16 @@
         select *
         from project;
     </select>
-
+    <select id="getArchiveProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">
+        select *
+        from project
+        where if_issued = 3;
+    </select>
+<!--    <select id="getCheckArchiveProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">-->
+<!--        select *-->
+<!--        from project-->
+<!--        where if_issued = 3 and shen_he_ren = #{shen_he_ren};-->
+<!--    </select>-->
     <insert id="insert" parameterType="com.myproject.api.springboot_mybatis.entity.Project" useGeneratedKeys="true"
             keyProperty="project_id">
         insert into project(project_id,

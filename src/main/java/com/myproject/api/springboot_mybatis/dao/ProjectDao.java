@@ -26,4 +26,6 @@ public interface ProjectDao {
     void globalPass(Project project);
 
     void globalRefuse(Project project);
+
+    List<Project> getArchiveProject();
 }

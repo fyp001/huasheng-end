@@ -51,6 +51,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<Project> getArchiveProject() {
+        return ProjectDao.getArchiveProject();
+    }
+
+    @Override
     public void insert(Project project) {
         ProjectDao.insert(project);
     }
