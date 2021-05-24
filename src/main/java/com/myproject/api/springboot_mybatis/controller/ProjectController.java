@@ -328,10 +328,16 @@ public class ProjectController {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
-        project.setIf_submit('3');
        projectService.globalPass(project);
     }
-
+    @RequestMapping(value = "/project/globalrefuse")
+    public void globalrefuse(Project project,HttpServletRequest request)
+    {
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
+        projectService.globalRefuse(project);
+    }
     @RequestMapping(value = "/project/refuse")
     public Map<String,Object> refuse(Project project,HttpServletRequest request)
     {

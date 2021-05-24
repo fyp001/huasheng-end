@@ -24,4 +24,6 @@ public interface ProjectDao {
     void if_delete(Project project);
 
     void globalPass(Project project);
+
+    void globalRefuse(Project project);
 }

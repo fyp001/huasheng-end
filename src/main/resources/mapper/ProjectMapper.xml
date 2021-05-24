@@ -41,7 +41,7 @@
     <select id="getAllProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">
         SELECT *
         FROM project
-        where jing_ban_ren = #{jing_ban_ren}
+        where jing_ban_ren = #{jing_ban_ren} and if_issued !=3
     </select>
 
     <select id="getOneProject" resultType="com.myproject.api.springboot_mybatis.entity.Project" parameterType="int">
@@ -199,6 +199,11 @@
     <update id="globalPass" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
         update project
         set if_issued=3
+        where project.project_id = #{project_id}
+    </update>
+    <update id="globalRefuse" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
+        update project
+        set if_issued=1
         where project.project_id = #{project_id}
     </update>
 

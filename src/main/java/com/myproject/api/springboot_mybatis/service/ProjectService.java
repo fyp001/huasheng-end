@@ -24,4 +24,6 @@ public interface ProjectService {
     List<Project> getGlobalCheckProject(Project project);
 
     void globalPass(Project project);
+
+    void globalRefuse(Project project);
 }

@@ -46,6 +46,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public void globalRefuse(Project project) {
+        ProjectDao.globalRefuse(project);
+    }
+
+    @Override
     public void insert(Project project) {
         ProjectDao.insert(project);
     }
