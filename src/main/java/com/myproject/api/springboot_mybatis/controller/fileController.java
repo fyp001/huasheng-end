@@ -110,7 +110,7 @@ public class fileController {
             {
                 String filename=f.get(i).getTxt_name();
                 String filelocation=f.get(i).getFile_location();
-                String url="http://127.0.0.1:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
+                String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
                 f.get(i).setFile_url(url);
             }
         }

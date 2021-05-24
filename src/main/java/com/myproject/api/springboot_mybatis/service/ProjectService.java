@@ -22,4 +22,6 @@ public interface ProjectService {
     List <Staff>  getname();
 
     List<Project> getGlobalCheckProject(Project project);
+
+    void globalPass(Project project);
 }

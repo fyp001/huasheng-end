@@ -22,4 +22,6 @@ public interface ProjectDao {
     void pass(Project project);
     void refuse(Project project);
     void if_delete(Project project);
+
+    void globalPass(Project project);
 }

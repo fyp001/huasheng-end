@@ -41,6 +41,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public void globalPass(Project project) {
+        ProjectDao.globalPass(project);
+    }
+
+    @Override
     public void insert(Project project) {
         ProjectDao.insert(project);
     }

@@ -1,6 +1,6 @@
 server:
   port: 8080
-
+#baseurl: http://8.129.86.121:${server.port}
 spring:
   datasource:
     username: hnhskjssws
