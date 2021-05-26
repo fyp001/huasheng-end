@@ -7,6 +7,7 @@ import com.myproject.api.springboot_mybatis.entity.Project;
 import com.myproject.api.springboot_mybatis.entity.Staff;
 import com.myproject.api.springboot_mybatis.entity.file;
 import com.myproject.api.springboot_mybatis.service.ProjectService;
+import com.myproject.api.springboot_mybatis.service.staffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +25,15 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import com.myproject.api.springboot_mybatis.service.staffService;
 
 @RestController
 public class ProjectController {
     @Autowired
     ProjectService projectService;
+
+    @Autowired
+    staffService staffService;
 
     @Resource
     RedisTemplate<String, Staff> redisTemplate;
@@ -496,7 +501,7 @@ public class ProjectController {
         Font bf = new Font(bfChinese);
         bf.setSize(10f);
         //添加内容
-        document.add(new Paragraph("审计报告",bf));
+        document.add(new Paragraph(oneProject.getProject_name(),bf));
 
 
         //4列的表.
@@ -539,11 +544,11 @@ public class ProjectController {
         cells2[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
         cells2[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
 
-        cells2[1] = new PdfPCell(new Paragraph(String.valueOf(oneProject.getJing_ban_ren()),bf));
+        cells2[1] = new PdfPCell(new Paragraph(staffService.staffInfoById(oneProject.getJing_ban_ren()).getStaff_name(),bf));
         cells2[2] = new PdfPCell(new Paragraph("审核人",bf));
         cells2[2].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
         cells2[2].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
-        cells2[3] = new PdfPCell(new Paragraph(String.valueOf(oneProject.getShen_he_ren()),bf));
+        cells2[3] = new PdfPCell(new Paragraph(staffService.staffInfoById(oneProject.getShen_he_ren()).getStaff_name(),bf));
 
         //行3
         PdfPCell cells3[] = new PdfPCell[4];
