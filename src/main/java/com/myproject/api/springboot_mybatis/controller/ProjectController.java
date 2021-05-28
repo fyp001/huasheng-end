@@ -7,6 +7,7 @@ import com.myproject.api.springboot_mybatis.entity.Project;
 import com.myproject.api.springboot_mybatis.entity.Staff;
 import com.myproject.api.springboot_mybatis.entity.file;
 import com.myproject.api.springboot_mybatis.service.ProjectService;
+import com.myproject.api.springboot_mybatis.service.staffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +25,18 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import com.myproject.api.springboot_mybatis.service.staffService;
 
 @RestController
 public class ProjectController {
     @Autowired
     ProjectService projectService;
+
+    @Autowired
+    staffService staffService;
 
     @Resource
     RedisTemplate<String, Staff> redisTemplate;
@@ -40,6 +48,23 @@ public class ProjectController {
         List<Project> p=projectService.getAdmin();
         List<Staff> s=projectService.getname();
         List<Project> p1=getProjects(s,p);
+        for(int i=0;i<p1.size();i++){
+            if(p1.get(i).getFile_location()!=null)
+            {
+//                String filename=URLEncoder.encode(f.get(i).getFile_name(), "utf-8");
+//                String filelocation=URLEncoder.encode(f.get(i).getFile_location(), "utf-8");
+                String filename=p1.get(i).getTxt_name();
+                String filelocation=p1.get(i).getFile_location();
+                String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
+                p1.get(i).setFile_url(url);
+            }
+        }
+        Collections.reverse(p1);
+        return p1;
+    }
+    @GetMapping(value = "/project/getArchiveProject")
+    public List<Project>  getArchiveProject(HttpServletRequest request){
+        List<Project> p1=projectService.getArchiveProject();
         for(int i=0;i<p1.size();i++){
             if(p1.get(i).getFile_location()!=null)
             {
@@ -106,13 +131,19 @@ public class ProjectController {
     {
         String token=request.getHeader("token");
         Staff s1=redisTemplate.opsForValue().get(token);
+        System.out.println(s1.toString());
         System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_id());
         int staff_id=s1.getStaff_id();
         Project project=new Project();
         project.setShen_he_ren(staff_id);
-        List<Staff> s=projectService.getname();
-        List<Project> p=projectService.getCheckProject(project);
-        List<Project> p1=getProjects(s,p);
+        List<Project> p;
+        List<Project> p1;
+        if("1".equals(s1.getStaff_permission())){
+            List<Staff> s=projectService.getname();
+            p=projectService.getCheckProject(project);
+            p1=getProjects(s,p);}
+        else
+            p1=projectService.getGlobalCheckProject(project);
         for(int i=0;i<p1.size();i++){
             if(p1.get(i).getFile_location()!=null)
             {
@@ -130,7 +161,7 @@ public class ProjectController {
 
 
     @RequestMapping(value = "/project/insert")
-    public Map<String,Object> insert(Project project,HttpServletRequest request,HttpServletResponse response,@RequestParam(value = "file",required = false) MultipartFile multipartFiles)
+    public Map<String,Object> insert(Project project,HttpServletRequest request,HttpServletResponse response,@RequestParam(value = "files",required = false) MultipartFile[] multipartFiles)
     {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
@@ -144,28 +175,68 @@ public class ProjectController {
         String driname = "projects";
         String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + formatter.format(new Date()) + File.separator;
 
+//        System.out.println(multipartFiles);
+        String file_location = null;
+        String txt_name = null;
+        String newname = null;
         try {
             if (multipartFiles != null)
             {
-                //String newname=UUID.randomUUID()+"_"+multipartFiles.getOriginalFilename();
-                String newname= UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
-                project.setFile_location(URLEncoder.encode(rootPath, "utf-8"));
-                project.setTxt_name(URLEncoder.encode(newname, "utf-8"));
-                File fileDir = new File(rootPath);
-                if (!fileDir.exists() && !fileDir.isDirectory())
-                {
-                    fileDir.mkdirs();
+                //多文件打包压缩存储
+                List<File> files=new ArrayList<>();
+                //ZipOutputStream类：完成文件或文件夹的压缩
+                for(MultipartFile multipartFile :multipartFiles){
+                    newname = UUID.randomUUID().toString().replace("-", "") + "_" + multipartFile.getOriginalFilename();
+//                    file_location.add(URLEncoder.encode(rootPath, "utf-8"));
+//                    txt_name.add(URLEncoder.encode(newname, "utf-8"));
+//                    System.out.println(newname);
+                    File fileDir = new File(rootPath);
+                    File file = new File(fileDir, newname);
+                    file.setWritable(true, false);
+                    if (!fileDir.exists() && !fileDir.isDirectory()) {
+                        fileDir.mkdirs();
+                    }
+                    try {
+                        multipartFile.transferTo(file);
+                        result.put("status", "success");
+                    } catch (IOException e) {
+                        result.put("status", "fail");
+                        result.put("msg", e.getMessage());
+                    }
+                    files.add(file);
                 }
+                //以最后一个文件名来命名压缩文件
                 try {
-                    //String extension=multipartFiles[i].getOriginalFilename().substring(multipartFiles[i].getOriginalFilename().lastIndexOf("."));
-                    multipartFiles.transferTo(new File(fileDir,newname));
-                    //String url=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+"/Springbootfile/"+newname;
-                    result.put("status","success");
-                    result.put("file_loaction",fileDir);
-                    result.put("file_name",newname);
-                } catch (IOException e) {
-                    result.put("status","fail");
-                    result.put("msg",e.getMessage());
+                    File zip = new File(rootPath,newname+".zip");
+                    file_location = URLEncoder.encode(rootPath, "utf-8");
+                    txt_name = URLEncoder.encode(newname+".zip", "utf-8");
+
+                    zip.setWritable(true, false);
+                    zip.createNewFile();
+
+
+                    byte[] buf = new byte[1024];
+                    ZipOutputStream out = null;
+                    //ZipOutputStream类：完成文件或文件夹的压缩
+                    out = new ZipOutputStream(new FileOutputStream(zip));
+                    for (int i = 0; i < files.size(); i++) {
+                        FileInputStream in = new FileInputStream(files.get(i));
+                        String filePath="";
+                        if (filePath == null)
+                            filePath = "";
+                        else
+                            filePath += "/";
+                        out.putNextEntry(new ZipEntry(filePath + files.get(i).getName()));
+                        int len;
+                        while ((len = in.read(buf)) > 0) {
+                            out.write(buf, 0, len);
+                        }
+                        out.closeEntry();
+                        in.close();
+                    }
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
             else
@@ -316,8 +387,22 @@ public class ProjectController {
 
         return result;
     }
-
-
+    @RequestMapping(value = "/project/globalpass")
+    public void globalpass(Project project,HttpServletRequest request)
+    {
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
+        projectService.globalPass(project);
+    }
+    @RequestMapping(value = "/project/globalrefuse")
+    public void globalrefuse(Project project,HttpServletRequest request)
+    {
+        String token=request.getHeader("token");
+        Staff s=redisTemplate.opsForValue().get(token);
+        System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
+        projectService.globalRefuse(project);
+    }
     @RequestMapping(value = "/project/refuse")
     public Map<String,Object> refuse(Project project,HttpServletRequest request)
     {
@@ -459,7 +544,7 @@ public class ProjectController {
         Font bf = new Font(bfChinese);
         bf.setSize(10f);
         //添加内容
-        document.add(new Paragraph("审计报告",bf));
+        document.add(new Paragraph(oneProject.getProject_name(),bf));
 
 
         //4列的表.
@@ -502,11 +587,11 @@ public class ProjectController {
         cells2[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
         cells2[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
 
-        cells2[1] = new PdfPCell(new Paragraph(String.valueOf(oneProject.getJing_ban_ren()),bf));
+        cells2[1] = new PdfPCell(new Paragraph(staffService.staffInfoById(oneProject.getJing_ban_ren()).getStaff_name(),bf));
         cells2[2] = new PdfPCell(new Paragraph("审核人",bf));
         cells2[2].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
         cells2[2].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
-        cells2[3] = new PdfPCell(new Paragraph(String.valueOf(oneProject.getShen_he_ren()),bf));
+        cells2[3] = new PdfPCell(new Paragraph(staffService.staffInfoById(oneProject.getShen_he_ren()).getStaff_name(),bf));
 
         //行3
         PdfPCell cells3[] = new PdfPCell[4];
