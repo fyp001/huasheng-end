@@ -23,6 +23,34 @@ public class Staff {
     public String staff_permission;
     public String staff_politic;
     public String staff_password;
+
+    @Override
+    public String toString() {
+        return "Staff{" +
+                "staff_id=" + staff_id +
+                ", staff_account='" + staff_account + '\'' +
+                ", staff_photo='" + staff_photo + '\'' +
+                ", staff_name='" + staff_name + '\'' +
+                ", staff_sex='" + staff_sex + '\'' +
+                ", staff_birthday='" + staff_birthday + '\'' +
+                ", staff_status='" + staff_status + '\'' +
+                ", staff_type='" + staff_type + '\'' +
+                ", staff_department='" + staff_department + '\'' +
+                ", staff_job='" + staff_job + '\'' +
+                ", staff_nation='" + staff_nation + '\'' +
+                ", staff_wage='" + staff_wage + '\'' +
+                ", staff_native_place='" + staff_native_place + '\'' +
+                ", staff_birth_place='" + staff_birth_place + '\'' +
+                ", staff_in_date='" + staff_in_date + '\'' +
+                ", staff_out_date='" + staff_out_date + '\'' +
+                ", staff_phone='" + staff_phone + '\'' +
+                ", staff_email='" + staff_email + '\'' +
+                ", staff_annual_leave='" + staff_annual_leave + '\'' +
+                ", staff_permission='" + staff_permission + '\'' +
+                ", staff_politic='" + staff_politic + '\'' +
+                ", staff_password='" + staff_password + '\'' +
+                '}';
+    }
  /*   public String user_name;
     public String password;
 

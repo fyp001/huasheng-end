@@ -46,6 +46,7 @@ public class staffController extends BaseController{
         String uuidToken = UUID.randomUUID().toString().replace("-","");
         //建立token和用户登录态之间的联系
         redisTemplate.opsForValue().set(uuidToken,staff);
+        //[TODO]为什么是1小时
         redisTemplate.expire(uuidToken,1, TimeUnit.HOURS);
 //        Staff s=redisTemplate.opsForValue().get("d4d04043c407436a8e848af7c6eac601");
 //        System.out.println(s.toString());

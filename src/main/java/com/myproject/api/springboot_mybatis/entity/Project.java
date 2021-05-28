@@ -41,6 +41,27 @@ public class Project {
 
     private String file_updatedate;
 
+    private String project_departmentmanager;
+
+    private String project_generalmanager;
+
+    public String getProject_departmentmanager() {
+        return project_departmentmanager;
+    }
+
+    public void setProject_departmentmanager(String project_departmentmanager) {
+        this.project_departmentmanager = project_departmentmanager;
+    }
+
+    public String getProject_generalmanager() {
+        return project_generalmanager;
+    }
+
+    public void setProject_generalmanager(String project_generalmanager) {
+        this.project_generalmanager = project_generalmanager;
+    }
+
+
     public String getFile_uploaddate() {
         return file_uploaddate;
     }

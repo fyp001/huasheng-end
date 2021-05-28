@@ -1,6 +1,6 @@
 server:
   port: 8080
-
+#baseurl: http://8.129.86.121:${server.port}
 spring:
   datasource:
     username: hnhskjssws
@@ -29,6 +29,8 @@ spring:
 mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
   type-aliases-package: com.myproject.api.springboot_mybatis.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 mq:
   nameserver:

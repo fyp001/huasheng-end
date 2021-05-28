@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.myproject.api.springboot_mybatis.dao.ProjectDao">
+    <resultMap id="projectMapper" type="com.myproject.api.springboot_mybatis.entity.Project">
+        <id property="project_id" column="project_id"/>
+        <result property="project_type" column="project_type"/>
+        <result property="project_name" column="project_name"/>
+        <result property="project_client" column="project_client"/>
+        <result property="project_reportnumber" column="project_reportnumber"/>
+        <result property="project_class" column="project_class"/>
+        <result property="project_qualitycontroler" column="project_qualitycontroler"/>
+        <result property="project_head" column="project_head"/>
+        <result property="project_members" column="project_members"/>
+        <result property="project_starttime" column="project_starttime"/>
+        <result property="project_endtime" column="project_endtime"/>
+        <result property="project_comment" column="project_comment"/>
+        <result property="project_assets" column="project_assets"/>
+        <result property="project_audit" column="project_audit"/>
+        <result property="project_reduction" column="project_reduction"/>
+        <result property="project_accountant" column="project_accountant"/>
+        <result property="project_costengineer" column="project_costengineer"/>
+        <result property="project_taxaccountant" column="project_taxaccountant"/>
+        <result property="project_partner" column="project_partner"/>
+        <result property="project_construction" column="project_construction"/>
+        <result property="project_code" column="project_code"/>
+        <result property="if_issued" column="if_issued"/>
+        <result property="if_delete" column="if_delete"/>
+        <result property="if_submit" column="if_submit"/>
+        <result property="file_location" column="file_location"/>
+        <result property="file_uploaddate" column="file_uploaddate"/>
+        <result property="file_updatedate" column="file_updatedate"/>
+        <result property="txt_name" column="txt_name"/>
+        <result property="project_departmentmanager" column="project_departmentmanager"/>
+        <result property="project_generalmanager" column="project_generalmanager"/>
+        <association property="staff_namej" column="jing_ban_ren"
+                     select="com.myproject.api.springboot_mybatis.dao.ProjectDao.getNameById"/>
+        <association property="staff_names" column="shen_he_ren"
+                     select="com.myproject.api.springboot_mybatis.dao.ProjectDao.getNameById"/>
+    </resultMap>
+    <select id="getAllProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">
+        SELECT *
+        FROM project
+        where jing_ban_ren = #{jing_ban_ren} and if_issued !=3
+    </select>
+
+    <select id="getOneProject" resultType="com.myproject.api.springboot_mybatis.entity.Project" parameterType="int">
+        SELECT *
+        FROM project
+        where project_id = #{project_id}
+    </select>
+
+    <select id="getCheckProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">
+
+        SELECT *
+        FROM project
+        where if_submit = 1 and if_issued !=3
+          and (shen_he_ren = #{shen_he_ren} or shen_he_ren is null);
+
+    </select>
+    <select id="getGlobalCheckProject" resultMap="projectMapper">
+
+        SELECT *
+        FROM project
+        where if_submit = 1
+          and if_issued = 2;
+
+    </select>
+
+    <select id="getname" resultType="com.myproject.api.springboot_mybatis.entity.Staff">
+
+        SELECT *
+        FROM staff;
+
+    </select>
+    <select id="getNameById" resultType="string">
+
+        SELECT staff_name
+        FROM staff
+        where staff_id = #{staff_id};
+
+    </select>
+    <select id="getAllCheckProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">
+        select *
+        from project
+        where if_submit = 1
+    </select>
+    <select id="getAdmin" resultType="com.myproject.api.springboot_mybatis.entity.Project">
+        select *
+        from project;
+    </select>
+    <select id="getArchiveProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">
+        select *
+        from project
+        where if_issued = 3;
+    </select>
+<!--    <select id="getCheckArchiveProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">-->
+<!--        select *-->
+<!--        from project-->
+<!--        where if_issued = 3 and shen_he_ren = #{shen_he_ren};-->
+<!--    </select>-->
+    <insert id="insert" parameterType="com.myproject.api.springboot_mybatis.entity.Project" useGeneratedKeys="true"
+            keyProperty="project_id">
+        insert into project(project_id,
+                            project_type,
+                            project_name,
+                            project_client,
+                            project_reportnumber,
+                            project_class,
+                            project_qualitycontroler,
+                            project_head,
+                            project_members,
+                            project_starttime,
+                            project_endtime,
+                            project_comment,
+                            project_assets,
+                            project_audit,
+                            project_reduction,
+                            project_accountant,
+                            project_costengineer,
+                            project_taxaccountant,
+                            project_partner,
+                            project_construction,
+                            project_code,
+                            if_issued,
+                            if_delete,
+                            if_submit,
+                            jing_ban_ren,
+                            file_location, file_uploaddate, file_updatedate, txt_name)
+        values (#{project_id},
+                #{project_type},
+                #{project_name},
+                #{project_client},
+                #{project_reportnumber},
+                #{project_class},
+                #{project_qualitycontroler},
+                #{project_head},
+                #{project_members},
+                #{project_starttime},
+                #{project_endtime},
+                #{project_comment},
+                #{project_assets},
+                #{project_audit},
+                #{project_reduction},
+                #{project_accountant},
+                #{project_costengineer},
+                #{project_taxaccountant},
+                #{project_partner},
+                #{project_construction},
+                #{ project_code},
+                0,
+                0,
+                0,
+                #{jing_ban_ren},
+                #{file_location},
+                #{file_uploaddate},
+                #{file_updatedate},
+                #{txt_name})
+    </insert>
+    <delete id="delete" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
+        delete
+        from project
+        where project_id = #{project_id}
+    </delete>
+    <update id="update" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
+        update project
+        set project_name=#{project_name},
+            project_type=#{project_type},
+            project_client=#{project_client},
+            project_reportnumber=#{project_reportnumber},
+            project_class=#{project_class},
+            project_qualitycontroler=#{project_qualitycontroler},
+            project_head=#{project_head},
+            project_members=#{project_members},
+            project_starttime=#{project_starttime},
+            project_endtime=#{project_endtime},
+            project_comment=#{project_comment},
+            project_assets=#{project_assets},
+            project_audit=#{project_audit},
+            project_reduction=#{project_reduction},
+            project_accountant=#{project_accountant},
+            project_costengineer=#{project_costengineer},
+            project_taxaccountant=#{project_taxaccountant},
+            project_partner=#{project_partner},
+            project_construction=#{project_construction},
+            file_location=#{file_location},
+            file_updatedate=#{file_updatedate},
+            txt_name=#{txt_name},
+            project_code=#{project_code},
+            project_departmentmanager=#{project_departmentmanager},
+            project_generalmanager=#{project_generalmanager}
+        where project.project_id = #{project_id}
+    </update>
+
+    <update id="submit" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
+        update project
+        set if_submit=1,
+            if_issued=0
+        where project.project_id = #{project_id}
+    </update>
+
+    <update id="pass" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
+        update project
+        set if_issued=2,
+            shen_he_ren=#{shen_he_ren}
+        where project.project_id = #{project_id}
+    </update>
+    <update id="globalPass" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
+        update project
+        set if_issued=3
+        where project.project_id = #{project_id}
+    </update>
+    <update id="globalRefuse" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
+        update project
+        set if_issued=1
+        where project.project_id = #{project_id}
+    </update>
+
+    <update id="refuse" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
+        update project
+        set if_issued=1,
+            shen_he_ren=#{shen_he_ren}
+        where project.project_id = #{project_id}
+    </update>
+
+    <update id="if_delete" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
+        update project
+        set project_name=#{project_name},
+            project_id=#{project_id},
+            project_type=#{project_type},
+            project_client=#{project_client},
+            project_reportnumber=#{project_reportnumber},
+            project_class=#{project_class},
+            project_qualitycontroler=#{project_qualitycontroler},
+            project_head=#{project_head},
+            project_members=#{project_members},
+            project_starttime=#{project_starttime},
+            project_endtime=#{project_endtime},
+            project_comment=#{project_comment},
+            project_assets=#{project_assets},
+            project_audit=#{project_audit},
+            project_reduction=#{project_reduction},
+            project_accountant=#{project_accountant},
+            project_costengineer=#{project_costengineer},
+            project_taxaccountant=#{project_taxaccountant},
+            project_partner=#{project_partner},
+            project_construction=#{project_construction},
+            project_code=#{project_code},
+            if_delete=1,
+            jing_ban_ren=#{jing_ban_ren},
+            shen_he_ren=#{shen_he_ren}
+        where project.project_id = #{project_id}
+    </update>
+
+
+</mapper>

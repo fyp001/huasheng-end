@@ -36,6 +36,26 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<Project> getGlobalCheckProject(Project project) {
+        return ProjectDao.getGlobalCheckProject(project);
+    }
+
+    @Override
+    public void globalPass(Project project) {
+        ProjectDao.globalPass(project);
+    }
+
+    @Override
+    public void globalRefuse(Project project) {
+        ProjectDao.globalRefuse(project);
+    }
+
+    @Override
+    public List<Project> getArchiveProject() {
+        return ProjectDao.getArchiveProject();
+    }
+
+    @Override
     public void insert(Project project) {
         ProjectDao.insert(project);
     }

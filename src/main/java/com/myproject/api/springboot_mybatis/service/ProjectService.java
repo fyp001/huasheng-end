@@ -20,4 +20,12 @@ public interface ProjectService {
     void if_delete(Project project);
 
     List <Staff>  getname();
+
+    List<Project> getGlobalCheckProject(Project project);
+
+    void globalPass(Project project);
+
+    void globalRefuse(Project project);
+
+    List<Project> getArchiveProject();
 }

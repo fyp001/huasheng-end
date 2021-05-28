@@ -10,8 +10,10 @@ public interface ProjectDao {
     Project getOneProject(int project_id);
     List<Project> getAllProject(Project project);
     List<Project> getCheckProject(Project project);
+    List<Project> getGlobalCheckProject(Project project);
     List<Project> getAllCheckProject();
     List <Staff>  getname();
+    String getNameById(int staff_id);
     List<Project> getAdmin();
     void insert(Project project);
     void delete(Project project);
@@ -20,4 +22,10 @@ public interface ProjectDao {
     void pass(Project project);
     void refuse(Project project);
     void if_delete(Project project);
+
+    void globalPass(Project project);
+
+    void globalRefuse(Project project);
+
+    List<Project> getArchiveProject();
 }
