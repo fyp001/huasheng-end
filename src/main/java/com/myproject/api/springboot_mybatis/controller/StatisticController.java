@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -20,19 +21,25 @@ public class StatisticController {
 
 
     @PostMapping(value = "/sta/getAll")
-    public List<Integer> getInfo(@RequestBody SearchObj searchObj){
-        List<Integer> res = new ArrayList<>();
-        //初始化每个月数量为0
-        for(int i=0;i<12;i++){
-            res.add(0);
-        }
+    public List<List<Integer>> getInfo(@RequestBody SearchObj searchObj){
+        //第一个list下表表示的是年0-2021年，第二个list下标表示的是每年的月1-12月，
+        List<List<Integer>> res = new ArrayList<>();
+
+
         //查找出给定范围的日期,例如，2021-04-15 -》 2021-9-16,返回4月到9月之间改项目负责人负责某类工程的数量
         int startYear = Integer.valueOf(searchObj.getBegin().split("-")[0]);
-        int startMonth = Integer.valueOf(searchObj.getBegin().split("-")[1]);
-//        int endYear = Integer.valueOf(searchObj.getEnd().split("-")[0]);
-        int endMonth = Integer.valueOf(searchObj.getEnd().split("-")[1]);
-//        System.out.println(11);
+        int startMonth = Integer.valueOf(searchObj.getBegin().split("-")[1])-1;
+        int endYear = Integer.valueOf(searchObj.getEnd().split("-")[0]);
+        int endMonth = Integer.valueOf(searchObj.getEnd().split("-")[1])-1;
 
+        //初始化
+        for(int i=0;i<=endYear;i++){
+            res.add(new ArrayList<>());
+            for(int j=0;j<12;j++){
+                res.get(i).add(0);
+            }
+        }
+        System.out.println(startMonth+" "+endMonth);
         //工程模块
         if(searchObj.getType().equals("project")){
             //先根据工程负责人和工程类型查出数据
@@ -40,9 +47,35 @@ public class StatisticController {
             for(Project project:list){
                 int year = Integer.valueOf(project.getProject_starttime().split("-")[0]);
                 int month = Integer.valueOf(project.getProject_starttime().split("-")[1])-1;
-                if(year==startYear && month>=startMonth && month<=endMonth){
-                    res.set(month,res.get(month)+1);
+                if(year>startYear && year<endYear){
+                    List<Integer> months = res.get(year);
+                    months.set(month,months.get(month)+1);
+                    res.set(year,months);
+                }else if(year==startYear && year==endYear){
+                    if(month>=startMonth && month<=endMonth){
+                        List<Integer> months = res.get(year);
+                        months.set(month,months.get(month)+1);
+                        res.set(year,months);
+                    }
+                }else if(year==startYear){
+                    if(month>=startMonth){
+                        List<Integer> months = res.get(year);
+                        months.set(month,months.get(month)+1);
+                        res.set(year,months);
+                    }
+                }else if(year==endYear){
+                    if(month<=endMonth){
+                        List<Integer> months = res.get(year);
+                        months.set(month,months.get(month)+1);
+                        res.set(year,months);
+                    }
                 }
+            }
+        }
+        for(int i=0;i<=endYear;i++){
+            for(int j=0;j<12;j++){
+                if(res.get(i).get(j)!=0)
+                    System.out.println(i+"-"+(j+1)+":"+res.get(i).get(j));
             }
         }
 //        //文档模块，file
