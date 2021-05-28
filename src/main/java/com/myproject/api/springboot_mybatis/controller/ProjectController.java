@@ -161,7 +161,7 @@ public class ProjectController {
 
 
     @RequestMapping(value = "/project/insert")
-    public Map<String,Object> insert(Project project,HttpServletRequest request,HttpServletResponse response,@RequestParam(value = "files",required = false) MultipartFile[] multipartFiles)
+    public Map<String,Object> insert(Project project,HttpServletRequest request,HttpServletResponse response,@RequestParam(value = "file",required = false) MultipartFile[] multipartFiles)
     {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
@@ -175,10 +175,13 @@ public class ProjectController {
         String driname = "projects";
         String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + formatter.format(new Date()) + File.separator;
 
-//        System.out.println(multipartFiles);
+
+        //保存文件地址名
         String file_location = null;
         String txt_name = null;
         String newname = null;
+
+
         try {
             if (multipartFiles != null)
             {
@@ -189,7 +192,6 @@ public class ProjectController {
                     newname = UUID.randomUUID().toString().replace("-", "") + "_" + multipartFile.getOriginalFilename();
 //                    file_location.add(URLEncoder.encode(rootPath, "utf-8"));
 //                    txt_name.add(URLEncoder.encode(newname, "utf-8"));
-//                    System.out.println(newname);
                     File fileDir = new File(rootPath);
                     File file = new File(fileDir, newname);
                     file.setWritable(true, false);
@@ -247,6 +249,8 @@ public class ProjectController {
             result.put("status","fail");
             result.put("msg",e.getMessage());
         }
+        result.put("file_loaction", file_location);
+        result.put("file_name", newname+".zip");
         project.setFile_uploaddate(formatter.format(new Date()));
         project.setFile_updatedate(formatter.format(new Date()));
         project.setJing_ban_ren(staff_id);
