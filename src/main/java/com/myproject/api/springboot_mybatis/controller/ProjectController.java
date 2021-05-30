@@ -161,7 +161,7 @@ public class ProjectController {
 
 
     @RequestMapping(value = "/project/insert")
-    public Map<String,Object> insert(Project project,HttpServletRequest request,HttpServletResponse response,@RequestParam(value = "file",required = false) MultipartFile[] multipartFiles)
+    public Map<String,Object> insert(Project project,HttpServletRequest request,HttpServletResponse response,@RequestParam(value = "files",required = false) MultipartFile[] multipartFiles)
     {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
