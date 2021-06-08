@@ -675,11 +675,12 @@ public class ProjectController {
 
 
 
-        String fujian = exportfujian.getTextFromPDF("C:\\Users\\49933\\Desktop\\2020硕士研究生统考复试成绩（公示）.pdf");
+
+        String fujian = exportfujian.getTextFromPDF(URLDecoder.decode(fileLocation)+URLDecoder.decode(fileName));
         //System.out.println(fujian);
         cells5[1] = new PdfPCell(new Paragraph(fujian,bf));//单元格内容
         cells5[1].setColspan(3);
-        cells5[1].setFixedHeight(300f);
+        cells5[1].setFixedHeight(400f);
 
 
 
