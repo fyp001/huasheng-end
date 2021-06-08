@@ -8,6 +8,7 @@ import com.myproject.api.springboot_mybatis.entity.Staff;
 import com.myproject.api.springboot_mybatis.entity.file;
 import com.myproject.api.springboot_mybatis.service.ProjectService;
 import com.myproject.api.springboot_mybatis.service.staffService;
+import com.myproject.api.springboot_mybatis.utils.exportfujian;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -519,12 +520,19 @@ public class ProjectController {
 
 
     @GetMapping(value = "/project/export/{projectId}")
-    //http://localhost:8080/project/export/387
+    //http://localhost:8080/project/export/289
     public void exportFile(@PathVariable("projectId") int project_id,HttpServletResponse response) throws IOException, DocumentException {
         Project oneProject = projectService.getOneProject(project_id);
 
         FileSystemView fsv = FileSystemView.getFileSystemView();
         File com=fsv.getHomeDirectory();
+
+        String fileName = oneProject.getTxt_name();
+        String fileLocation = oneProject.getFile_location();
+        File file=new File(URLDecoder.decode(fileLocation)+URLDecoder.decode(fileName));
+        if(!file.exists()){
+            System.out.println("文件不存在！！！！！！");
+        }
         // 配置文件下载
         response.setHeader("content-type", "application/octet-stream");
         response.setContentType("application/octet-stream");
@@ -535,6 +543,20 @@ public class ProjectController {
         response.setHeader("Content-Disposition", "attachment;filename=" + projectName);
         System.out.println(oneProject.getProject_name());
         OutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+
+
+
+
+
+        //-------------------------
+
+
+
+        //----------------------
+
+
+
+
         Document document = new Document();
         //建立一个书写器
         PdfWriter writer = PdfWriter.getInstance(document, outputStream );
@@ -650,9 +672,15 @@ public class ProjectController {
         //cells3[0].setPaddingLeft(20);//左填充20
         cells5[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
         cells5[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
-        cells5[1] = new PdfPCell(new Paragraph("xx",bf));//单元格内容
+
+
+
+
+        String fujian = exportfujian.getTextFromPDF(URLDecoder.decode(fileLocation)+URLDecoder.decode(fileName));
+        //System.out.println(fujian);
+        cells5[1] = new PdfPCell(new Paragraph(fujian,bf));//单元格内容
         cells5[1].setColspan(3);
-        cells5[1].setFixedHeight(100f);
+        cells5[1].setFixedHeight(400f);
 
 
 
@@ -778,11 +806,7 @@ public class ProjectController {
 
         outputStream.flush();
         outputStream.close();
-//        Field[] fields = oneProject.getClass().getDeclaredFields();
-//        for(Field field : fields){
-//            String name = field.getName();
-//
-//        }
+
 
     }
 
