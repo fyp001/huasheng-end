@@ -533,7 +533,7 @@ public class fileController {
 
         try {
 
-            if (multipartFiles != null)
+            if (multipartFiles != null&&multipartFiles.length!=0)
             {
                 //多文件打包压缩存储
                 List<File> files=new ArrayList<>();

@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.filechooser.FileSystemView;
+import javax.websocket.server.PathParam;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
@@ -59,7 +60,6 @@ public class ProjectController {
                 p1.get(i).setFile_url(url);
             }
         }
-        Collections.reverse(p1);
         return p1;
     }
     @GetMapping(value = "/project/getArchiveProject")
@@ -76,18 +76,18 @@ public class ProjectController {
                 p1.get(i).setFile_url(url);
             }
         }
-        Collections.reverse(p1);
         return p1;
     }
 
     @GetMapping(value = "/project/getAllProject")
-    public List<Project> getAllProject(HttpServletRequest request){
+    public List<Project> getAllProject(HttpServletRequest request,@PathParam("projectType") String projectType){
         String token=request.getHeader("token");
         Staff s1=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_id());
         int staff_id=s1.getStaff_id();
         List<Staff> s=projectService.getname();
         Project pro = new Project();
+        pro.setProject_type(projectType);
         pro.setJing_ban_ren(staff_id);
         List<Project> p=projectService.getAllProject(pro);
         List<Project> p1=getProjects(s,p);
@@ -102,7 +102,6 @@ public class ProjectController {
                 p1.get(i).setFile_url(url);
             }
         }
-        Collections.reverse(p1);
         return p1;
     }
 
@@ -155,7 +154,6 @@ public class ProjectController {
                 p1.get(i).setFile_url(url);
             }
         }
-        Collections.reverse(p1);
         return p1;
     }
 
@@ -183,7 +181,7 @@ public class ProjectController {
 
 
         try {
-            if (multipartFiles != null)
+            if (multipartFiles != null&&multipartFiles.length!=0)
             {
                 //多文件打包压缩存储
                 List<File> files=new ArrayList<>();
@@ -251,6 +249,8 @@ public class ProjectController {
         }
         result.put("file_loaction", file_location);
         result.put("file_name", newname+".zip");
+        project.setFile_location(file_location);
+        project.setTxt_name(txt_name);
         project.setFile_uploaddate(formatter.format(new Date()));
         project.setFile_updatedate(formatter.format(new Date()));
         project.setJing_ban_ren(staff_id);

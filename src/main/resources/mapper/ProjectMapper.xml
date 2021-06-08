@@ -41,7 +41,7 @@
     <select id="getAllProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">
         SELECT *
         FROM project
-        where jing_ban_ren = #{jing_ban_ren} and if_issued !=3
+        where project_type=#{project_type} and jing_ban_ren = #{jing_ban_ren} and if_issued !=3 ORDER BY project_id DESC
     </select>
 
     <select id="getOneProject" resultType="com.myproject.api.springboot_mybatis.entity.Project" parameterType="int">
@@ -55,7 +55,7 @@
         SELECT *
         FROM project
         where if_submit = 1 and if_issued !=3
-          and (shen_he_ren = #{shen_he_ren} or shen_he_ren is null);
+          and (shen_he_ren = #{shen_he_ren} or shen_he_ren is null) ORDER BY project_id DESC
 
     </select>
     <select id="getGlobalCheckProject" resultMap="projectMapper">
@@ -63,7 +63,7 @@
         SELECT *
         FROM project
         where if_submit = 1
-          and if_issued = 2;
+          and if_issued = 2 ORDER BY project_id DESC
 
     </select>
 
@@ -83,16 +83,16 @@
     <select id="getAllCheckProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">
         select *
         from project
-        where if_submit = 1
+        where if_submit = 1 ORDER BY project_id DESC
     </select>
     <select id="getAdmin" resultType="com.myproject.api.springboot_mybatis.entity.Project">
         select *
-        from project;
+        from project ORDER BY project_id DESC
     </select>
     <select id="getArchiveProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">
         select *
         from project
-        where if_issued = 3;
+        where if_issued = 3 ORDER BY project_id DESC
     </select>
 <!--    <select id="getCheckArchiveProject" resultType="com.myproject.api.springboot_mybatis.entity.Project">-->
 <!--        select *-->
@@ -222,35 +222,35 @@
             shen_he_ren=#{shen_he_ren}
         where project.project_id = #{project_id}
     </update>
-
-    <update id="if_delete" parameterType="com.myproject.api.springboot_mybatis.entity.Project">
-        update project
-        set project_name=#{project_name},
-            project_id=#{project_id},
-            project_type=#{project_type},
-            project_client=#{project_client},
-            project_reportnumber=#{project_reportnumber},
-            project_class=#{project_class},
-            project_qualitycontroler=#{project_qualitycontroler},
-            project_head=#{project_head},
-            project_members=#{project_members},
-            project_starttime=#{project_starttime},
-            project_endtime=#{project_endtime},
-            project_comment=#{project_comment},
-            project_assets=#{project_assets},
-            project_audit=#{project_audit},
-            project_reduction=#{project_reduction},
-            project_accountant=#{project_accountant},
-            project_costengineer=#{project_costengineer},
-            project_taxaccountant=#{project_taxaccountant},
-            project_partner=#{project_partner},
-            project_construction=#{project_construction},
-            project_code=#{project_code},
-            if_delete=1,
-            jing_ban_ren=#{jing_ban_ren},
-            shen_he_ren=#{shen_he_ren}
-        where project.project_id = #{project_id}
-    </update>
+<!--未使用-->
+<!--    <update id="if_delete" parameterType="com.myproject.api.springboot_mybatis.entity.Project">-->
+<!--        update project-->
+<!--        set project_name=#{project_name},-->
+<!--            project_id=#{project_id},-->
+<!--            project_type=#{project_type},-->
+<!--            project_client=#{project_client},-->
+<!--            project_reportnumber=#{project_reportnumber},-->
+<!--            project_class=#{project_class},-->
+<!--            project_qualitycontroler=#{project_qualitycontroler},-->
+<!--            project_head=#{project_head},-->
+<!--            project_members=#{project_members},-->
+<!--            project_starttime=#{project_starttime},-->
+<!--            project_endtime=#{project_endtime},-->
+<!--            project_comment=#{project_comment},-->
+<!--            project_assets=#{project_assets},-->
+<!--            project_audit=#{project_audit},-->
+<!--            project_reduction=#{project_reduction},-->
+<!--            project_accountant=#{project_accountant},-->
+<!--            project_costengineer=#{project_costengineer},-->
+<!--            project_taxaccountant=#{project_taxaccountant},-->
+<!--            project_partner=#{project_partner},-->
+<!--            project_construction=#{project_construction},-->
+<!--            project_code=#{project_code},-->
+<!--            if_delete=1,-->
+<!--            jing_ban_ren=#{jing_ban_ren},-->
+<!--            shen_he_ren=#{shen_he_ren}-->
+<!--        where project.project_id = #{project_id}-->
+<!--    </update>-->
 
 
 </mapper>
