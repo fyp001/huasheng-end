@@ -75,7 +75,7 @@ public class exportfujian {
             }else{
                 //System.out.println("file:"+entry.getName());
                 if(entry.getName().endsWith("txt")){
-                    sb.append("\n"+new String(entry.getName().getBytes("utf-8"),"utf-8")+"\n");
+                    sb.append("\n"+new String(entry.getName().getBytes("UTF-8"),"UTF-8")+"\n");
 
 //                    BufferedReader reader = new BufferedReader(new InputStreamReader(zip.getInputStream(entry),"UTF-8"));
 //                    String line = null;
@@ -85,15 +85,15 @@ public class exportfujian {
 //                    }
                     sb.append("\n");
                 } else if(entry.getName().endsWith("docx")){
-                    sb.append("\n"+new String(entry.getName().getBytes("GBK"),"GBK")+"\n");
+                    sb.append("\n"+new String(entry.getName().getBytes("UTF-8"),"UTF-8")+"\n");
 
                     sb.append("\n");
                 } else if(entry.getName().endsWith("doc")){
-                    sb.append("\n"+new String(entry.getName().getBytes("utf-8"),"gbk")+"\n");
+                    sb.append("\n"+new String(entry.getName().getBytes("UTF-8"),"UTF-8")+"\n");
 
                     sb.append("\n");
                 }  else if(entry.getName().endsWith("pdf")){
-                    sb.append("\n"+new String(entry.getName().getBytes("utf-8"),"gbk")+"\n");
+                    sb.append("\n"+new String(entry.getName().getBytes("UTF-8"),"UTF-8")+"\n");
                     sb.append("\n");
                 }
                 else if (entry.getName().endsWith("zip")){  //判断是否为压缩包，若是则将其解压出再读取

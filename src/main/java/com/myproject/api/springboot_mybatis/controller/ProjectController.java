@@ -683,7 +683,7 @@ public class ProjectController {
         //System.out.println(fujian);
         cells5[1] = new PdfPCell(new Paragraph(fujian,bf));//单元格内容
         cells5[1].setColspan(3);
-        cells5[1].setFixedHeight(400f);
+        cells5[1].setFixedHeight(200f);
 
 
 
