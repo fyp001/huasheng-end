@@ -521,9 +521,9 @@ public class ProjectController {
 
     @GetMapping(value = "/project/export/{projectId}")
     //http://localhost:8080/project/export/289
-    public void exportFile(@PathVariable("projectId") int project_id,HttpServletResponse response) throws IOException, DocumentException {
+    public Map<String,Object> exportFile(@PathVariable("projectId") int project_id,HttpServletResponse response) throws IOException, DocumentException {
         Project oneProject = projectService.getOneProject(project_id);
-
+        Map<String,Object> result=new HashMap<>();
         FileSystemView fsv = FileSystemView.getFileSystemView();
         File com=fsv.getHomeDirectory();
 
@@ -532,6 +532,9 @@ public class ProjectController {
         File file=new File(URLDecoder.decode(fileLocation)+URLDecoder.decode(fileName));
         if(!file.exists()){
             System.out.println("文件不存在！！！！！！");
+            result.put("status","fail");
+            result.put("message","下载文件失败，请检查文件:" + fileName + " 是否存在");
+            return result;
         }
         // 配置文件下载
         response.setHeader("content-type", "application/octet-stream");
@@ -676,7 +679,7 @@ public class ProjectController {
 
 
 
-        String fujian = exportfujian.getTextFromPDF(URLDecoder.decode(fileLocation)+URLDecoder.decode(fileName));
+        String fujian = exportfujian.readZip(URLDecoder.decode(fileLocation)+URLDecoder.decode(fileName));
         //System.out.println(fujian);
         cells5[1] = new PdfPCell(new Paragraph(fujian,bf));//单元格内容
         cells5[1].setColspan(3);
@@ -799,6 +802,7 @@ public class ProjectController {
 
 
 
+
         //关闭文档
         document.close();
         //关闭书写器
@@ -806,7 +810,9 @@ public class ProjectController {
 
         outputStream.flush();
         outputStream.close();
-
+        result.put("status","success");
+        result.put("message","下载成功！");
+        return result;
 
     }
 
