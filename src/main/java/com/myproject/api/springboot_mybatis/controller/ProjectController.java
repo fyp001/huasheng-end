@@ -285,48 +285,93 @@ public class ProjectController {
 
 
     @RequestMapping(value = "/project/update")
-    public Map<String,Object> update(Project project,@RequestParam(value = "file",required = false) MultipartFile multipartFiles)
+    public Map<String,Object> update(Project project,@RequestParam(value = "file",required = false) MultipartFile[] multipartFiles) throws Exception
     {
+        File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
+        String desktopPath = desktopDir.getAbsolutePath();
+        String driname = "projects";
+        String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + formatter.format(new Date()) + File.separator;
+//        String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + project.getFile_updatedate() + File.separator;
+
+        //保存文件地址名
+        String file_location = null;
+        String txt_name = null;
+        String newname = null;
+
         Map<String,Object> result=new HashMap<>();
         if (multipartFiles != null)
         {
-            File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
-            String desktopPath = desktopDir.getAbsolutePath();
-            String driname = "projects";
-            String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + formatter.format(new Date()) + File.separator;
-            if(!project.getFile_location().equals("null")&&!project.getTxt_name().equals("null"))
-            {
-                File fileDir = new File(URLDecoder.decode(project.getFile_location()));
-                if (!fileDir.exists() && !fileDir.isDirectory())
-                {
+            //多文件打包压缩存储
+            List<File> files=new ArrayList<>();
+            //ZipOutputStream类：完成文件或文件夹的压缩
+            for(MultipartFile multipartFile :multipartFiles){
+                newname = UUID.randomUUID().toString().replace("-", "") + "_" + multipartFile.getOriginalFilename();
+                File fileDir = new File(rootPath);
+                File file = new File(fileDir, newname);
+                file.setWritable(true, false);
+                if (!fileDir.exists() && !fileDir.isDirectory()) {
                     fileDir.mkdirs();
                 }
-                File file=new File(URLDecoder.decode(project.getFile_location())+URLDecoder.decode(project.getTxt_name()));
-                file.delete();
                 try {
-                    String newname=UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
-                    multipartFiles.transferTo(new File(fileDir,newname));
-                    project.setTxt_name(URLEncoder.encode(newname, "utf-8"));
+                    multipartFile.transferTo(file);
+                    result.put("status", "success");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    result.put("status", "fail");
+                    result.put("msg", e.getMessage());
                 }
+                files.add(file);
+            }
+            //以最后一个文件名来命名压缩文件
+            try {
+                File zip = new File(rootPath,newname+".zip");
+                file_location = URLEncoder.encode(rootPath, "utf-8");
+                txt_name = URLEncoder.encode(newname+".zip", "utf-8");
+
+                zip.setWritable(true, false);
+                zip.createNewFile();
+
+
+                byte[] buf = new byte[1024];
+                ZipOutputStream out = null;
+                //ZipOutputStream类：完成文件或文件夹的压缩
+                out = new ZipOutputStream(new FileOutputStream(zip));
+                for (int i = 0; i < files.size(); i++) {
+                    FileInputStream in = new FileInputStream(files.get(i));
+                    String filePath="";
+                    if (filePath == null)
+                        filePath = "";
+                    else
+                        filePath += "/";
+                    out.putNextEntry(new ZipEntry(filePath + files.get(i).getName()));
+                    int len;
+                    while ((len = in.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+                    out.closeEntry();
+                    in.close();
+                    files.get(i).delete();
+                }
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if(!project.getFile_location().equals("null")&&!project.getTxt_name().equals("null"))
+            {
+                //删除旧文件
+                //查找出旧文件存放地址
+                String filLocation = URLDecoder.decode(projectService.getOneProject(project.getProject_id()).getFile_location(),"UTF-8")+ File.separator +
+                        URLDecoder.decode(projectService.getOneProject(project.getProject_id()).getTxt_name(),"UTF-8");
+                System.out.println(filLocation);
+                File oldFile = new File(filLocation);
+                System.out.println(oldFile.getAbsolutePath());
+                oldFile.delete();
+                project.setTxt_name(txt_name);
             }
             else if(project.getFile_location().equals("null")&&project.getTxt_name().equals("null"))
             {
-                System.out.println("aaaaa");
-                File fileDirnew = new File(rootPath);
-                if (!fileDirnew.exists() && !fileDirnew.isDirectory())
-                {
-                    fileDirnew.mkdirs();
-                }
-                try {
-                    String newname=UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
-                    multipartFiles.transferTo(new File(fileDirnew,newname));
-                    project.setTxt_name(URLEncoder.encode(newname, "utf-8"));
-                    project.setFile_location(URLEncoder.encode(rootPath, "utf-8"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                project.setTxt_name(txt_name);
+                project.setFile_location(file_location);
             }
         }
         else{
@@ -336,6 +381,8 @@ public class ProjectController {
                 project.setTxt_name(null);
             }
         }
+        result.put("file_loaction", file_location);
+        result.put("file_name", newname+".zip");
         project.setFile_updatedate(formatter.format(new Date()));
         projectService.update(project);
         return result;
