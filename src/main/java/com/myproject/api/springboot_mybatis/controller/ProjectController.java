@@ -292,15 +292,13 @@ public class ProjectController {
         String desktopPath = desktopDir.getAbsolutePath();
         String driname = "projects";
         String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + formatter.format(new Date()) + File.separator;
-//        String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + project.getFile_updatedate() + File.separator;
-
         //保存文件地址名
         String file_location = null;
         String txt_name = null;
         String newname = null;
 
         Map<String,Object> result=new HashMap<>();
-        if (multipartFiles != null)
+        if (multipartFiles != null&&multipartFiles.length!=0)
         {
             //多文件打包压缩存储
             List<File> files=new ArrayList<>();
@@ -361,8 +359,8 @@ public class ProjectController {
             {
                 //删除旧文件
                 //查找出旧文件存放地址
-                String filLocation = URLDecoder.decode(projectService.getOneProject(project.getProject_id()).getFile_location(),"UTF-8")+ File.separator +
-                        URLDecoder.decode(projectService.getOneProject(project.getProject_id()).getTxt_name(),"UTF-8");
+                String filLocation = URLDecoder.decode(project.getFile_location(),"UTF-8")+ File.separator +
+                        URLDecoder.decode(project.getTxt_name(),"UTF-8");
                 System.out.println(filLocation);
                 File oldFile = new File(filLocation);
                 System.out.println(oldFile.getAbsolutePath());
