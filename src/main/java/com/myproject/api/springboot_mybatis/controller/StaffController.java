@@ -4,7 +4,7 @@ import com.myproject.api.springboot_mybatis.entity.Staff;
 import com.myproject.api.springboot_mybatis.error.BusinessException;
 import com.myproject.api.springboot_mybatis.error.EmBusinessError;
 import com.myproject.api.springboot_mybatis.response.CommonReturnType;
-import com.myproject.api.springboot_mybatis.service.staffService;
+import com.myproject.api.springboot_mybatis.service.StaffService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +18,9 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-public class staffController extends BaseController{
+public class StaffController extends BaseController{
     @Autowired
-    staffService staffService;
+    StaffService staffService;
 
     @Resource
     RedisTemplate<String, Staff> redisTemplate;

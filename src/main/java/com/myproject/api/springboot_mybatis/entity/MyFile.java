@@ -2,7 +2,7 @@ package com.myproject.api.springboot_mybatis.entity;
 
 import java.util.Date;
 
-public class file {
+public class MyFile {
     private int file_id;
     private String file_type;
     private String file_property;

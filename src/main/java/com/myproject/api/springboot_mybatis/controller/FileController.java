@@ -1,14 +1,9 @@
 package com.myproject.api.springboot_mybatis.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.myproject.api.springboot_mybatis.entity.Project;
-import com.myproject.api.springboot_mybatis.entity.file;
+import com.myproject.api.springboot_mybatis.entity.MyFile;
 import com.myproject.api.springboot_mybatis.entity.Staff;
-import com.myproject.api.springboot_mybatis.interceptor.LoginInterceptor;
-import com.myproject.api.springboot_mybatis.service.fileService;
-import com.myproject.api.springboot_mybatis.service.staffService;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import com.myproject.api.springboot_mybatis.service.FileService;
+import com.myproject.api.springboot_mybatis.service.StaffService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,20 +27,20 @@ import java.util.zip.ZipOutputStream;
 
 @EnableAutoConfiguration
 @RestController
-public class fileController {
+public class FileController {
     @Autowired
-    fileService fileservice;
-    staffService staffservice;
+    FileService fileservice;
+    StaffService staffservice;
     SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat formatter1= new SimpleDateFormat("yyyy-MM-dd'-'HH-mm-ss");
 
     @Resource
     RedisTemplate<String, Staff> redisTemplate;
 
-    private static java.util.logging.Logger log = java.util.logging.Logger.getLogger(fileController.class.getName());
+    private static java.util.logging.Logger log = java.util.logging.Logger.getLogger(FileController.class.getName());
     @GetMapping(value = "/file/getAdminFile")
-    public List<file> getAdminFile(HttpServletRequest request){
-        List<file> f=fileservice.GetAllFile();
+    public List<MyFile> getAdminFile(HttpServletRequest request){
+        List<MyFile> f=fileservice.GetAllFile();
         for(int i=0;i<f.size();i++){
             if(f.get(i).getShen_he_ren()!=0){
                 f.get(i).setChecker(fileservice.GetName(f.get(i).getShen_he_ren()));
@@ -66,8 +61,8 @@ public class fileController {
     }
 
     @GetMapping(value = "/file/getAdminCon")
-    public List<file> getAdminCon(HttpServletRequest request){
-        List<file> f=fileservice.GetAllCon();
+    public List<MyFile> getAdminCon(HttpServletRequest request){
+        List<MyFile> f=fileservice.GetAllCon();
         for(int i=0;i<f.size();i++){
             if(f.get(i).getShen_he_ren()!=0){
                 f.get(i).setChecker(fileservice.GetName(f.get(i).getShen_he_ren()));
@@ -93,14 +88,14 @@ public class fileController {
      * 然后筛选出该身份对应的文档
      */
     @RequestMapping(value = "/file/getOperator")
-    List<file> getOperator(HttpServletRequest request){
+    List<MyFile> getOperator(HttpServletRequest request){
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s.staff_name);
         int staff_id=s.getStaff_id();
-        file file1 = new file();
+        MyFile file1 = new MyFile();
         file1.setJing_ban_ren(staff_id);
-        List<file> f=fileservice.GetOperator(file1);
+        List<MyFile> f=fileservice.GetOperator(file1);
         System.out.println(f.size());
         for(int i=0;i<f.size();i++){
             if(f.get(i).getShen_he_ren()!=0){
@@ -124,15 +119,15 @@ public class fileController {
      * 在这里需要返回审核人的名字与经办人的名字
      */
     @RequestMapping(value = "/file/getChecker")
-    List<file> getChecker(HttpServletRequest request){
+    List<MyFile> getChecker(HttpServletRequest request){
 
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        file file2 = new file();
+        MyFile file2 = new MyFile();
         file2.setShen_he_ren(staff_id);
-        List<file> f=fileservice.GetChecker(file2);
+        List<MyFile> f=fileservice.GetChecker(file2);
         for(int i=0;i<f.size();i++){
             if(f.get(i).getJing_ban_ren()!=0){
                 f.get(i).setOperatorname(fileservice.GetName(f.get(i).getJing_ban_ren()));
@@ -157,7 +152,7 @@ public class fileController {
      */
     @CrossOrigin
     @RequestMapping(value = "/file/submitfile")
-    void submitfile(file f){
+    void submitfile(MyFile f){
         fileservice.submitfile(f);
     }
 
@@ -168,14 +163,14 @@ public class fileController {
      */
     @CrossOrigin
     @RequestMapping(value = "/file/checkpass")
-    Map<String,Object> checkpass(file f,HttpServletRequest request){
+    Map<String,Object> checkpass(MyFile f,HttpServletRequest request){
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
         Map<String,Object> result=new HashMap<>();
         f.setShen_he_ren(staff_id);
-        List<file> l=fileservice.getAllCheckerFile();
+        List<MyFile> l=fileservice.getAllCheckerFile();
         for(int i=0;i<l.size();i++){
             if(l.get(i).getFile_id()==f.getFile_id()){
                 if(l.get(i).getIf_issued()!='0'){
@@ -215,14 +210,14 @@ public class fileController {
      * 审核之前还需判断该文档/合同是否已经有人进行了审核操作
      */
     @RequestMapping(value = "/file/checknotpass")
-    Map<String,Object> checknotpass(file f,HttpServletRequest request){
+    Map<String,Object> checknotpass(MyFile f,HttpServletRequest request){
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
         Map<String,Object> result=new HashMap<>();
         f.setShen_he_ren(staff_id);
-        List<file> l=fileservice.getAllCheckerFile();
+        List<MyFile> l=fileservice.getAllCheckerFile();
         for(int i=0;i<l.size();i++){
             if(l.get(i).getFile_id()==f.getFile_id()){
                 if(l.get(i).getIf_issued()!='0'){
@@ -260,7 +255,7 @@ public class fileController {
      * 审核人删除已审核显示(暂时无用)
      */
     @RequestMapping(value = "/file/checkdelete")
-    void checkdelete(file f){
+    void checkdelete(MyFile f){
         fileservice.checkdelete(f);
     }
 
@@ -268,7 +263,7 @@ public class fileController {
      * 根据id查询(暂时无用)
      */
     @RequestMapping(value = "/file/QueryFile")
-    public List<file> QueryFile(file f) //得到传来的file_type参数 json参数要加@RequestBody使其自动转对象
+    public List<MyFile> QueryFile(MyFile f) //得到传来的file_type参数 json参数要加@RequestBody使其自动转对象
     {
         return fileservice.QueryFile(f);
     }
@@ -277,8 +272,8 @@ public class fileController {
      * 获取所有文档列表(暂时无用)
      */
     @RequestMapping(value = "/file/GetAllFile")
-    public List<file> GetAllFile() throws UnsupportedEncodingException {
-        List<file> f=fileservice.GetAllFile();
+    public List<MyFile> GetAllFile() throws UnsupportedEncodingException {
+        List<MyFile> f=fileservice.GetAllFile();
         for(int i=0;i<f.size();i++) {
             if(f.get(i).getFile_location()!=null)
             {
@@ -300,14 +295,14 @@ public class fileController {
      * 所以需要根据用户进行筛选
      */
     @RequestMapping(value = "/file/GetAllContract")
-    public List<file> GetAllContract(HttpServletRequest request) throws UnsupportedEncodingException {
+    public List<MyFile> GetAllContract(HttpServletRequest request) throws UnsupportedEncodingException {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        file file1 = new file();
+        MyFile file1 = new MyFile();
         file1.setJing_ban_ren(staff_id);
-        List<file> f=fileservice.GetAllContract(file1);
+        List<MyFile> f=fileservice.GetAllContract(file1);
         for(int i=0;i<f.size();i++){
             if(f.get(i).getShen_he_ren()!=0){
                 f.get(i).setChecker(fileservice.GetName(f.get(i).getShen_he_ren()));
@@ -329,14 +324,14 @@ public class fileController {
      * 需要获取token验证身份信息
      */
     @RequestMapping(value = "/file/GetAllContractChecker")
-    public List<file> GetAllContractChecker(HttpServletRequest request) throws UnsupportedEncodingException {
+    public List<MyFile> GetAllContractChecker(HttpServletRequest request) throws UnsupportedEncodingException {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
         System.out.println("通过了拦截器到达controller先取值:"+s.getStaff_id());
         int staff_id=s.getStaff_id();
-        file file2 = new file();
+        MyFile file2 = new MyFile();
         file2.setShen_he_ren(staff_id);
-        List<file> f=fileservice.GetAllContractChecker(file2);
+        List<MyFile> f=fileservice.GetAllContractChecker(file2);
         for(int i=0;i<f.size();i++){
             if(f.get(i).getJing_ban_ren()!=0){
                 f.get(i).setOperatorname(fileservice.GetName(f.get(i).getJing_ban_ren()));
@@ -360,7 +355,7 @@ public class fileController {
      * 文档插入字段(暂时无用)
      */
     @RequestMapping(value = "/file/insert")
-    public void insert(file f)
+    public void insert(MyFile f)
     {
         f.setFile_uploaddate(formatter.format(new Date()));
         f.setFile_updatedate(formatter.format(new Date()));
@@ -371,7 +366,7 @@ public class fileController {
      * 文档删除(暂时无用)
      */
     @RequestMapping(value = "/file/delete")
-    public void delete(file f)
+    public void delete(MyFile f)
     {
         fileservice.delete(f);
     }
@@ -380,7 +375,7 @@ public class fileController {
      * 获取文档文件位置(暂时无用)
      */
     @RequestMapping(value = "/file/download")
-    List<file> download(file f){
+    List<MyFile> download(MyFile f){
         return fileservice.download(f);
     }
 
@@ -388,7 +383,7 @@ public class fileController {
      * 无用
      */
     @RequestMapping(value = "/file/search")
-    List<file> SearchFile(file f){
+    List<MyFile> SearchFile(MyFile f){
         return fileservice.SearchFile(f);
     }
 
@@ -398,7 +393,7 @@ public class fileController {
      * 若原来没有文件则上传一个文件保存文件地址
      */
     @RequestMapping(value = "/file/update")
-    public Map<String,Object> update(@RequestParam(value = "files",required = false) MultipartFile[] multipartFiles,file f,HttpServletResponse response,HttpServletRequest request) throws UnsupportedEncodingException {
+    public Map<String,Object> update(@RequestParam(value = "files",required = false) MultipartFile[] multipartFiles,MyFile f,HttpServletResponse response,HttpServletRequest request) throws UnsupportedEncodingException {
         File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
         String desktopPath = desktopDir.getAbsolutePath();
         String driname = "files";
@@ -498,7 +493,7 @@ public class fileController {
         return result;
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(fileController.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     /**
      * 文档/合同上传，上传文档/合同的字段信息或文件，文件可有可无，若有则需设置文件位置，文件名等字段
@@ -560,7 +555,7 @@ public class fileController {
 //    }
 
     @RequestMapping("/file/upload")
-    public Map<String,Object> uploadFile(@RequestParam(value = "files",required = false) MultipartFile[] multipartFiles,HttpServletResponse response,HttpServletRequest request,file f)  {
+    public Map<String,Object> uploadFile(@RequestParam(value = "files",required = false) MultipartFile[] multipartFiles,HttpServletResponse response,HttpServletRequest request,MyFile f)  {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
         int staff_id=s.getStaff_id();
@@ -744,7 +739,7 @@ public class fileController {
      * 文档文件删除，若有文件则需要同时删除文件
      */
     @RequestMapping("/file/deletefile")
-    public Map<String,Object> deletefile(HttpServletResponse response,HttpServletRequest request,file f)
+    public Map<String,Object> deletefile(HttpServletResponse response,HttpServletRequest request,MyFile f)
     {
         Map<String,Object> result=new HashMap<>();
         fileservice.delete(f);

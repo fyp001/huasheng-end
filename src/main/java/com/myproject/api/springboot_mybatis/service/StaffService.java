@@ -1,12 +1,11 @@
-package com.myproject.api.springboot_mybatis.dao;
+package com.myproject.api.springboot_mybatis.service;
 
 import com.myproject.api.springboot_mybatis.entity.Staff;
-import org.apache.ibatis.annotations.Mapper;
+import com.myproject.api.springboot_mybatis.error.BusinessException;
 
 import java.util.List;
 
-@Mapper
-public interface staffDao {
+public interface StaffService {
     List<Staff> getAllstaff();
 
     int deleteStaff(int staff_id);
@@ -22,6 +21,7 @@ public interface staffDao {
 
     int updateStaffInfo(Staff staff);
 
-    Staff selectByAccount(String account);
+    Staff validateLogin(String account, String password) throws BusinessException;
+
 
 }

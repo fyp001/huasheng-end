@@ -15,7 +15,7 @@
     </insert>
 </mapper>
 -->
-    <mapper namespace="com.myproject.api.springboot_mybatis.dao.staffDao">
+    <mapper namespace="com.myproject.api.springboot_mybatis.dao.StaffDao">
 
     <resultMap id="BaseResultMap" type="com.myproject.api.springboot_mybatis.entity.Staff">
         <!--

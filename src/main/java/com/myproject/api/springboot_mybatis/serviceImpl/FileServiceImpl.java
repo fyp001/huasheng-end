@@ -1,66 +1,66 @@
 package com.myproject.api.springboot_mybatis.serviceImpl;
 
-import com.myproject.api.springboot_mybatis.dao.fileMapper;
-import com.myproject.api.springboot_mybatis.entity.file;
-import com.myproject.api.springboot_mybatis.service.fileService;
+import com.myproject.api.springboot_mybatis.dao.FileMapper;
+import com.myproject.api.springboot_mybatis.entity.MyFile;
+import com.myproject.api.springboot_mybatis.service.FileService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-public class fileServiceImpl implements fileService {
+public class FileServiceImpl implements FileService {
     @Resource
-    fileMapper filemapper;
+    FileMapper filemapper;
 
     @Override
-    public List<file> QueryFile(file f) {
+    public List<MyFile> QueryFile(MyFile f) {
         return filemapper.QueryFile(f);
     }
 
     @Override
-    public List<file> GetAllFile()
+    public List<MyFile> GetAllFile()
     {
         return filemapper.GetAllFile();
     }
 
     @Override
-    public void insert(file f) {
+    public void insert(MyFile f) {
         filemapper.insert(f);
     }
 
     @Override
-    public List<file> download(file f) {
+    public List<MyFile> download(MyFile f) {
         return filemapper.download(f);
     }
 
     @Override
-    public List<file> SearchFile(file f) {
+    public List<MyFile> SearchFile(MyFile f) {
         return  filemapper.SearchFile(f);
     }
 
     @Override
-    public void update(file f) {
+    public void update(MyFile f) {
         filemapper.update(f);
     }
 
     @Override
-    public void delete(file f) {
+    public void delete(MyFile f) {
         filemapper.delete(f);
     }
 
     @Override
-    public List<file> GetAllContract(file f) {
+    public List<MyFile> GetAllContract(MyFile f) {
         return filemapper.GetAllContract(f);
     }
 
     @Override
-    public List<file> GetOperator(file f) {
+    public List<MyFile> GetOperator(MyFile f) {
         return filemapper.GetOperator(f);
     }
 
     @Override
-    public List<file> GetChecker(file f) {
+    public List<MyFile> GetChecker(MyFile f) {
         return filemapper.GetChecker(f);
     }
 
@@ -70,38 +70,38 @@ public class fileServiceImpl implements fileService {
     }
 
     @Override
-    public void submitfile(file f) {
+    public void submitfile(MyFile f) {
         filemapper.submitfile(f);
     }
 
     @Override
-    public void checkpass(file f) {
+    public void checkpass(MyFile f) {
         filemapper.checkpass(f);
     }
 
     @Override
-    public void checknotpass(file f) {
+    public void checknotpass(MyFile f) {
         filemapper.checknotpass(f);
     }
 
     @Override
-    public void checkdelete(file f) {
+    public void checkdelete(MyFile f) {
         filemapper.checkdelete(f);
     }
 
     @Override
-    public List<file> GetAllContractChecker(file f) {
+    public List<MyFile> GetAllContractChecker(MyFile f) {
         return filemapper.GetAllContractChecker(f);
     }
 
     @Override
-    public List<file> getAllCheckerFile() {
+    public List<MyFile> getAllCheckerFile() {
         return filemapper.getAllCheckerFile();
     }
 
 
     @Override
-    public List<file> GetAllCon() {
+    public List<MyFile> GetAllCon() {
         return filemapper.GetAllCon();
     }
 }

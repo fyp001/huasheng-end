@@ -1,13 +1,12 @@
 package com.myproject.api.springboot_mybatis.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.myproject.api.springboot_mybatis.entity.Project;
 import com.myproject.api.springboot_mybatis.entity.Staff;
 import com.myproject.api.springboot_mybatis.entity.file;
 import com.myproject.api.springboot_mybatis.service.ProjectService;
-import com.myproject.api.springboot_mybatis.service.staffService;
+import com.myproject.api.springboot_mybatis.service.StaffService;
 import com.myproject.api.springboot_mybatis.utils.exportfujian;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.swing.filechooser.FileSystemView;
 import javax.websocket.server.PathParam;
 import java.io.*;
-import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -30,15 +28,13 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import com.myproject.api.springboot_mybatis.service.staffService;
-
 @RestController
 public class ProjectController {
     @Autowired
     ProjectService projectService;
 
     @Autowired
-    staffService staffService;
+    StaffService staffService;
 
     @Resource
     RedisTemplate<String, Staff> redisTemplate;

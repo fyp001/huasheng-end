@@ -1,19 +1,19 @@
 package com.myproject.api.springboot_mybatis.serviceImpl;
 
-import com.myproject.api.springboot_mybatis.dao.staffDao;
+import com.myproject.api.springboot_mybatis.dao.StaffDao;
 import com.myproject.api.springboot_mybatis.entity.Staff;
 import com.myproject.api.springboot_mybatis.error.BusinessException;
 import com.myproject.api.springboot_mybatis.error.EmBusinessError;
-import com.myproject.api.springboot_mybatis.service.staffService;
+import com.myproject.api.springboot_mybatis.service.StaffService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 @Service
-public class staffServiceImpl implements staffService {
+public class StaffServiceImpl implements StaffService {
     @Resource
-    staffDao staffDao;
+    StaffDao staffDao;
 
     @Override
     public Staff validateLogin(String account, String password) throws BusinessException {
