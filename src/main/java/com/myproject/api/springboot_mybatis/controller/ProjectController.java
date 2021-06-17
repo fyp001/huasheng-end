@@ -717,21 +717,16 @@ public class ProjectController {
 //行4
         PdfPCell cells5[] = new PdfPCell[4];
         PdfPRow row5 = new PdfPRow(cells5);
-        //单元格
-        cells5[0] = new PdfPCell(new Paragraph("附件内容",bf));//单元格内容
-        //cells1[0].setBorderColor(BaseColor.BLUE);//边框验证
-        //cells3[0].setPaddingLeft(20);//左填充20
-        cells5[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
-        cells5[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
-
 
 
 
         String fujian = exportfujian.readZip(URLDecoder.decode(fileLocation)+URLDecoder.decode(fileName));
         //System.out.println(fujian);
-        cells5[1] = new PdfPCell(new Paragraph(fujian,bf));//单元格内容
-        cells5[1].setColspan(3);
-        cells5[1].setMinimumHeight(500f);
+        cells5[0] = new PdfPCell(new Paragraph(fujian,bf));//单元格内容
+        cells5[0].setHorizontalAlignment(Element.ALIGN_CENTER);//水平居中
+        cells5[0].setVerticalAlignment(Element.ALIGN_MIDDLE);//垂直居中
+        cells5[0].setColspan(4);
+        cells5[0].setMinimumHeight(500f);
 
 
 
