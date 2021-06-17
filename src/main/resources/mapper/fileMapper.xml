@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myproject.api.springboot_mybatis.dao.fileMapper">
     <insert id="insert" parameterType="com.myproject.api.springboot_mybatis.entity.file" useGeneratedKeys="true" keyProperty="file_id">
-        INSERT into filetable(file_id,file_name,file_type,file_property,file_version, file_project ,file_location,file_uploaddate,file_updatedate,txt_name,jing_ban_ren,if_issued,if_delete,if_submit,file_code,contract_amount)
-        VALUES(#{file_id},#{file_name},#{file_type},#{file_property},#{file_version},#{file_project},#{file_location},#{file_uploaddate},#{file_updatedate},#{txt_name},#{jing_ban_ren},#{if_issued},#{if_delete},#{if_submit},#{file_code},#{contract_amount})
+        INSERT into filetable(file_id,file_name,file_type,file_property,file_version, file_project ,file_location,file_uploaddate,file_updatedate,txt_name,jing_ban_ren,if_issued,if_delete,if_submit,file_code,contract_amount,customer_name)
+        VALUES(#{file_id},#{file_name},#{file_type},#{file_property},#{file_version},#{file_project},#{file_location},#{file_uploaddate},#{file_updatedate},#{txt_name},#{jing_ban_ren},#{if_issued},#{if_delete},#{if_submit},#{file_code},#{contract_amount},#{customer_name})
     </insert>
     
     <update id="update" parameterType="com.myproject.api.springboot_mybatis.entity.file" >
-        UPDATE filetable set file_name=#{file_name},file_type=#{file_type},file_property=#{file_property},file_version=#{file_version},file_project=#{file_project},file_location=#{file_location},file_updatedate=#{file_updatedate},txt_name=#{txt_name},file_code=#{file_code},contract_amount=#{contract_amount}
+        UPDATE filetable set file_name=#{file_name},file_type=#{file_type},file_property=#{file_property},file_version=#{file_version},file_project=#{file_project},file_location=#{file_location},file_updatedate=#{file_updatedate},txt_name=#{txt_name},file_code=#{file_code},contract_amount=#{contract_amount},customer_name=#{customer_name}
         WHERE file_id=#{file_id}
     </update>
     <update id="submitfile">

@@ -127,7 +127,7 @@ public class ProjectController {
 
 
     @GetMapping(value = "/project/getCheckProject")
-    public List<Project> getCheckProject(HttpServletRequest request)
+    public List<Project> getCheckProject(HttpServletRequest request,@PathParam("projectType") String projectType)
     {
         String token=request.getHeader("token");
         Staff s1=redisTemplate.opsForValue().get(token);
@@ -135,10 +135,11 @@ public class ProjectController {
         System.out.println("通过了拦截器到达controller先取值:"+s1.getStaff_id());
         int staff_id=s1.getStaff_id();
         Project project=new Project();
-        project.setShen_he_ren(staff_id);
+        project.setProject_type(projectType);
         List<Project> p;
         List<Project> p1;
         if("1".equals(s1.getStaff_permission())){
+            project.setShen_he_ren(staff_id);
             List<Staff> s=projectService.getname();
             p=projectService.getCheckProject(project);
             p1=getProjects(s,p);}
@@ -285,7 +286,7 @@ public class ProjectController {
 
 
     @RequestMapping(value = "/project/update")
-    public Map<String,Object> update(Project project,@RequestParam(value = "file",required = false) MultipartFile[] multipartFiles) throws Exception
+    public Map<String,Object> update(Project project,@RequestParam(value = "files",required = false) MultipartFile[] multipartFiles) throws Exception
     {
         File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
         String desktopPath = desktopDir.getAbsolutePath();

@@ -54,7 +54,7 @@
 
         SELECT *
         FROM project
-        where if_submit = 1 and if_issued !=3
+        where  project_type=#{project_type} and if_submit = 1 and if_issued !=3
           and (shen_he_ren = #{shen_he_ren} or shen_he_ren is null) ORDER BY project_id DESC
 
     </select>
@@ -62,7 +62,7 @@
 
         SELECT *
         FROM project
-        where if_submit = 1
+        where project_type=#{project_type} and if_submit = 1
           and if_issued = 2 ORDER BY project_id DESC
 
     </select>
