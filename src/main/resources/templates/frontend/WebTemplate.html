@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>湖南华晟会计师事务所</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="icon" href="./img/favicon.ico">
+	<script src="layui/layui.js"></script>
+	<script src="js/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style type="text/css">
+        /**
+         * @Description Layui内置导航栏修改样式
+         * @Date 21:22 2020/11/2
+         * @Author:DingJiaXin
+         */
+        .dhlStyle {
+            margin-left: 12px;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+
+        /**
+         * @Description Layui内置图标修改样式
+         * @Date 21:22 2020/11/2
+         * @Author:DingJiaXin
+         */
+        .iconStyle {
+            font-size: 25px;
+            color: #ffffff;
+        }
+
+        /**
+        * @Description 可承接业务DIV样式
+        * @Date 21:22 2020/11/2
+        * @Author:DingJiaXin
+        */
+        .kcjywStyle {
+            font: bold 30px arial, sans-serif;
+            color: #AAAAAA;
+            height: 300px;
+
+        }
+
+        /**
+        * @Description 经典案例DIV样式
+        * @Date 21:22 2020/11/3
+        * @Author:Mashidan
+        */
+        .jdanaStyle {
+            font: bold 30px arial, sans-serif;
+            color: #AAAAAA;
+            height: 200px;
+
+        }
+
+        .jdanbStyle {
+            font: bold 16px Univers, sans-serif;
+            color: #666666;
+            height: 40px;
+        }
+
+        /**
+        * @Description 处理中案例DIV样式
+        * @Date 17:23 2020/11/3
+        * @Author:GaoYige
+        */
+        .clzalaStyle {
+            font: bold 30px arial, sans-serif;
+            color: #AAAAAA;
+            height: 200px;
+        }
+
+        .clzalbStyle {
+            font: bold 16px Univers, sans-serif;
+            color: #666666;
+            height: 40px;
+        }
+
+        /* 下方可以写你的样式 */
+    </style>
+</head>
+
+<body>
+    <!--导航条-->
+    <div class="layui-layout-admin " >
+        
+            <ul class="layui-nav layui-bg-blue" lay-filter="" style="text-align: center;">
+                <li
+                    style="height:50px;width:100px;padding: 0;display:inline-block;*display:inline;*zoom:1;vertical-align:middle;">
+                    <!-- logo -->
+<!--                    <i class="layui-icon layui-icon-app" style="font-size: 40px; color: #C4C0C1;"></i>-->
+                    <img src="./img/logoWithBack.png" style="width:100%;height:100%">
+                </li>
+
+                <li class="layui-nav-item ">
+                    <a href="./main" class="dhlStyle" target="layui-body-iframe">
+                        <i class="layui-icon layui-icon-home iconStyle"></i>
+                        首页
+                    </a>
+                </li>
+                <li class="layui-nav-item">
+
+                    <a href="./businessScope" class="dhlStyle" target="layui-body-iframe">
+                        <i class="layui-icon layui-icon-senior iconStyle"></i>
+                        关于我们
+                    </a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="./certificate" class="dhlStyle" target="layui-body-iframe">
+                        <i class="layui-icon layui-icon-username iconStyle"></i>
+                        资质证书
+                    </a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="./contactInfo" class="dhlStyle" target="layui-body-iframe">
+                        <i class="layui-icon layui-icon-note iconStyle"></i>
+                        联系我们
+                    </a>
+                </li>
+                <li class="layui-nav-item">
+                    <button type="button" class="layui-btn layui-btn-normal"
+                        onclick="javascrtpt:window.location.href='./login'">
+                        登录
+                    </button>
+                </li>
+            </ul>
+       
+        <!--导航条JS-->
+        <script>
+            //注意：导航 依赖 element 模块，否则无法进行功能性操作
+            layui.use('element', function () {
+                var element = layui.element;
+            });
+        </script>
+    </div>
+    <!-- 内容主体区域 -->
+    <div  style="height:90vh;margin:0 auto;text-align: center;">
+        <!-- css样式overflow:hidden表示溢出隐藏 -->
+        <iframe src="./main" name="layui-body-iframe" marginwidth="0" marginheight="0" scrolling="yes"
+            frameborder="0" height="100%" width="100%" >
+            
+        </iframe>
+        <!-- scrolling="yes"表示在iframe中显示滚动条 -->
+        <!-- frameborder="0"规定不显示框架周围的边框 -->
+        <!-- marginheight="1"定义iframe的顶部和底部的边距为1 -->
+        <!-- marginwidth="1"定义iframe的左侧和右侧的边距为1 -->
+        <!-- src=""规定在iframe中显示的文档的URL,最初显示的是系统首页 -->
+    </div>
+
+</body>

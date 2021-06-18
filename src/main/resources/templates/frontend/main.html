@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>湖南华晟会计师事务所</title>
+    <link rel="stylesheet" type="text/css" href="font_Icon/iconfont.css">
+    <link rel="stylesheet" type="text/css" href="layui/css/chat.css">
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="icon" href="./img/favicon.ico">
+	<script src="layui/layui.js"></script>
+	<script src="js/jquery.min.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style type="text/css">
+        /**
+         * @Description Layui内置导航栏修改样式
+         * @Date 21:22 2020/11/2
+         * @Author:DingJiaXin
+         */
+        .dhlStyle {
+            margin-left: 12px;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+
+        /**
+         * @Description Layui内置图标修改样式
+         * @Date 21:22 2020/11/2
+         * @Author:DingJiaXin
+         */
+        .iconStyle {
+            font-size: 25px;
+            color: #C4C0C1;
+        }
+
+        /**
+        * @Description 可承接业务DIV样式
+        * @Date 21:22 2020/11/2
+        * @Author:DingJiaXin
+        */
+        .kcjywStyle {
+            font: bold 30px arial, sans-serif;
+            color: #AAAAAA;
+            height: 300px;
+
+        }
+
+        /**
+        * @Description 经典案例DIV样式
+        * @Date 21:22 2020/11/3
+        * @Author:Mashidan
+        */
+        .jdanaStyle {
+            font: bold 30px arial, sans-serif;
+            color: #AAAAAA;
+            height: 200px;
+
+        }
+
+        .jdanbStyle {
+            font: bold 16px Univers, sans-serif;
+            color: #666666;
+            height: 40px;
+        }
+
+        /**
+        * @Description 处理中案例DIV样式
+        * @Date 17:23 2020/11/3
+        * @Author:GaoYige
+        */
+        .clzalaStyle {
+            font: bold 30px arial, sans-serif;
+            color: #ffffff;
+            height: 200px;
+        }
+
+        .clzalbStyle {
+            font: bold 16px Univers, sans-serif;
+            color: #ffffff;
+            height: 40px;
+        }
+
+        /* 下方可以写你的样式 */
+    </style>
+</head>
+
+<body style="width:100%;margin: 0 auto;text-align: center;">
+
+    <div>
+        <!-- 轮播图  -->
+        <div style="text-align: center;width: 100%;margin: 0 auto;text-align: center;z-index: 1;position: fixed;">
+            <div style="text-align: center;width:100%;margin: 0 auto">
+                <div class="layui-carousel" id="test1" lay-anim lay-indicator="inside" lay-arrow="always"
+                    style="text-align: center;margin-top:0px;width:100%;">
+                    <div carousel-item>
+                        <div style="text-align: center;">
+                            <img src="img/banner1.png" style="width: 100%;">
+                        </div>
+                        <div style="text-align: center;">
+                            <img src="img/banner2.jpg" style="width: 100%;">
+                        </div>
+                        <div style="text-align: center;">
+                            <img src="img/banner3.jpg" style="width: 100%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 轮播图JS  -->
+        <script>
+            layui.use('carousel', function () {
+                var carousel = layui.carousel;
+                //建造实例
+                carousel.render({
+                    full:'true',
+                    elem: '#test1',
+                    width: 'window.innerWidth' ,//设置容器宽度
+                    // height: '530px',
+                    arrow: 'hover' //悬停显示箭头
+                    //,anim: 'updown' //切换动画方式
+                });
+            });
+        </script>
+        <div class="chatContainer" style="z-index:999; float: right;position: absolute;">
+            <div class="chatBtn" onclick="">
+                <i class="iconfont icon-xiaoxi1"></i>
+            </div>
+            <div class="chatBox" ref="chatBox" style="display:none">
+                <div class="chatBox-head">
+                    <div class="chatBox-head-one">
+                        消息
+                        <div class="chat-close" style="margin: 10px 10px 0 0;font-size: 14px">关闭</div>
+                    </div>
+                </div>
+                <div class="chatBox-info">
+                    <div class="chatBox-list" ref="chatBoxkuang">
+                        <div class="chatBox-content">
+                            <div class="chatBox-content-demo" id="chatBox-content-demo">
+                                <div class="clearfloat">
+                                    <div class="left">
+                                        <div class="chat-message">
+                                            您好，这里是湖南华晟会计师事务所，请问有什么需要帮助？
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chatBox-bottom">
+                    <div class="chatBox-send">
+                        <div class="div-textarea" contenteditable="true"></div>
+                        <button id="chat-fasong" class="btn-default-styles">
+                            发送信息
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="chatContainer" style="float: right;">
+        <div class="chatBtn" onclick="">
+            <i class="iconfont icon-xiaoxi1"></i>
+        </div>
+        <div class="chatBox" ref="chatBox" style="display:none">
+            <div class="chatBox-head">
+                <div class="chatBox-head-one">
+                    消息
+                    <div class="chat-close" style="margin: 10px 10px 0 0;font-size: 14px">关闭</div>
+                </div>
+            </div>
+            <div class="chatBox-info">
+                <div class="chatBox-list" ref="chatBoxkuang">
+                    <div class="chatBox-content">
+                        <div class="chatBox-content-demo" id="chatBox-content-demo">
+                            <div class="clearfloat">
+                                <div class="left">
+                                    <div class="chat-message">
+                                        您好，这里是湖南华晟会计师事务所，请问有什么需要帮助？
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chatBox-bottom">
+                <div class="chatBox-send">
+                    <div class="div-textarea" contenteditable="true"></div>
+                    <button id="chat-fasong" class="btn-default-styles">
+                        发送信息
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+<script>
+    //打开/关闭聊天框
+    $(".chatBtn").click(function () {
+        $(".chatBox").toggle(10);
+    })
+    $(".chat-close").click(function () {
+        $(".chatBox").toggle(10);
+    })
+
+    //发送信息
+    $("#chat-fasong").click(function () {
+        var textContent = $(".div-textarea").html().replace(/[\n\r]/g, '<br>')
+        if (textContent != "") {
+            $(".chatBox-content-demo").append("<div class=\"clearfloat\">" +
+                "<div class=\"right\"> <div class=\"chat-message\"> " + textContent + " </div> " +
+                " </div> </div>");
+            //发送后清空输入框
+            $(".div-textarea").html("");
+            //聊天框默认最底部
+            $(document).ready(function () {
+                $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+            });
+            $.ajax({
+                type: 'POST',
+                url: '/QandA/Answering',
+                async: false,
+                data: {
+                    question:textContent
+                },
+                success:function(data){
+                    msg = eval("(" + data + ")");
+                    $(".chatBox-content-demo").append("<div class=\"clearfloat\">" +
+                    "<div class=\"left\"> <div class=\"chat-message\"> " + msg.answer + " </div> " +
+                    " </div> </div>");
+                }
+            });
+        }
+    });
+
+</script>
+
+</body>
+
+</html>
