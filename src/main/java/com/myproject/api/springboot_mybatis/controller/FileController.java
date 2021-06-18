@@ -579,8 +579,6 @@ public class FileController {
                 //ZipOutputStream类：完成文件或文件夹的压缩
                 for(MultipartFile multipartFile :multipartFiles){
                     newname = UUID.randomUUID().toString().replace("-", "") + "_" + multipartFile.getOriginalFilename();
-//                    file_location.add(URLEncoder.encode(rootPath, "utf-8"));
-//                    txt_name.add(URLEncoder.encode(newname, "utf-8"));
                     File fileDir = new File(rootPath);
                     File file = new File(fileDir, newname);
                     file.setWritable(true, false);
@@ -624,6 +622,7 @@ public class FileController {
                         }
                         out.closeEntry();
                         in.close();
+                        files.get(i).delete();
                     }
                     out.close();
                 } catch (Exception e) {
@@ -660,7 +659,6 @@ public class FileController {
             result.put("status","fail");
             result.put("msg",e.getMessage());
         }
-        System.out.println(file_location+"       "+newname+".zip");
         result.put("file_loaction", file_location);
         result.put("file_name", newname+".zip");
         f.setFile_location(file_location);

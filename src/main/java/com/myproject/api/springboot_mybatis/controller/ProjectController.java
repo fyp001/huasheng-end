@@ -230,6 +230,7 @@ public class ProjectController {
                         }
                         out.closeEntry();
                         in.close();
+                        files.get(i).delete();
                     }
                     out.close();
                 } catch (Exception e) {

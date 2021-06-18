@@ -18,6 +18,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @RestController
 public class TenderController {
@@ -39,8 +41,6 @@ public class TenderController {
         for(int i=0;i<t1.size();i++){
             if(t1.get(i).getFile_location()!=null)
             {
-//                String filename=URLEncoder.encode(f.get(i).getFile_name(), "utf-8");
-//                String filelocation=URLEncoder.encode(f.get(i).getFile_location(), "utf-8");
                 String filename=t1.get(i).getTxt_name();
                 String filelocation=t1.get(i).getFile_location();
                 String url="http://8.129.86.121:8080/file/download1?fileName="+filename+"&fileLocation="+filelocation;
@@ -93,7 +93,7 @@ public class TenderController {
     }
 
     @RequestMapping(value = "/tender/insert")
-    public Map<String,Object> insert(Tender tender, HttpServletRequest request, @RequestParam(value = "file",required = false) MultipartFile multipartFiles)
+    public Map<String,Object> insert(Tender tender, HttpServletRequest request, @RequestParam(value = "files",required = false) MultipartFile[] multipartFiles)
     {
         String token=request.getHeader("token");
         Staff s=redisTemplate.opsForValue().get(token);
@@ -102,33 +102,68 @@ public class TenderController {
 
         Map<String,Object> result=new HashMap<>();
         //在文件操作中，不用/或者\最好，推荐使用File.separator
-        File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
-        String desktopPath = desktopDir.getAbsolutePath();
         String driname = "tenders";
         String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + formatter.format(new Date()) + File.separator;
-
+        //保存文件地址名
+        String file_location = null;
+        String txt_name = null;
+        String newname = null;
         try {
-            if (multipartFiles != null)
+            if (multipartFiles != null&&multipartFiles.length!=0)
             {
-                //String newname=UUID.randomUUID()+"_"+multipartFiles.getOriginalFilename();
-                String newname= UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
-                tender.setFile_location(URLEncoder.encode(rootPath, "utf-8"));
-                tender.setTxt_name(URLEncoder.encode(newname, "utf-8"));
-                File fileDir = new File(rootPath);
-                if (!fileDir.exists() && !fileDir.isDirectory())
-                {
-                    fileDir.mkdirs();
+                //多文件打包压缩存储
+                List<File> files=new ArrayList<>();
+                //ZipOutputStream类：完成文件或文件夹的压缩
+                for(MultipartFile multipartFile :multipartFiles){
+                    newname = UUID.randomUUID().toString().replace("-", "") + "_" + multipartFile.getOriginalFilename();
+                    File fileDir = new File(rootPath);
+                    File file = new File(fileDir, newname);
+                    file.setWritable(true, false);
+                    if (!fileDir.exists() && !fileDir.isDirectory()) {
+                        fileDir.mkdirs();
+                    }
+                    try {
+                        multipartFile.transferTo(file);
+                        result.put("status", "success");
+                    } catch (IOException e) {
+                        result.put("status", "fail");
+                        result.put("msg", e.getMessage());
+                    }
+                    files.add(file);
                 }
+                //以最后一个文件名来命名压缩文件
                 try {
-                    //String extension=multipartFiles[i].getOriginalFilename().substring(multipartFiles[i].getOriginalFilename().lastIndexOf("."));
-                    multipartFiles.transferTo(new File(fileDir,newname));
-                    //String url=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+"/Springbootfile/"+newname;
-                    result.put("status","success");
-                    result.put("file_loaction",fileDir);
-                    result.put("file_name",newname);
-                } catch (IOException e) {
-                    result.put("status","fail");
-                    result.put("msg",e.getMessage());
+                    File zip = new File(rootPath,newname+".zip");
+                    file_location = URLEncoder.encode(rootPath, "utf-8");
+                    txt_name = URLEncoder.encode(newname+".zip", "utf-8");
+
+                    zip.setWritable(true, false);
+                    zip.createNewFile();
+
+
+                    byte[] buf = new byte[1024];
+                    ZipOutputStream out = null;
+                    //ZipOutputStream类：完成文件或文件夹的压缩
+                    out = new ZipOutputStream(new FileOutputStream(zip));
+                    for (int i = 0; i < files.size(); i++) {
+                        FileInputStream in = new FileInputStream(files.get(i));
+                        String filePath="";
+                        if (filePath == null)
+                            filePath = "";
+                        else
+                            filePath += "/";
+                        out.putNextEntry(new ZipEntry(filePath + files.get(i).getName()));
+                        int len;
+                        while ((len = in.read(buf)) > 0) {
+                            out.write(buf, 0, len);
+                        }
+                        out.closeEntry();
+                        in.close();
+                        files.get(i).delete();
+                    }
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
             else
@@ -139,6 +174,10 @@ public class TenderController {
             result.put("status","fail");
             result.put("msg",e.getMessage());
         }
+        result.put("file_loaction", file_location);
+        result.put("file_name", newname+".zip");
+        tender.setFile_location(file_location);
+        tender.setTxt_name(txt_name);
         tender.setFile_uploaddate(formatter.format(new Date()));
         tender.setFile_updatedate(formatter.format(new Date()));
         tender.setJing_ban_ren(staff_id);
@@ -148,15 +187,6 @@ public class TenderController {
         tenderService.insert(tender);
         return result;
     }
-
-
-//    @CrossOrigin
-//    @RequestMapping(value = "/tender/delete",method = RequestMethod.DELETE)
-//    public void delete(Tender tender)
-//    {
-//        tenderService.delete(tender);
-//    }
-
     @RequestMapping("/tender/delete")
     public Map<String,Object> delete(Tender tender, HttpServletResponse response, HttpServletRequest request)
     {
@@ -190,48 +220,85 @@ public class TenderController {
 //    }
 
     @RequestMapping(value = "/tender/update")
-    public Map<String,Object> update(Tender tender,@RequestParam(value = "file",required = false) MultipartFile multipartFiles)
-    {
+    public Map<String,Object> update(Tender tender,@RequestParam(value = "files",required = false) MultipartFile[] multipartFiles) throws UnsupportedEncodingException {
+        String driname ="tenders";
+        String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + formatter.format(new Date()) + File.separator;
+        //保存文件地址名
+        String file_location = null;
+        String txt_name = null;
+        String newname = null;
         Map<String,Object> result=new HashMap<>();
-        if (multipartFiles != null)
+        if (multipartFiles != null&&multipartFiles.length!=0)
         {
-            File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
-            String desktopPath = desktopDir.getAbsolutePath();
-            String driname = "tenders";
-            String rootPath = System.getProperty("user.dir")+ File.separator +driname + File.separator + formatter.format(new Date()) + File.separator;
-            if(!tender.getFile_location().equals("null")&&!tender.getTxt_name().equals("null"))
-            {
-                File fileDir = new File(URLDecoder.decode(tender.getFile_location()));
-                if (!fileDir.exists() && !fileDir.isDirectory())
-                {
+           //多文件打包压缩存储
+            List<File> files=new ArrayList<>();
+            //ZipOutputStream类：完成文件或文件夹的压缩
+            for(MultipartFile multipartFile :multipartFiles){
+                newname = UUID.randomUUID().toString().replace("-", "") + "_" + multipartFile.getOriginalFilename();
+                File fileDir = new File(rootPath);
+                File file = new File(fileDir, newname);
+                file.setWritable(true, false);
+                if (!fileDir.exists() && !fileDir.isDirectory()) {
                     fileDir.mkdirs();
                 }
-                File file=new File(URLDecoder.decode(tender.getFile_location())+URLDecoder.decode(tender.getTxt_name()));
-                file.delete();
                 try {
-                    String newname=UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
-                    multipartFiles.transferTo(new File(fileDir,newname));
-                    tender.setTxt_name(URLEncoder.encode(newname, "utf-8"));
+                    multipartFile.transferTo(file);
+                    result.put("status", "success");
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    result.put("status", "fail");
+                    result.put("msg", e.getMessage());
                 }
+                files.add(file);
             }
-            else if(tender.getFile_location().equals("null")&&tender.getTxt_name().equals("null"))
+            //以最后一个文件名来命名压缩文件
+            try {
+                File zip = new File(rootPath,newname+".zip");
+                file_location = URLEncoder.encode(rootPath, "utf-8");
+                txt_name = URLEncoder.encode(newname+".zip", "utf-8");
+
+                zip.setWritable(true, false);
+                zip.createNewFile();
+
+
+                byte[] buf = new byte[1024];
+                ZipOutputStream out = null;
+                //ZipOutputStream类：完成文件或文件夹的压缩
+                out = new ZipOutputStream(new FileOutputStream(zip));
+                for (int i = 0; i < files.size(); i++) {
+                    FileInputStream in = new FileInputStream(files.get(i));
+                    String filePath="";
+                    if (filePath == null)
+                        filePath = "";
+                    else
+                        filePath += "/";
+                    out.putNextEntry(new ZipEntry(filePath + files.get(i).getName()));
+                    int len;
+                    while ((len = in.read(buf)) > 0) {
+                        out.write(buf, 0, len);
+                    }
+                    out.closeEntry();
+                    in.close();
+                    files.get(i).delete();
+                }
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(!tender.getFile_location().equals("null")&&!tender.getTxt_name().equals("null"))
             {
-                System.out.println("aaaaa");
-                File fileDirnew = new File(rootPath);
-                if (!fileDirnew.exists() && !fileDirnew.isDirectory())
-                {
-                    fileDirnew.mkdirs();
-                }
-                try {
-                    String newname=UUID.randomUUID().toString().replace("-","")+"_"+multipartFiles.getOriginalFilename();
-                    multipartFiles.transferTo(new File(fileDirnew,newname));
-                    tender.setTxt_name(URLEncoder.encode(newname, "utf-8"));
-                    tender.setFile_location(URLEncoder.encode(rootPath, "utf-8"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                //删除旧文件
+                //查找出旧文件存放地址
+                String filLocation = URLDecoder.decode(tender.getFile_location(),"UTF-8")+ File.separator +
+                        URLDecoder.decode(tender.getTxt_name(),"UTF-8");
+                System.out.println(filLocation);
+                File oldFile = new File(filLocation);
+                System.out.println(oldFile.getAbsolutePath());
+                oldFile.delete();
+                tender.setTxt_name(txt_name);
+            }
+            else if(tender.getFile_location().equals("null")&&tender.getTxt_name().equals("null")) {
+                tender.setTxt_name(txt_name);
+                tender.setFile_location(file_location);
             }
         }
         else{
