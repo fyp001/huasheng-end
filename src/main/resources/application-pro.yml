@@ -1,0 +1,45 @@
+server:
+  port: 8080
+#baseurl: http://8.129.86.121:${server.port}
+spring:
+  datasource:
+    username: hnhskjssws
+    password: Hnhskjssws
+    url: jdbc:mysql://8.129.86.121:3306/kjssws?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    prefix: "classpath:/templates/frontend/"
+    suffix: ".html"
+  resources:
+    static-locations: classpath:/static
+  redis:
+    host: 8.129.86.121
+    port: 6379
+    database: 10
+  servlet:
+    multipart:
+      #单个文件的最大上限
+      max-file-size: 100MB
+      #多个请求的文件总大小上限
+      max-request-size: 200MB
+#
+#  mvc:
+#    static-path-pattern: /static/**
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.myproject.api.springboot_mybatis.entity
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+mq:
+  nameserver:
+    addr: 127.0.0.1:9876
+  topicname: stock
+
+#showSql
+logging:
+  level:
+    com:
+      example:
+        mapper : debug
